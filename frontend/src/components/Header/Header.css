@@ -1,0 +1,24 @@
+.header {
+  background-color: #493b37;
+  color: white;
+  box-sizing: border-box;
+  padding: 12px 32px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header-title {
+  font-size: 30px;
+  color: #f7f8f8;
+  font-weight: bolder;
+  font-style: italic;
+  margin: auto;
+}
+

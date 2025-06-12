@@ -1,0 +1,81 @@
+.content {
+  margin-left: 20px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px;
+  align-items: center; 
+}
+
+.product-header h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.add-product-btn {
+  background-color: #ff7b00;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.product-table th, .product-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.product-table th {
+  background-color: #f3f3f3;
+}
+
+.action-btn {
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px 0;
+}
+
+.show-per-page select {
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.pagination-buttons button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #ddd;
+}
+
+.pagination-buttons button.active {
+  background-color: #ff7b00;
+  color: white;
+}

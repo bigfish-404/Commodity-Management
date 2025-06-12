@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  MyBatis 映射文件
+  对应接口: com.example.backend.mapper.ProductListMapper
+-->
+<mapper namespace="com.example.backend.mapper.ProductListMapper">
+
+    <!-- 结果映射，把数据库字段名映射到实体类属性名 -->
+    <resultMap id="ProductMap" type="com.example.backend.entity.ProductListEntity">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="productName" column="product_name" />
+        <result property="category" column="category" />
+        <result property="spec" column="spec" />
+        <result property="stockQty" column="stock_qty" />
+        <result property="price" column="price" />
+        <result property="purchasePrice" column="purchase_price" />
+        <result property="lastSalesDate" column="last_sales_date" />
+        <result property="totalSales" column="total_sales" />
+        <result property="staff" column="staff" />
+        <result property="createdBy" column="created_by" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedBy" column="updated_by" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="deletedFlg" column="deleted_flg" />
+    </resultMap>
+
+    <!-- 分页查询商品列表 -->
+    <select id="getAllProductsByUserId" resultMap="ProductMap">
+        SELECT * FROM products
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <!-- 查询商品总数 -->
+    <select id="countProductsByUserId" resultType="int">
+        SELECT COUNT(*) FROM products WHERE user_id = #{userId}
+    </select>
+
+    <!-- 插入新商品记录 -->
+    <insert id="insertProduct">
+        INSERT INTO products(
+            user_id, product_name, category, spec, stock_qty, price, purchase_price,
+            last_sales_date, total_sales, staff, created_by, created_at, updated_by, updated_at, deleted_flg
+        ) VALUES (
+            #{userId}, #{productName}, #{category}, #{spec}, #{stockQty}, #{price}, #{purchasePrice},
+            #{lastSalesDate}, #{totalSales}, #{staff}, #{createdBy}, #{createdAt}, #{updatedBy}, #{updatedAt}, #{deletedFlg}
+        )
+    </insert>
+
+</mapper>

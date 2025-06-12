@@ -1,0 +1,203 @@
+/* 整体容器 */
+.register-container {
+  display: flex;
+  /* 使用 Flexbox 布局，使左右两栏并排显示 */
+  width: 60%;
+  /* 宽度为视口的 60% */
+  max-width: 2000px;
+  /* 最大宽度限制，避免过宽 */
+  max-height: 100vh;
+  /* 最大高度为视口高度，避免内容溢出 */
+  margin-top: 150px;
+  /* 上方间距 */
+  margin-left: auto;
+  /* 左侧自动边距，使容器居中 */
+  margin-right: auto;
+  /* 右侧自动边距，使容器居中 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* 添加淡淡的阴影，增加立体感 */
+  border-radius: 15px;
+  /* 圆角边框 */
+  overflow: hidden;
+  /* 溢出隐藏，防止内容超出边框 */
+  background-color: #fff;
+  /* 背景为白色 */
+}
+
+/* 左侧蓝色面板 */
+.left-panel {
+  flex: 1;
+  /* 占据 50% 宽度 */
+  background: linear-gradient(135deg, #00030a, #4169e1);
+  /* 渐变背景色 */
+  color: #fff;
+  /* 文字颜色为白色 */
+  padding: 50px 40px;
+  /* 内边距 */
+}
+
+.left-panel h2 {
+  font-size: 28px;
+  /* 标题字体大小 */
+  margin-bottom: 20px;
+  /* 与下方内容间距 */
+}
+
+.left-panel p {
+  font-size: 14px;
+  /* 正文字体大小 */
+  line-height: 1.6;
+  /* 行距 */
+  margin-bottom: 20px;
+  /* 与下方内容间距 */
+}
+
+.left-panel ul {
+  list-style: none;
+  /* 移除默认列表样式 */
+  padding: 0;
+  /* 去除内边距 */
+  line-height: 2;
+  /* 列表项行距 */
+  font-size: 14px;
+  /* 列表字体大小 */
+}
+
+/* 右侧注册面板 */
+.right-panel {
+  flex: 1;
+  /* 占据 50% 宽度 */
+  padding: 50px 40px;
+  /* 内边距 */
+  background-color: #f9f9f9;
+  /* 浅灰色背景 */
+}
+
+.right-panel h2 {
+  font-size: 24px;
+  /* 标题字体大小 */
+  color: #01091a;
+  /* 字体颜色 */
+  margin-bottom: 30px;
+  /* 与表单之间的距离 */
+  text-align: center;
+  /* 居中对齐 */
+}
+
+/* 表单输入框样式 */
+.register-form input {
+  width: 90%;
+  /* 输入框宽度为90% */
+  padding: 12px 15px;
+  /* 内边距 */
+  margin-bottom: 15px;
+  /* 与下方输入框间距 */
+  border: 1px solid #ccc;
+  /* 灰色边框 */
+  border-radius: 8px;
+  /* 圆角输入框 */
+  font-size: 14px;
+  /* 字体大小 */
+}
+
+/* 注册按钮样式 */
+.register-button {
+  width: 97%;
+  /* 按钮宽度为96% */
+  padding: 12px;
+  /* 上下内边距 */
+  background-color: #01050f;
+  /* 深色背景 */
+  color: white;
+  /* 白色文字 */
+  font-size: 16px;
+  /* 字体大小 */
+  font-weight: bold;
+  /* 加粗 */
+  border: none;
+  /* 去除边框 */
+  border-radius: 8px;
+  /* 圆角按钮 */
+  cursor: pointer;
+  /* 鼠标悬停变成手型 */
+  margin-top: 10px;
+  /* 与上方间距 */
+  transition: background-color 0.3s ease;
+  /* 鼠标悬停时的颜色过渡效果 */
+}
+
+.register-button:hover {
+  background-color: #1a54c8;
+  /* 悬停时按钮变蓝色 */
+}
+
+/* 登录跳转链接区域 */
+.login-link {
+  margin-top: 20px;
+  /* 上方间距 */
+  font-size: 14px;
+  /* 字体大小 */
+  text-align: center;
+  /* 居中对齐 */
+}
+
+/* 登录链接按钮样式 */
+.login-link-button {
+  color: #2b6ef2;
+  /* 链接颜色为蓝色 */
+  size: 14px;
+  /* 字体大小设置（注意：`size` 实际无效，建议用 font-size） */
+  text-decoration: none;
+  /* 去掉下划线 */
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+  /* 悬停时添加下划线效果 */
+}
+
+/* 社交登录区域整体样式 */
+.social-login {
+  text-align: center;
+  /* 内容居中 */
+  margin-top: 30px;
+  /* 上方间距 */
+}
+
+/* 社交图标的容器 */
+.social-icons {
+  display: flex;
+  /* 横向排列图标 */
+  justify-content: center;
+  /* 居中对齐 */
+  gap: 15px;
+  /* 图标之间的间距 */
+  margin-top: 10px;
+  /* 与提示文字之间的间距 */
+}
+
+/* 单个图标样式 */
+.icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  /* 圆形图标 */
+  display: inline-block;
+  cursor: pointer;
+  /* 鼠标悬停变手型 */
+}
+
+/* Facebook 图标蓝色背景 */
+.icon.blue {
+  background-color: #3b5998;
+}
+
+/* Google 图标红色背景 */
+.icon.red {
+  background-color: #dd4b39;
+}
+
+/* Twitter 图标浅蓝背景 */
+.icon.lightblue {
+  background-color: #1da1f2;
+}

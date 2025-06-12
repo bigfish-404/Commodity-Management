@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:MCF
+    username: COMMODITY_MANAGEMENT
+    password: COMMODITY_MANAGEMENT
+    driver-class-name: oracle.jdbc.OracleDriver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.backend.entity
+
+
+logging:
+  level:
+    root: INFO
+    com.example.backend: DEBUG
+    org.springframework.transaction: TRACE
