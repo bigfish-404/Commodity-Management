@@ -1,81 +1,70 @@
 .content {
-  margin-left: 20px;
-  margin-top: 10px;
-  padding: 10px;
+  padding: 30px;
+  font-family: 'Arial', sans-serif;
 }
 
 .product-header {
   display: flex;
   justify-content: space-between;
-  padding: 10px 10px;
-  align-items: center; 
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .product-header h2 {
   font-size: 24px;
-  margin: 0;
+  font-weight: bold;
+  color: #333;
 }
 
 .add-product-btn {
-  background-color: #ff7b00;
+  background-color: #1976d2;
   color: white;
   border: none;
-  padding: 10px 10px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.product-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-.product-table th, .product-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
-}
-
-.product-table th {
-  background-color: #f3f3f3;
-}
-
-.action-btn {
-  margin: 0 5px;
-  cursor: pointer;
-  font-size: 16px;
+.add-product-btn:hover {
+  background-color: #1259a5;
 }
 
 .pagination-container {
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 15px;
-  padding: 10px 0;
 }
 
 .show-per-page select {
-  margin-left: 5px;
-  padding: 5px;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 .pagination-info {
   font-size: 14px;
-  color: #666;
+  color: #555;
 }
 
 .pagination-buttons button {
-  margin-left: 5px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
+  margin: 0 3px;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
   cursor: pointer;
-  background-color: #ddd;
+  transition: 0.2s;
 }
 
-.pagination-buttons button.active {
-  background-color: #ff7b00;
+.pagination-buttons button:hover {
+  background-color: #e3f2fd;
+}
+
+.pagination-buttons .active {
+  background-color: #1976d2;
   color: white;
+  border-color: #1976d2;
 }

@@ -22,11 +22,12 @@ public class ProductListController {
      */
     @GetMapping("/{userId}")
     public List<ProductListEntity> getAllProductsByUserId(
-            @PathVariable("userId") Long userId,
-            @RequestParam(defaultValue = "0") int offset,
-            @RequestParam(defaultValue = "10") int limit
-    ) {
-        return productListService.getAllProductsByUserId(userId, offset, limit);
+            @PathVariable Long userId,
+            @RequestParam int offset,
+            @RequestParam int limit,
+            @RequestParam(required = false, defaultValue = "productName") String orderBy,
+            @RequestParam(required = false, defaultValue = "asc") String orderDirection) {
+        return productListService.getAllProductsByUserId(userId, offset, limit, orderBy, orderDirection);
     }
 
     /**

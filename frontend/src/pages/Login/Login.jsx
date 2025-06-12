@@ -1,4 +1,5 @@
 import React, { useState } from 'react';//引入React库
+import axios from 'axios'; //引入axios库，用于发送HTTP请求
 import { Helmet } from 'react-helmet-async'; //引入react-helmet库，用于修改页面标题
 import { useNavigate } from 'react-router-dom'; //引入useNavigate钩子，用于编程式导航
 import CryptoJS from 'crypto-js'; //引入CryptoJS库，用于加密密码
@@ -38,27 +39,30 @@ function Login() {
         const encryptedPassword = CryptoJS.SHA256(password).toString();
         // 使用CryptoJS库对密码进行SHA-256加密
 
-        const response = await fetch("/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                email,
-                password: encryptedPassword
-            })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
+        try {
+            const response = await axios.post("/api/login",
+                {
+                    email,
+                    password: encryptedPassword
+                },
+                {
+                    withCredentials: true
+                }
+            );
             navigate("/api/homepage");
-            // 如果响应状态为200，表示登录成功，使用navigate函数跳转到"/api/home"页面
-        } else {
-            alert(result.message || 'Login failed');
-            // Handle login failure (e.g., show error message)
+            
+        } catch (error) {
+            if (error.response) {
+                // 服务器返回的错误响应
+                console.error("Login error:", error.response.data);
+                alert(error.response.data.message || "Login failed.");
+            } else {
+                // 网络错误或服务器未响应
+                console.error("Network error:", error);
+                alert("Network error or server is not responding.");
+            }
         }
+
     };
 
     return (

@@ -21,11 +21,14 @@ public interface ProductListMapper {
      * @param limit  每页查询数量
      * @return 商品列表
      */
-    List<ProductListEntity> getAllProductsByUserId(
-            @Param("userId") Long userId,
-            @Param("offset") int offset,
-            @Param("limit") int limit
-    );
+   List<ProductListEntity> getAllProductsByUserId(
+    @Param("userId") Long userId, 
+    @Param("offset") int offset, 
+    @Param("limit") int limit,
+    @Param("orderBy") String orderBy,
+    @Param("orderDirection") String orderDirection
+);
+
 
     /**
      * 根据用户ID查询商品总数（用于分页总条数计算）
