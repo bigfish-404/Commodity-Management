@@ -2,6 +2,8 @@ import React from "react";
 import { formatDate } from "../../../utils/dateFormatter";
 import './ProductListTable.css';
 
+
+// 从父组件接受4个props
 function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
 
     const renderSortArrow = (field) => {
@@ -13,8 +15,10 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
         <table className="product-table">
             <thead>
                 <tr>
+                    {/* 点击这个表头的时候，会调用 handleSort("productName")，通知父组件修改排序字段。
+                        renderSortArrow("productName")} 负责显示对应排序箭头。*/}
                     <th onClick={() => handleSort("productName")}>商品名 {renderSortArrow("productName")}</th>
-                    <th onClick={() => handleSort("category")}>商品カテゴリ {renderSortArrow("category")}</th>
+                    <th onClick={() => handleSort("category")}>カテゴリ {renderSortArrow("category")}</th>
                     <th onClick={() => handleSort("spec")}>規格・仕様 {renderSortArrow("spec")}</th>
                     <th onClick={() => handleSort("stockQty")}>在庫数量 {renderSortArrow("stockQty")}</th>
                     <th onClick={() => handleSort("price")}>単価（税込） {renderSortArrow("price")}</th>
@@ -25,7 +29,9 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
                 </tr>
             </thead>
             <tbody>
+                {/* 遍历products的数组，逐条进行渲染，每一个p表示一条数据对象 */}
                 {products.map(p => (
+                    // 用 p.id 作为 key
                     <tr key={p.id}>
                         <td>{p.productName}</td>
                         <td>{p.category}</td>

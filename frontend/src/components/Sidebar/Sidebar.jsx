@@ -37,10 +37,9 @@ function Sidebar() {
                 <SidebarItem icon={<Inventory2Icon />} text="メルカリ" to="/api/mercari" />
                 <SidebarItem icon={<Inventory2Icon />} text="フリマ" to="/api/furima" />
                 <SidebarItem icon={<CategoryIcon />} text="マイページ" to="/api/Mypage" />
-
                 <SidebarItem icon={<SubtitlesIcon />} text="商品リスト"  to="/api/productList" />
-                <SidebarItem icon={<SubtitlesIcon />} text="Add Sub Category" />
-                <SidebarItem icon={<BrandingWatermarkIcon />} text="Brand List" />
+                <SidebarItem icon={<SubtitlesIcon />} text="商品追加" />
+                <SidebarItem icon={<BrandingWatermarkIcon />} text="カテゴリー" />
                 <SidebarItem icon={<BrandingWatermarkIcon />} text="Add Brand" />
                 <SidebarItem icon={<UploadFileIcon />} text="Import Products" />
                 <SidebarItem icon={<PrintIcon />} text="Print Barcode" />

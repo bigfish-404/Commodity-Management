@@ -37,9 +37,6 @@
         OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-
-
-
     <!-- 查询商品总数 -->
     <select id="countProductsByUserId" resultType="int">
         SELECT COUNT(*) FROM products WHERE user_id = #{userId}

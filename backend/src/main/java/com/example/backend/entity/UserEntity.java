@@ -1,14 +1,22 @@
 package com.example.backend.entity;
 
-public class LoginEntity {
+public class UserEntity {
+    private int id;
     private String username;
     private String email;
     private String password;
 
-
-    public LoginEntity() {
+    public UserEntity() {
     }
 
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+    
     public String getUsername() {
         return username;
     }

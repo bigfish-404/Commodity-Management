@@ -49,6 +49,9 @@ function Login() {
                     withCredentials: true
                 }
             );
+            
+            const userData = response.data;
+            localStorage.setItem("userId", userData.id)
             navigate("/api/homepage");
             
         } catch (error) {

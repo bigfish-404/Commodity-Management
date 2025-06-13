@@ -11,7 +11,7 @@ import java.util.List;
  * 商品管理控制器
  */
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/productList")
 public class ProductListController {
 
     @Autowired
