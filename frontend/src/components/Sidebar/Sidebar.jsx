@@ -30,7 +30,7 @@ function Sidebar() {
             }}
         >
             <Toolbar>
-                <Typography variant="h6" noWrap component="div">Dreams POS</Typography>
+                <Typography variant="h6" noWrap component="div">Action List</Typography>
             </Toolbar>
             <List>
                 <SidebarItem icon={<CategoryIcon />} text="ホームページ" to={"/api/homepage"} />
@@ -38,7 +38,7 @@ function Sidebar() {
                 <SidebarItem icon={<Inventory2Icon />} text="フリマ" to="/api/furima" />
                 <SidebarItem icon={<CategoryIcon />} text="マイページ" to="/api/Mypage" />
                 <SidebarItem icon={<SubtitlesIcon />} text="商品リスト"  to="/api/productList" />
-                <SidebarItem icon={<SubtitlesIcon />} text="商品追加" />
+                <SidebarItem icon={<SubtitlesIcon />} text="商品追加"  to="/api/productAdd"/>
                 <SidebarItem icon={<BrandingWatermarkIcon />} text="カテゴリー" />
                 <SidebarItem icon={<BrandingWatermarkIcon />} text="Add Brand" />
                 <SidebarItem icon={<UploadFileIcon />} text="Import Products" />

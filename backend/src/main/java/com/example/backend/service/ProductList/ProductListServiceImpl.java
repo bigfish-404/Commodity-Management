@@ -17,8 +17,8 @@ public class ProductListServiceImpl implements ProductListService {
     // 字段映射表
     public static final Map<String, String> ORDER_BY_COLUMNS = Map.of(
         "productName", "product_name",
-        "category", "category",
-        "spec", "spec",
+        "categoryName", "category_name",
+        "specName", "spec_name",
         "stockQty", "stock_qty",
         "price", "price",
         "purchasePrice", "purchase_price",

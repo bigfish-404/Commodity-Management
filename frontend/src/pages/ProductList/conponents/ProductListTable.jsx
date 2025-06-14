@@ -18,8 +18,8 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
                     {/* 点击这个表头的时候，会调用 handleSort("productName")，通知父组件修改排序字段。
                         renderSortArrow("productName")} 负责显示对应排序箭头。*/}
                     <th onClick={() => handleSort("productName")}>商品名 {renderSortArrow("productName")}</th>
-                    <th onClick={() => handleSort("category")}>カテゴリ {renderSortArrow("category")}</th>
-                    <th onClick={() => handleSort("spec")}>規格・仕様 {renderSortArrow("spec")}</th>
+                    <th onClick={() => handleSort("categoryName")}>カテゴリ {renderSortArrow("categoryName")}</th>
+                    <th onClick={() => handleSort("specName")}>規格・仕様 {renderSortArrow("specname")}</th>
                     <th onClick={() => handleSort("stockQty")}>在庫数量 {renderSortArrow("stockQty")}</th>
                     <th onClick={() => handleSort("price")}>単価（税込） {renderSortArrow("price")}</th>
                     <th onClick={() => handleSort("lastSalesDate")}>最終販売日 {renderSortArrow("lastSalesDate")}</th>
@@ -34,8 +34,8 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
                     // 用 p.id 作为 key
                     <tr key={p.id}>
                         <td>{p.productName}</td>
-                        <td>{p.category}</td>
-                        <td>{p.spec}</td>
+                        <td>{p.categoryName}</td>
+                        <td>{p.specName}</td>
                         <td>{p.stockQty}</td>
                         <td>{p.price?.toFixed(0)}</td>
                         <td>{formatDate(p.lastSalesDate)}</td>

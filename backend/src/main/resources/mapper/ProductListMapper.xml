@@ -3,19 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!--
-  MyBatis 映射文件
-  对应接口: com.example.backend.mapper.ProductListMapper
--->
 <mapper namespace="com.example.backend.mapper.ProductListMapper">
 
-    <!-- 结果映射，把数据库字段名映射到实体类属性名 -->
+    <!-- 结果映射 -->
     <resultMap id="ProductMap" type="com.example.backend.entity.ProductListEntity">
         <id property="id" column="id" />
         <result property="userId" column="user_id" />
         <result property="productName" column="product_name" />
-        <result property="category" column="category" />
-        <result property="spec" column="spec" />
+        <result property="categoryId" column="category_id" />
+        <result property="categoryName" column="category_name" />
+        <result property="specId" column="spec_id" />
+        <result property="specName" column="spec_name" />
         <result property="stockQty" column="stock_qty" />
         <result property="price" column="price" />
         <result property="purchasePrice" column="purchase_price" />
@@ -29,10 +27,16 @@
         <result property="deletedFlg" column="deleted_flg" />
     </resultMap>
 
-    <!-- 分页查询商品列表 -->
+    <!-- 分页查询商品列表，联表查出分类名称、规格名称 -->
     <select id="getAllProductsByUserId" resultMap="ProductMap">
-        SELECT * FROM products
-        WHERE user_id = #{userId}
+        SELECT p.id, p.user_id, p.product_name, p.category_id, c.category_name,
+               p.spec_id, s.spec_name, p.stock_qty, p.price, p.purchase_price, 
+               p.last_sales_date, p.total_sales, p.staff, p.created_by, p.created_at, 
+               p.updated_by, p.updated_at, p.deleted_flg
+        FROM products p
+        LEFT JOIN category c ON p.category_id = c.id
+        LEFT JOIN spec s ON p.spec_id = s.id
+        WHERE p.user_id = #{userId}
         ORDER BY ${orderBy} ${orderDirection}
         OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
@@ -44,11 +48,11 @@
 
     <!-- 插入新商品记录 -->
     <insert id="insertProduct">
-        INSERT INTO products(
-            user_id, product_name, category, spec, stock_qty, price, purchase_price,
+        INSERT INTO products (
+            user_id, product_name, category_id, spec_id, stock_qty, price, purchase_price,
             last_sales_date, total_sales, staff, created_by, created_at, updated_by, updated_at, deleted_flg
         ) VALUES (
-            #{userId}, #{productName}, #{category}, #{spec}, #{stockQty}, #{price}, #{purchasePrice},
+            #{userId}, #{productName}, #{categoryId}, #{specId}, #{stockQty}, #{price}, #{purchasePrice},
             #{lastSalesDate}, #{totalSales}, #{staff}, #{createdBy}, #{createdAt}, #{updatedBy}, #{updatedAt}, #{deletedFlg}
         )
     </insert>

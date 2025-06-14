@@ -8,6 +8,7 @@ import Furima from '../pages/Furima/Furima';
 import Mypage from '../pages/Mypage/Mypage';
 import Register from '../pages/Register/Register';
 import ProductList from '../pages/ProductList/ProductList';
+import ProductAdd from '../pages/ProductAdd/ProductAdd';
 
 function AppRouter() {
   return (
@@ -22,6 +23,7 @@ function AppRouter() {
       <Route path="/api/furima" element={<MainLayout><Furima /></MainLayout>} />
       <Route path="/api/mypage" element={<MainLayout><Mypage /></MainLayout>} />
       <Route path="/api/productList" element={<MainLayout><ProductList /></MainLayout>} />
+      <Route path="/api/productAdd" element={<MainLayout><ProductAdd /></MainLayout>} />
     </Routes>
   );
 }

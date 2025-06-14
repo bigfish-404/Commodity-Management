@@ -1,0 +1,42 @@
+.product-add-container {
+  padding: 20px;
+  background: #f5f6fa;
+  border-radius: 8px;
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+}
+
+.upload-area {
+  border: 1px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.submit-btn {
+  background-color: orange;
+  padding: 10px 20px;
+}
+
+.cancel-btn {
+  background-color: gray;
+  padding: 10px 20px;
+}

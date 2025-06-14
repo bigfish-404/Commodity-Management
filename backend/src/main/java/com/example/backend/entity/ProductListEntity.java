@@ -18,10 +18,15 @@ public class ProductListEntity {
     private String productName;
 
     /** 商品分类 */
-    private String category;
+    private String categoryId;
+
+    /** 商品分类名称 */
+    private String categoryName;
 
     /** 规格/型号 */
-    private String spec;
+    private String specName;
+
+    private Long specId;
 
     /** 库存数量 */
     private Integer stockQty;
@@ -79,22 +84,6 @@ public class ProductListEntity {
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getSpec() {
-        return spec;
-    }
-
-    public void setSpec(String spec) {
-        this.spec = spec;
     }
 
     public Integer getStockQty() {
@@ -184,4 +173,37 @@ public class ProductListEntity {
     public void setDeletedFlg(Integer deletedFlg) {
         this.deletedFlg = deletedFlg;
     }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public Long getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(Long specId) {
+        this.specId = specId;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+    
 }
