@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Grid, Button, Box, FormControl, FormLabel, Select, MenuItem, Typography } from '@mui/material';
-import AddCategoryModal from './AddCategoryModal';
-import AddSpecModal from './AddSpecModal';
+import AddCategoryModal from './Modal/AddCategoryModal';
+import AddSpecModal from './Modal/AddSpecModal';
 import UploadArea from './UploadArea';
 import { fetchCategories, fetchSpecs, submitProduct } from '../../services/productAddService';
 import './ProductAddForm.css';
@@ -33,7 +33,15 @@ export default function ProductAddForm() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        // 限制价格、数量只能输入数字和小数点
+        if (['price', 'purchasePrice', 'quantity'].includes(name)) {
+            if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+                setFormData(prev => ({ ...prev, [name]: value }));
+            }
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleFileSelect = (file) => {
@@ -42,6 +50,27 @@ export default function ProductAddForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const requiredFields = ['productName', 'category', 'spec', 'price', 'purchasePrice', 'quantity'];
+
+        // 空值检查
+        for (let field of requiredFields) {
+            if (!formData[field]) {
+                alert("全ての項目を入力してください");
+                return;
+            }
+        }
+
+        // 数值必须大于 0 检查
+        const numericFields = ['price', 'purchasePrice', 'quantity'];
+        for (let field of numericFields) {
+            const value = parseFloat(formData[field]);
+            if (isNaN(value) || value <= 0) {
+                alert(`${field} は0より大きい数値を入力してください`);
+                return;
+            }
+        }
+
         try {
             await submitProduct(formData, currentUser);
             alert("商品登録成功");
@@ -70,13 +99,13 @@ export default function ProductAddForm() {
                 <Grid item xs={4}>
                     <FormLabel className="form-label">商品名</FormLabel>
                     <TextField fullWidth name="productName" value={formData.productName} onChange={handleChange}
-                        variant="outlined" size="small" className="text-input" />
+                        variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
                 <Grid item xs={4} className="select-with-button">
                     <Box sx={{ flexGrow: 1 }}>
                         <FormLabel className="form-label">カテゴリー</FormLabel>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth required>
                             <Select name="category" value={formData.category} onChange={handleChange} size="small" className="select-input">
                                 {categories.map(cat => (
                                     <MenuItem key={cat.id} value={cat.id}>{cat.categoryName}</MenuItem>
@@ -91,7 +120,7 @@ export default function ProductAddForm() {
                 <Grid item xs={4} className="select-with-button">
                     <Box sx={{ flexGrow: 1 }}>
                         <FormLabel className="form-label">規格/仕様</FormLabel>
-                        <FormControl fullWidth>
+                        <FormControl fullWidth required>
                             <Select name="spec" value={formData.spec} onChange={handleChange} size="small" className="select-input">
                                 {specs.map(spec => (
                                     <MenuItem key={spec.id} value={spec.id}>{spec.specName}</MenuItem>
@@ -105,20 +134,20 @@ export default function ProductAddForm() {
 
                 <Grid item xs={4}>
                     <FormLabel className="form-label">価格</FormLabel>
-                    <TextField fullWidth name="price" type="number" value={formData.price} onChange={handleChange}
-                        variant="outlined" size="small" className="text-input" />
+                    <TextField fullWidth name="price" type="text" value={formData.price} onChange={handleChange}
+                        variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
                 <Grid item xs={4}>
                     <FormLabel className="form-label">進貨価格</FormLabel>
-                    <TextField fullWidth name="purchasePrice" type="number" value={formData.purchasePrice} onChange={handleChange}
-                        variant="outlined" size="small" className="text-input" />
+                    <TextField fullWidth name="purchasePrice" type="text" value={formData.purchasePrice} onChange={handleChange}
+                        variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
                 <Grid item xs={4}>
                     <FormLabel className="form-label">数量</FormLabel>
-                    <TextField fullWidth name="quantity" type="number" value={formData.quantity} onChange={handleChange}
-                        variant="outlined" size="small" className="text-input" />
+                    <TextField fullWidth name="quantity" type="text" value={formData.quantity} onChange={handleChange}
+                        variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
                 <Grid item xs={12}>

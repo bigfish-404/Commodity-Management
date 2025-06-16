@@ -1,36 +1,31 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { addSpec } from '../../services/productAddService';
+import { addCategory } from '../../../services/productAddService';
 
-export default function AddSpecModal({ open, onClose, onAdd }) {
+export default function AddCategoryModal({ open, onClose, onAdd }) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    const [specName, setSpecName] = useState('');
+    const [categoryName, setCategoryName] = useState('');
 
     const handleSubmit = async () => {
-        if (!specName.trim()) {
-            alert("規格名を入力してください");
+        if (!categoryName.trim()) {
+            alert("カテゴリー名を入力してください");
             return;
         }
-        try {
-            await addSpec(specName, currentUser);
-            setSpecName('');
-            onAdd();  // 重新加载规格
-            onClose();
-        } catch (err) {
-            console.error(err);
-            alert("登録に失敗しました");
-        }
+        await addCategory(categoryName, currentUser);
+        setCategoryName('');
+        onAdd(); // 重新加载分类
+        onClose();
     };
 
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={{ p: 3, bgcolor: 'white', mx: 'auto', my: '20%', width: 400 }}>
-                <Typography variant="h6">新規規格追加</Typography>
+                <Typography variant="h6">新規カテゴリー追加</Typography>
                 <TextField
                     fullWidth
-                    label="規格・仕様"
-                    value={specName}
-                    onChange={(e) => setSpecName(e.target.value)}
+                    label="カテゴリー名"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
                     sx={{ mt: 2 }}
                 />
                 <Box sx={{ mt: 2, textAlign: 'right' }}>

@@ -40,7 +40,7 @@ function Sidebar() {
                 <SidebarItem icon={<SubtitlesIcon />} text="商品リスト"  to="/api/productList" />
                 <SidebarItem icon={<SubtitlesIcon />} text="商品追加"  to="/api/productAdd"/>
                 <SidebarItem icon={<BrandingWatermarkIcon />} text="カテゴリー" />
-                <SidebarItem icon={<BrandingWatermarkIcon />} text="Add Brand" />
+                <SidebarItem icon={<BrandingWatermarkIcon />} text="規格・仕様" />
                 <SidebarItem icon={<UploadFileIcon />} text="Import Products" />
                 <SidebarItem icon={<PrintIcon />} text="Print Barcode" />
             </List>
