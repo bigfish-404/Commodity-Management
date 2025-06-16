@@ -27,6 +27,7 @@ public class LoginController {
             Map<String, Object> response = new HashMap<>();
             response.put("id", usereEntity.getId());
             response.put("name", usereEntity.getUsername());
+            response.put("email",  usereEntity.getEmail());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

@@ -49,11 +49,12 @@ function Login() {
                     withCredentials: true
                 }
             );
-            
+
             const userData = response.data;
-            localStorage.setItem("userId", userData.id)
+            localStorage.setItem("currentUser", JSON.stringify(userData));
+
             navigate("/api/homepage");
-            
+
         } catch (error) {
             if (error.response) {
                 // 服务器返回的错误响应

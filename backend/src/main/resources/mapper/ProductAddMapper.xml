@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.mapper.ProductAddMapper">
+
+    <insert id="insertProduct" parameterType="com.example.backend.entity.ProductEntity">
+        INSERT INTO PRODUCTS (
+          ID,
+          USER_ID,
+          PRODUCT_NAME,
+          CATEGORY_ID,
+          SPEC_ID,
+          STOCK_QTY,
+          PRICE,
+          PURCHASE_PRICE,
+          LAST_SALES_DATE,
+          TOTAL_SALES,
+          STAFF,
+          CREATED_BY,
+          CREATED_AT,
+          UPDATED_BY,
+          UPDATED_AT,
+          DELETED_FLG
+        ) VALUES (
+          PRODUCTS_SEQ.NEXTVAL,  -- 只生成一次ID
+          #{userId, jdbcType=NUMERIC},
+          #{productName, jdbcType=VARCHAR},
+          #{categoryId, jdbcType=NUMERIC},
+          #{specId, jdbcType=NUMERIC},
+          #{stockQty, jdbcType=NUMERIC},
+          #{price, jdbcType=NUMERIC},
+          #{purchasePrice, jdbcType=NUMERIC},
+          #{lastSalesDate, jdbcType=TIMESTAMP},
+          #{totalSales, jdbcType=NUMERIC},
+          #{staff, jdbcType=VARCHAR},
+          #{createdBy, jdbcType=VARCHAR},
+          SYSTIMESTAMP, 
+          #{updatedBy, jdbcType=VARCHAR},
+          SYSTIMESTAMP,
+          #{deletedFlg, jdbcType=NUMERIC}
+        )
+    </insert>
+
+</mapper>

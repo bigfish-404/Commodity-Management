@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.mapper.SpecMapper">
+
+    <!-- resultMap 完整映射 -->
+    <resultMap id="SpecResultMap" type="com.example.backend.entity.SpecEntity">
+        <id property="id" column="ID" jdbcType="NUMERIC"/>
+        <result property="specName" column="SPEC_NAME" jdbcType="VARCHAR"/>
+        <result property="description" column="DESCRIPTION" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="CREATED_BY" jdbcType="VARCHAR"/>
+        <result property="createdAt" column="CREATED_AT" jdbcType="TIMESTAMP"/>
+        <result property="updatedBy" column="UPDATED_BY" jdbcType="VARCHAR"/>
+        <result property="updatedAt" column="UPDATED_AT" jdbcType="TIMESTAMP"/>
+        <result property="deletedFlg" column="DELETED_FLG" jdbcType="CHAR"/>
+    </resultMap>
+
+    <!-- 插入语句 -->
+    <insert id="insertSpec" parameterType="com.example.backend.entity.SpecEntity">
+    INSERT INTO SPEC (
+        SPEC_NAME, 
+        DESCRIPTION,
+        CREATED_AT, 
+        CREATED_BY, 
+        UPDATED_AT, 
+        UPDATED_BY, 
+        DELETED_FLG
+    ) VALUES (
+        #{specName, jdbcType=VARCHAR}, 
+        #{description, jdbcType=VARCHAR},
+        SYSTIMESTAMP, 
+        #{createdBy, jdbcType=VARCHAR}, 
+        SYSTIMESTAMP, 
+        #{updatedBy, jdbcType=VARCHAR}, 
+        #{deletedFlg, jdbcType=CHAR}
+    )
+</insert>
+
+
+    <!-- 查询语句 -->
+    <select id="getAllSpecs" resultMap="SpecResultMap">
+        SELECT * FROM SPEC WHERE DELETED_FLG = '0'
+    </select>
+
+</mapper>

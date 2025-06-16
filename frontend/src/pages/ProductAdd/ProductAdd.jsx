@@ -1,19 +1,21 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import ProductForm from './ProductForm';
+import ProductAddForm from './ProductAddForm';
 import './ProductAdd.css';
 
 export default function ProductAdd() {
-  return (
-    <>
-      <Helmet>
-        <title>Product Add</title>
-      </Helmet>
-      <div className="product-add-container">
-        <h2>Product Add</h2>
-        <p>Create new product</p>
-        <ProductForm />
-      </div>
-    </>
-  );
+    return (
+        <>
+            <Helmet>
+                <title>Product Add</title>
+            </Helmet>
+            <div className="content">
+                <div className=".product-header ">
+                    <h2>商品追加</h2>
+                    <ProductAddForm />
+                </div>
+            </div>
+
+        </>
+    );
 }

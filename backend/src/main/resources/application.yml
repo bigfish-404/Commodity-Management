@@ -15,3 +15,7 @@ logging:
     root: INFO
     com.example.backend: DEBUG
     org.springframework.transaction: TRACE
+    org.mybatis: DEBUG
+    org.mybatis.spring: DEBUG
+    jdbc.sqlonly: DEBUG
+    org.springframework.jdbc.core: TRACE
