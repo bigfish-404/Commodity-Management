@@ -1,0 +1,41 @@
+.sales-input-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.sales-input-table th,
+.sales-input-table td {
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.sales-input-table th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
+
+.display-cell {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  padding: 6px 12px;
+}
+
+.small-input .MuiInputBase-input {
+  text-align: center;
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+.small-input {
+  width: 80px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}

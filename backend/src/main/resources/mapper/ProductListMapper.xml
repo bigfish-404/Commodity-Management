@@ -37,6 +37,7 @@
         LEFT JOIN category c ON p.category_id = c.id
         LEFT JOIN spec s ON p.spec_id = s.id
         WHERE p.user_id = #{userId}
+            AND p.deleted_flg = 0
         ORDER BY ${orderBy} ${orderDirection}
         OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>

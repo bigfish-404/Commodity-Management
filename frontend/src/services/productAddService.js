@@ -11,6 +11,12 @@ export const fetchSpecs = async () => {
     const response = await axios.get('/api/getAllspecs');
     return response.data;
 };
+
+// 取得所有配送方法
+export const fetchDeliverys = async () => {
+    const response = await axios.get('/api/getAllDeliveryMethod');
+    return response.data;
+};
 // 新增分类
 export const addCategory = async (categoryName, currentUser) => {
     const data = {
@@ -37,11 +43,12 @@ export const addSpec = async (specName, currentUser) => {
 export const submitProduct = async (formData, currentUser) => {
     const productData = {
         productName: formData.productName,
-        categoryId: parseInt(formData.category),
-        specId: parseInt(formData.spec),
-        price: parseFloat(formData.price),
+        categoryId: parseInt(formData.categoryId),
+        specId: parseInt(formData.specId),
+        price: parseFloat(formData.priceId),
         purchasePrice: parseFloat(formData.purchasePrice),
         stockQty: parseInt(formData.quantity),
+        deliveryCompanyMethodId: parseInt(formData.deliveryCompanyMethodId),
         userId: currentUser.id,
         createdBy: currentUser.name,
         updatedBy: currentUser.name,

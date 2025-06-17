@@ -34,8 +34,8 @@ function Sidebar() {
             </Toolbar>
             <List>
                 <SidebarItem icon={<CategoryIcon />} text="ホームページ" to={"/api/homepage"} />
-                <SidebarItem icon={<Inventory2Icon />} text="メルカリ" to="/api/mercari" />
-                <SidebarItem icon={<Inventory2Icon />} text="フリマ" to="/api/furima" />
+                <SidebarItem icon={<Inventory2Icon />} text="販売" to="/api/SaleInput" />
+                <SidebarItem icon={<Inventory2Icon />} text="販売履歴" to="/api/furima" />
                 <SidebarItem icon={<CategoryIcon />} text="マイページ" to="/api/Mypage" />
                 <SidebarItem icon={<SubtitlesIcon />} text="商品リスト"  to="/api/productList" />
                 <SidebarItem icon={<SubtitlesIcon />} text="商品追加"  to="/api/productAdd"/>

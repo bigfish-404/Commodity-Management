@@ -3,24 +3,30 @@ import { TextField, Grid, Button, Box, FormControl, FormLabel, Select, MenuItem,
 import AddCategoryModal from './Modal/AddCategoryModal';
 import AddSpecModal from './Modal/AddSpecModal';
 import UploadArea from './UploadArea';
-import { fetchCategories, fetchSpecs, submitProduct } from '../../services/productAddService';
+import { fetchCategories, fetchDeliverys, fetchSpecs, submitProduct } from '../../services/productAddService';
 import './ProductAddForm.css';
 
 export default function ProductAddForm() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         productName: '',
-        category: '',
-        spec: '',
+        categoryId: '',
+        specId: '',
         price: '',
         purchasePrice: '',
         quantity: '',
+        deliveryCompany: '',
+        deliveryCompanyMethodId: '',
         image: null
-    });
+    };
+
+    const [formData, setFormData] = useState(initialFormData);
+
 
     const [categories, setCategories] = useState([]);
     const [specs, setSpecs] = useState([]);
+    const [deliveryOptions, setDeliveryOptions] = useState([]);
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     const [specModalOpen, setSpecModalOpen] = useState(false);
 
@@ -29,14 +35,21 @@ export default function ProductAddForm() {
     const loadMasters = async () => {
         setCategories(await fetchCategories());
         setSpecs(await fetchSpecs());
+        setDeliveryOptions(await fetchDeliverys());
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
         // 限制价格、数量只能输入数字和小数点
-        if (['price', 'purchasePrice', 'quantity'].includes(name)) {
+        if (['price', 'purchasePrice'].includes(name)) {
+            // 允许数字和小数点，最多两位小数
             if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+                setFormData(prev => ({ ...prev, [name]: value }));
+            }
+        } else if (name === 'quantity') {
+            // 只能输入非负整数
+            if (value === '' || /^\d+$/.test(value)) {
                 setFormData(prev => ({ ...prev, [name]: value }));
             }
         } else {
@@ -51,7 +64,7 @@ export default function ProductAddForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const requiredFields = ['productName', 'category', 'spec', 'price', 'purchasePrice', 'quantity'];
+        const requiredFields = ['productName', 'categoryId', 'specId', 'price', 'purchasePrice', 'quantity'];
 
         // 空值检查
         for (let field of requiredFields) {
@@ -81,17 +94,21 @@ export default function ProductAddForm() {
         }
     };
 
-    const resetForm = () => {
-        setFormData({
-            productName: '',
-            category: '',
-            spec: '',
-            price: '',
-            purchasePrice: '',
-            quantity: '',
-            image: null
-        });
+    const handleCompanyChange = (e) => {
+        const company = e.target.value;
+        setFormData(prev => ({ ...prev, deliveryCompany: company, deliveryMethod: '' }));
     };
+
+    const handleMethodChange = (e) => {
+        const id = e.target.value;
+        setFormData(prev => ({ ...prev, deliveryCompanyMethodId: id }));
+    };
+
+
+    const resetForm = () => {
+        setFormData(initialFormData);
+    };
+
 
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -106,7 +123,7 @@ export default function ProductAddForm() {
                     <Box sx={{ flexGrow: 1 }}>
                         <FormLabel className="form-label">カテゴリー</FormLabel>
                         <FormControl fullWidth required>
-                            <Select name="category" value={formData.category} onChange={handleChange} size="small" className="select-input">
+                            <Select name="categoryId" value={formData.categoryId} onChange={handleChange} size="small" className="select-input">
                                 {categories.map(cat => (
                                     <MenuItem key={cat.id} value={cat.id}>{cat.categoryName}</MenuItem>
                                 ))}
@@ -121,7 +138,7 @@ export default function ProductAddForm() {
                     <Box sx={{ flexGrow: 1 }}>
                         <FormLabel className="form-label">規格/仕様</FormLabel>
                         <FormControl fullWidth required>
-                            <Select name="spec" value={formData.spec} onChange={handleChange} size="small" className="select-input">
+                            <Select name="specId" value={formData.specId} onChange={handleChange} size="small" className="select-input">
                                 {specs.map(spec => (
                                     <MenuItem key={spec.id} value={spec.id}>{spec.specName}</MenuItem>
                                 ))}
@@ -150,6 +167,47 @@ export default function ProductAddForm() {
                         variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
+                <Grid item xs={2}>
+                    <FormLabel className="form-label">配送会社</FormLabel>
+                    <FormControl fullWidth required>
+                        <Select
+                            value={formData.deliveryCompany}
+                            onChange={handleCompanyChange}
+                            size="small"
+                            className="select-input"
+                        >
+                            {[...new Set(deliveryOptions.map(opt => opt.deliveryCompany))].map((company, index) => (
+                                <MenuItem key={index} value={company}>{company}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+
+                <Grid item xs={2}>
+                    <FormLabel className="form-label">配送方法</FormLabel>
+                    <FormControl fullWidth required>
+                        <Select
+                            value={formData.deliveryCompanyMethodId}
+                            onChange={handleMethodChange}
+                            size="small"
+                            className="select-input"
+                            disabled={!formData.deliveryCompany}
+                        >
+                            {deliveryOptions
+                                .filter(opt => opt.deliveryCompany === formData.deliveryCompany)
+                                .map(opt => (
+                                    <MenuItem key={opt.id} value={opt.id}>
+                                        {opt.deliveryMethod}
+                                    </MenuItem>
+                                ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+
+
+
                 <Grid item xs={12}>
                     <UploadArea onFileSelect={handleFileSelect} />
                     {formData.image && (
@@ -159,7 +217,7 @@ export default function ProductAddForm() {
 
                 <Grid item xs={12} sx={{ textAlign: 'right' }}>
                     <Button type="submit" variant="contained" color="primary">登録</Button>
-                    <Button type="button" variant="outlined" sx={{ ml: 2 }} onClick={resetForm}>取消</Button>
+                    <Button type="button" variant="outlined" sx={{ ml: 2 }} onClick={resetForm}>キャンセル</Button>
                 </Grid>
             </Grid>
 

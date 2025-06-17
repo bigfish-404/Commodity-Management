@@ -18,13 +18,14 @@
           LAST_SALES_DATE,
           TOTAL_SALES,
           STAFF,
+          DELIVERY_COMPANY_METHOD_ID,  
           CREATED_BY,
           CREATED_AT,
           UPDATED_BY,
           UPDATED_AT,
           DELETED_FLG
         ) VALUES (
-          PRODUCTS_SEQ.NEXTVAL,  -- 只生成一次ID
+          PRODUCTS_SEQ.NEXTVAL,
           #{userId, jdbcType=NUMERIC},
           #{productName, jdbcType=VARCHAR},
           #{categoryId, jdbcType=NUMERIC},
@@ -35,8 +36,9 @@
           #{lastSalesDate, jdbcType=TIMESTAMP},
           #{totalSales, jdbcType=NUMERIC},
           #{staff, jdbcType=VARCHAR},
+          #{deliveryCompanyMethodId, jdbcType=NUMERIC}, 
           #{createdBy, jdbcType=VARCHAR},
-          SYSTIMESTAMP, 
+          SYSTIMESTAMP,
           #{updatedBy, jdbcType=VARCHAR},
           SYSTIMESTAMP,
           #{deletedFlg, jdbcType=NUMERIC}
