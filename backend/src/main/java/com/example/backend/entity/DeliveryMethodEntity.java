@@ -1,19 +1,22 @@
 package com.example.backend.entity;
-
 import java.time.LocalDateTime;
 
 public class DeliveryMethodEntity {
+private Long id;
 
-    private Long id;
     private String deliveryCompany;
-    private String deliveryMethod;
-    private String createdBy;
-    private LocalDateTime createdAt;
-    private String updatedBy;
-    private LocalDateTime updatedAt;
-    private String deletedFlg;
 
-    // Getter & Setter
+    private String deliveryMethod;
+
+    private String createdBy;
+
+    private LocalDateTime createdAt;
+
+    private String updatedBy;
+
+    private LocalDateTime updatedAt;
+
+    private String deletedFlg;
 
     public Long getId() {
         return id;
@@ -78,4 +81,5 @@ public class DeliveryMethodEntity {
     public void setDeletedFlg(String deletedFlg) {
         this.deletedFlg = deletedFlg;
     }
+   
 }

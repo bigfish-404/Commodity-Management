@@ -20,7 +20,7 @@ function AppRouter() {
       {/* 有布局的页面 */}
       <Route path="/api/homepage" element={<MainLayout><Homepage /></MainLayout>} />
       <Route path="/api/SaleInput" element={<MainLayout><SaleInput /></MainLayout>} />
-      <Route path="/api/furima" element={<MainLayout><Furima /></MainLayout>} />
+
       <Route path="/api/mypage" element={<MainLayout><Mypage /></MainLayout>} />
       <Route path="/api/productList" element={<MainLayout><ProductList /></MainLayout>} />
       <Route path="/api/productAdd" element={<MainLayout><ProductAdd /></MainLayout>} />

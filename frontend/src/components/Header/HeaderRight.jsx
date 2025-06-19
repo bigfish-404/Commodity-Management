@@ -14,10 +14,10 @@ function HeaderRight() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const searchInputRef = useRef(null);
 
-  useEffect(() => {
-    // 模拟后端取头像
-    setAvatarUrl("/user_avatar.jpg");
-  }, []);
+  // useEffect(() => {
+  //   // 模拟后端取头像
+  //   setAvatarUrl("/user_avatar.jpg");
+  // }, []);
 
   const handleAvatarClick = (event) => {
     setMenuAnchor(event.currentTarget);

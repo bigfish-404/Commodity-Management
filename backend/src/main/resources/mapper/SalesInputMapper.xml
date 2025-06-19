@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.mapper.SalesInputMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="SalesInputResultMap" type="com.example.backend.entity.SalesInputEntity">
+        <id column="ID" property="id"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="PRODUCT_NAME" property="productName"/>
+        <result column="CATEGORY_ID" property="categoryId"/>
+        <result column="CATEGORY_NAME" property="categoryName"/>
+        <result column="SPEC_ID" property="specId"/>
+        <result column="SPEC_NAME" property="specName"/>
+        <result column="STOCK_QTY" property="stockQty"/>
+        <result column="PRICE" property="price"/>
+        <result column="PURCHASE_PRICE" property="purchasePrice"/>
+        <result column="DELIVERY_METHOD" property="deliveryMethod"/>
+        <result column="DELIVERY_PRICE" property="deliveryPrice"/>
+    </resultMap>
+
+    <!-- 查询库存数大于0的商品 -->
+    <select id="selectAvailableSalesProductsByUserId" resultMap="SalesInputResultMap">
+    SELECT
+        p.ID,
+        p.USER_ID,
+        p.PRODUCT_NAME,
+        p.CATEGORY_ID,
+        c.CATEGORY_NAME,
+        p.SPEC_ID,
+        s.SPEC_NAME,
+        p.STOCK_QTY,
+        p.PRICE,
+        p.PURCHASE_PRICE,
+        d.DELIVERY_METHOD,
+        dp.PRICE AS DELIVERY_PRICE
+    FROM
+        COMMODITY_MANAGEMENT.PRODUCTS p
+    LEFT JOIN COMMODITY_MANAGEMENT.CATEGORY c
+        ON p.CATEGORY_ID = c.ID
+    LEFT JOIN COMMODITY_MANAGEMENT.SPEC s
+        ON p.SPEC_ID = s.ID
+    LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_COMPANY_METHOD d
+        ON p.DELIVERY_COMPANY_METHOD_ID = d.ID
+    LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_PRICE dp
+        ON dp.DELIVERY_COMPANY_METHOD_ID = d.ID
+        AND dp.CHANNEL_ID = #{channelId}
+        AND dp.DELETED_FLG = '0'
+    WHERE
+        p.DELETED_FLG = 0
+        AND NVL(p.STOCK_QTY, 0) > 0
+        AND p.USER_ID = #{userId}
+    </select>
+
+
+</mapper>

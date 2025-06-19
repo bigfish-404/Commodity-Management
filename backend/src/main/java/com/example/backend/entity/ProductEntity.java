@@ -16,7 +16,7 @@ public class ProductEntity {
     private Date lastSalesDate;
     private Integer totalSales;
     private String staff;
-    private Long deliveryCompanyMethodId; // ← 新增字段
+    private Long deliveryCompanyMethodId; 
     private String createdBy;
     private Date createdAt;
     private String updatedBy;

@@ -39,3 +39,8 @@
   justify-content: center;
   gap: 8px;
 }
+
+.sales-input-table tbody tr:hover {
+  background-color: #e6d3f6; /* 鼠标悬停时变蓝色 */
+  cursor: pointer;
+}
