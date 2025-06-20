@@ -45,7 +45,7 @@ export const submitProduct = async (formData, currentUser) => {
         productName: formData.productName,
         categoryId: parseInt(formData.categoryId),
         specId: parseInt(formData.specId),
-        price: parseFloat(formData.priceId),
+        price: parseFloat(formData.price),
         purchasePrice: parseFloat(formData.purchasePrice),
         stockQty: parseInt(formData.quantity),
         deliveryCompanyMethodId: parseInt(formData.deliveryCompanyMethodId),

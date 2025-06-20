@@ -3,46 +3,40 @@ import { Tabs, Tab, Box } from '@mui/material';
 import axios from 'axios';
 import './PlatformSelector.css';
 
-export default function PlatformSelector({ platform, setPlatform }) {
-  const [displayMap, setDisplayMap] = useState({}); // 存储后端返回的数据
+export default function PlatformSelector({ platform, setPlatform, setChannelMap }) {
+  const [displayMap, setDisplayMap] = useState({}); // { mercari: "メルカリ", yahoo: "ヤフオク" }
+  const [internalChannelMap, setInternalChannelMap] = useState({}); // { mercari: 1, yahoo: 2 }
 
-  const handleChange = (event, newValue) => {
-    setPlatform(newValue);
-  };
+  useEffect(() => {
+    const fetchChannels = async () => {
+      try {
+        const response = await axios.get('/api/channels');
+        const display = {};
+        const map = {};
+        response.data.forEach((channel) => {
+          display[channel.channelName] = channel.displayName;
+          map[channel.channelName] = channel.id;
+        });
+        setDisplayMap(display);
+        setInternalChannelMap(map);
+        setChannelMap(map);
 
-useEffect(() => {
-  const fetchChannels = async () => {
-    try {
-      const response = await axios.get('/api/channels');
-      const map = {};
-      response.data.forEach((channel) => {
-        map[channel.channelName] = channel.displayName; 
-      });
-      setDisplayMap(map);
-
-      // 可选：初始化默认选中第一个
-      if (!platform && Object.keys(map).length > 0) {
-        setPlatform(Object.keys(map)[0]);
+        if (!platform && Object.keys(display).length > 0) {
+          setPlatform(Object.keys(display)[0]);
+        }
+      } catch (error) {
+        console.error("❌error", error);
       }
-    } catch (error) {
-      console.error("error", error);
-    }
-  };
+    };
 
-  fetchChannels();
-}, []);
-
+    fetchChannels();
+  }, []);
 
   return (
     <Box className="platform-selector-box">
-      <Tabs value={platform} onChange={handleChange} centered>
+      <Tabs value={platform} onChange={(e, v) => setPlatform(v)} centered>
         {Object.keys(displayMap).map((key) => (
-          <Tab
-            key={key}
-            label={displayMap[key]}
-            value={key}
-            className={`platform-tab ${platform === key ? 'selected' : ''}`}
-          />
+          <Tab key={key} label={displayMap[key]} value={key} />
         ))}
       </Tabs>
     </Box>

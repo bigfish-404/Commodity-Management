@@ -23,36 +23,94 @@
 
     <!-- 查询库存数大于0的商品 -->
     <select id="selectAvailableSalesProductsByUserId" resultMap="SalesInputResultMap">
-    SELECT
-        p.ID,
-        p.USER_ID,
-        p.PRODUCT_NAME,
-        p.CATEGORY_ID,
-        c.CATEGORY_NAME,
-        p.SPEC_ID,
-        s.SPEC_NAME,
-        p.STOCK_QTY,
-        p.PRICE,
-        p.PURCHASE_PRICE,
-        d.DELIVERY_METHOD,
-        dp.PRICE AS DELIVERY_PRICE
-    FROM
-        COMMODITY_MANAGEMENT.PRODUCTS p
-    LEFT JOIN COMMODITY_MANAGEMENT.CATEGORY c
-        ON p.CATEGORY_ID = c.ID
-    LEFT JOIN COMMODITY_MANAGEMENT.SPEC s
-        ON p.SPEC_ID = s.ID
-    LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_COMPANY_METHOD d
-        ON p.DELIVERY_COMPANY_METHOD_ID = d.ID
-    LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_PRICE dp
-        ON dp.DELIVERY_COMPANY_METHOD_ID = d.ID
-        AND dp.CHANNEL_ID = #{channelId}
-        AND dp.DELETED_FLG = '0'
-    WHERE
-        p.DELETED_FLG = 0
-        AND NVL(p.STOCK_QTY, 0) > 0
-        AND p.USER_ID = #{userId}
+        SELECT
+            p.ID,
+            p.USER_ID,
+            p.PRODUCT_NAME,
+            p.CATEGORY_ID,
+            c.CATEGORY_NAME,
+            p.SPEC_ID,
+            s.SPEC_NAME,
+            p.STOCK_QTY,
+            p.PRICE,
+            p.PURCHASE_PRICE,
+            d.DELIVERY_METHOD,
+            dp.PRICE AS DELIVERY_PRICE
+        FROM
+            COMMODITY_MANAGEMENT.PRODUCTS p
+        LEFT JOIN COMMODITY_MANAGEMENT.CATEGORY c
+            ON p.CATEGORY_ID = c.ID
+        LEFT JOIN COMMODITY_MANAGEMENT.SPEC s
+            ON p.SPEC_ID = s.ID
+        LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_COMPANY_METHOD d
+            ON p.DELIVERY_COMPANY_METHOD_ID = d.ID
+        LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_PRICE dp
+            ON dp.DELIVERY_COMPANY_METHOD_ID = d.ID
+        WHERE
+            p.DELETED_FLG = 0
+            AND NVL(p.STOCK_QTY, 0) > 0
+            AND p.USER_ID = #{userId}
+            AND dp.CHANNEL_ID = #{channelId}
+            AND dp.DELETED_FLG = '0'
     </select>
+    <insert id="insertProfit" parameterType="com.example.backend.entity.ProfitEntity">
+    INSERT INTO COMMODITY_MANAGEMENT.PROFIT (
+        PRODUCT_NAME,
+        CATEGORY,
+        SPEC,
+        PLATFORM,
+        SALES_PRICE,
+        PROFIT,
+        QUANTITY,
+        SALES_PERSON,
+        SALES_DATE,
+        UPDATED_AT,
+        UPDATED_BY,
+        CREATED_AT,
+        CREATED_BY,
+        DELETED_FLG,
+        USER_ID
+    ) VALUES (
+        #{productName, jdbcType=VARCHAR},
+        #{category, jdbcType=VARCHAR},
+        #{spec, jdbcType=VARCHAR},
+        #{platform, jdbcType=VARCHAR},
+        #{salesPrice, jdbcType=NUMERIC},
+        #{profit, jdbcType=NUMERIC},
+        #{quantity, jdbcType=NUMERIC},
+        #{salesPerson, jdbcType=VARCHAR},
+        #{salesDate, jdbcType=DATE},
+        SYSTIMESTAMP,
+        #{updatedBy, jdbcType=VARCHAR},
+        SYSTIMESTAMP,
+        #{createdBy, jdbcType=VARCHAR},
+        #{deletedFlg, jdbcType=CHAR},
+        #{userId, jdbcType=NUMERIC}
+    )
+    </insert>
+
+    <update id="updateProductAfterSale">
+
+    UPDATE COMMODITY_MANAGEMENT.PRODUCTS
+    SET
+        STOCK_QTY = STOCK_QTY - #{quantity},
+        LAST_SALES_DATE = SYSTIMESTAMP,
+        STAFF = #{salesPerson},
+        TOTAL_SALES = TOTAL_SALES + #{quantity},
+        UPDATED_AT = SYSTIMESTAMP,
+        UPDATED_BY = #{salesPerson}
+    WHERE USER_ID = #{userId}
+      AND PRODUCT_NAME = #{productName}
+      AND SPEC_ID = (
+          SELECT ID FROM COMMODITY_MANAGEMENT.SPEC WHERE SPEC_NAME = #{specName} AND DELETED_FLG = '0'
+      )
+      AND CATEGORY_ID = (
+          SELECT ID FROM COMMODITY_MANAGEMENT.CATEGORY WHERE CATEGORY_NAME = #{categoryName} AND DELETED_FLG = '0'
+      )
+
+    </update>
+
+
 
 
 </mapper>
