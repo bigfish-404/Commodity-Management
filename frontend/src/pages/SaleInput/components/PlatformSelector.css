@@ -6,19 +6,19 @@
   font-size: 16px !important;
   font-weight: bold !important;
   padding: 12px 36px !important;
-  border-radius: 3px !important;
-  margin: 0 0px !important;
-  background-color: #f5f5f5;
-  color: #c4b8b8 !important;
-  transition: all 0.3s ease;
+  margin: 0 8px !important;
+  border-radius: px !important;
+  color: #666 !important;
+  background-color: #f0f0f0 !important;
+  transition: all 0.3s ease-in-out;
 }
 
 .platform-tab:hover {
-  background-color: #eaeaea;
+  background-color: #ddd !important;
 }
 
 .platform-tab.selected {
-  background-color: #83440665;
-  color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #1976d2 !important; /* 蓝色块 */
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

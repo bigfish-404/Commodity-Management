@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.mapper.SalesHistoryMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="ProfitResultMap" type="com.example.backend.entity.SalesHistoryEntity">
+        <id column="ID" property="id"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="PRODUCT_NAME" property="productName"/>
+        <result column="CATEGORY" property="category"/>
+        <result column="SPEC" property="spec"/>
+        <result column="PLATFORM" property="platform"/>
+        <result column="SALES_PRICE" property="salesPrice"/>
+        <result column="PROFIT" property="profit"/>
+        <result column="QUANTITY" property="quantity"/>
+        <result column="SALES_PERSON" property="salesPerson"/>
+        <result column="CHANNEL_NAME" property="channelName"/>
+        <result column="DISPLAY_NAME" property="displayName"/>
+        <result column="SALES_DATE" property="salesDate"/>
+        <result column="UPDATED_AT" property="updatedAt"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+        <result column="CREATED_AT" property="createdAt"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="DELETED_FLG" property="deletedFlg"/>
+    </resultMap>
+
+    <select id="selectAllProfits" resultMap="ProfitResultMap">
+        SELECT
+            p.ID,
+            p.PRODUCT_NAME,
+            p.CATEGORY,
+            p.SPEC,
+            p.PLATFORM,
+            p.SALES_PRICE,
+            p.PROFIT,
+            p.QUANTITY,
+            p.SALES_PERSON,
+            p.SALES_DATE,
+            c.CHANNEL_NAME,
+            c.DISPLAY_NAME,
+            p.UPDATED_AT,
+            p.UPDATED_BY,
+            p.CREATED_AT,
+            p.CREATED_BY,
+            p.DELETED_FLG
+        FROM COMMODITY_MANAGEMENT.PROFIT p
+        LEFT JOIN COMMODITY_MANAGEMENT.CHANNEL c
+          ON p.PLATFORM = c.ID
+        WHERE p.DELETED_FLG = '0'
+          AND p.USER_ID = #{userId}
+        ORDER BY SALES_DATE DESC
+    </select>
+
+    <update id="updateProfitIfChanged" parameterType="com.example.backend.entity.ProfitEntity">
+        UPDATE COMMODITY_MANAGEMENT.PROFIT
+        SET 
+            SALES_PRICE = #{salesPrice},
+            PROFIT = #{profit},
+            QUANTITY = #{quantity},
+            SALES_PERSON = #{salesPerson},
+            SALES_DATE = #{salesDate},
+            UPDATED_BY = #{updatedBy},
+            UPDATED_AT = SYSTIMESTAMP
+        WHERE ID = #{id}
+            AND DELETED_FLG = '0'
+            AND (
+            SALES_PRICE != #{salesPrice}
+            OR PROFIT != #{profit}
+            OR QUANTITY != #{quantity}
+            OR SALES_PERSON != #{salesPerson}
+            OR SALES_DATE != #{salesDate}
+      )
+    </update>
+
+    <update id="markAsDeleted">
+        UPDATE COMMODITY_MANAGEMENT.PROFIT
+        SET DELETED_FLG = '1', 
+        UPDATED_AT = SYSTIMESTAMP
+        WHERE ID = #{id}
+    </update>
+
+
+</mapper>

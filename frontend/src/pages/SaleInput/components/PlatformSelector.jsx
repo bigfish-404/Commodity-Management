@@ -36,7 +36,12 @@ export default function PlatformSelector({ platform, setPlatform, setChannelMap 
     <Box className="platform-selector-box">
       <Tabs value={platform} onChange={(e, v) => setPlatform(v)} centered>
         {Object.keys(displayMap).map((key) => (
-          <Tab key={key} label={displayMap[key]} value={key} />
+          <Tab
+            key={key}
+            label={displayMap[key]}
+            value={key}
+            className={`platform-tab ${platform === key ? 'selected' : ''}`}
+          />
         ))}
       </Tabs>
     </Box>

@@ -1,0 +1,31 @@
+.edit-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.edit-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 999;
+}
+
+.readonly-input {
+  background-color: #f5f5f5;
+}
+
+.readonly-input .MuiInputBase-input {
+  color: #555;
+  cursor: not-allowed;
+}

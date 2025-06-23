@@ -42,7 +42,7 @@ export const sellProduct = async (product, currentUser,channelId) => {
     const response = await axios.post('/api/sellProductSubmit', payload);
     return response.data;
   } catch (error) {
-    console.error("❌ 销售请求失败：", error);
+    console.error("❌ error：", error);
     throw error;
   }
 };
