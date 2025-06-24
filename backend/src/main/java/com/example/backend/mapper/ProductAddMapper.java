@@ -1,6 +1,7 @@
 package com.example.backend.mapper;
-import com.example.backend.entity.ProductEntity;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.example.backend.entity.db.ProductEntity;
 
 @Mapper
 public interface ProductAddMapper {

@@ -5,8 +5,10 @@
 
 <mapper namespace="com.example.backend.mapper.CategoryMapper">
 
-    <resultMap id="CategoryResultMap" type="com.example.backend.entity.CategoryEntity">
+    <resultMap id="CategoryResultMap" type="com.example.backend.entity.db.CategoryEntity">
         <id property="id" column="ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="categoryId" column="CATEGORY_ID"/>
         <result property="categoryName" column="CATEGORY_NAME"/>
         <result property="description" column="DESCRIPTION"/>
         <result property="createdBy" column="CREATED_BY"/>
@@ -16,25 +18,36 @@
         <result property="deletedFlg" column="DELETED_FLG"/>
     </resultMap>
 
-    <insert id="insertCategory" parameterType="com.example.backend.entity.CategoryEntity">
-    INSERT INTO CATEGORY (
-        CATEGORY_NAME, 
+    <insert id="insertCategory" parameterType="com.example.backend.entity.db.CategoryEntity">
+    INSERT INTO CATEGORIES (
+        USER_ID,
+        CATEGORY_ID,
+        CATEGORY_NAME,
         DESCRIPTION,
-        CREATED_BY, 
-        UPDATED_BY
+        CREATED_BY,
+        CREATED_AT,
+        UPDATED_BY,
+        UPDATED_AT,
+        DELETED_FLG
     ) VALUES (
-        #{categoryName, jdbcType=VARCHAR}, 
-        #{description, jdbcType=VARCHAR}, 
-        #{createdBy, jdbcType=VARCHAR}, 
-        #{updatedBy, jdbcType=VARCHAR}
+        #{userId, jdbcType=VARCHAR},
+        #{categoryId, jdbcType=VARCHAR},
+        #{categoryName, jdbcType=VARCHAR},
+        #{description, jdbcType=VARCHAR},
+        #{createdBy, jdbcType=VARCHAR},
+        SYSTIMESTAMP,
+        #{updatedBy, jdbcType=VARCHAR},
+        SYSTIMESTAMP,
+        #{deletedFlg, jdbcType=CHAR}
     )
 </insert>
 
 
-
     <select id="getAllCategories" resultMap="CategoryResultMap">
-        SELECT * FROM CATEGORY WHERE DELETED_FLG = '0'
+        SELECT * 
+        FROM CATEGORIES 
+        WHERE DELETED_FLG = '0'
+            AND  USER_ID = #{userId}
     </select>
-
 
 </mapper>

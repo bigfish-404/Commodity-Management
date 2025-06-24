@@ -1,6 +1,6 @@
 package com.example.backend.service.SpectService;
 
-import com.example.backend.entity.SpecEntity;
+import com.example.backend.entity.db.SpecEntity;
 import com.example.backend.mapper.SpecMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class SpecServiceImpl implements SpecService {
     }
 
     @Override
-    public List<SpecEntity> getAllSpecs() {
-        return specMapper.getAllSpecs();
+    public List<SpecEntity> getAllSpecs(String userId) {
+        return specMapper.getAllSpecs(userId);
     }
 }

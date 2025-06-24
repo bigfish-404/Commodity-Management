@@ -1,8 +1,11 @@
 package com.example.backend.mapper;
 
-import com.example.backend.entity.DeliveryMethodEntity;
 import java.util.List;
+import com.example.backend.entity.db.DeliveryMethodEntity;
+import org.apache.ibatis.annotations.Mapper;
 
+
+@Mapper
 public interface DeliveryMethodMapper {
-    List<DeliveryMethodEntity> getAll();
+    List<DeliveryMethodEntity> getAll(String userId);
 } 

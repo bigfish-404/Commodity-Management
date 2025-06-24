@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.example.backend.entity.ProductListEntity;
+import com.example.backend.entity.dto.ProductListEntity;
 
 /**
  * 商品列表Mapper接口（使用MyBatis映射SQL）

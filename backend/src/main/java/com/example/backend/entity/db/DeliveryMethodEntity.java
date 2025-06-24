@@ -1,21 +1,18 @@
-package com.example.backend.entity;
-import java.time.LocalDateTime;
+package com.example.backend.entity.db;
+
+import java.sql.Timestamp;
 
 public class DeliveryMethodEntity {
-private Long id;
 
+    private Long id;
+    private Long deliveryMethodId;
+    private String userId;
     private String deliveryCompany;
-
     private String deliveryMethod;
-
     private String createdBy;
-
-    private LocalDateTime createdAt;
-
+    private Timestamp createdAt;
     private String updatedBy;
-
-    private LocalDateTime updatedAt;
-
+    private Timestamp updatedAt;
     private String deletedFlg;
 
     public Long getId() {
@@ -24,6 +21,22 @@ private Long id;
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getDeliveryMethodId() {
+        return deliveryMethodId;
+    }
+
+    public void setDeliveryMethodId(Long deliveryMethodId) {
+        this.deliveryMethodId = deliveryMethodId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getDeliveryCompany() {
@@ -50,11 +63,11 @@ private Long id;
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -66,11 +79,11 @@ private Long id;
         this.updatedBy = updatedBy;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -81,5 +94,5 @@ private Long id;
     public void setDeletedFlg(String deletedFlg) {
         this.deletedFlg = deletedFlg;
     }
-   
+
 }

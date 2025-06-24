@@ -3,7 +3,7 @@ package com.example.backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.example.backend.entity.UserEntity;
+import com.example.backend.entity.db.UserEntity;
 
 @Mapper
 public interface LoginMapper {

@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.example.backend.entity.ProfitEntity;
-import com.example.backend.entity.SalesHistoryEntity;
+import com.example.backend.entity.db.ProfitEntity;
+import com.example.backend.entity.dto.SalesHistoryEntity;
 
 @Mapper
 public interface SalesHistoryMapper {

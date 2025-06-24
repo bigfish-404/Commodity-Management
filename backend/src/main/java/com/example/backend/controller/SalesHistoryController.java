@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.entity.ProfitEntity;
-import com.example.backend.entity.SalesHistoryEntity;
+import com.example.backend.entity.db.ProfitEntity;
+import com.example.backend.entity.dto.SalesHistoryEntity;
 import com.example.backend.service.SalesHistoryService.SalesHistoryService;
 
 @RequestMapping("/api")

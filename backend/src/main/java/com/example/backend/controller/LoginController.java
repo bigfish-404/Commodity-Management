@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.backend.entity.UserEntity;
-import com.example.backend.service.LoginService;
+import com.example.backend.entity.db.UserEntity;
+import com.example.backend.service.LoginService.LoginService;
+
 
 @RestController
 @RequestMapping("/api")
@@ -25,7 +26,7 @@ public class LoginController {
 
         if (usereEntity != null) {
             Map<String, Object> response = new HashMap<>();
-            response.put("id", usereEntity.getId());
+            response.put("userId", usereEntity.getUserId());
             response.put("name", usereEntity.getUsername());
             response.put("email",  usereEntity.getEmail());
             return ResponseEntity.ok(response);

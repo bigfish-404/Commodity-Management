@@ -1,54 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Grid, Button, Box, FormControl, FormLabel, Select, MenuItem, Typography } from '@mui/material';
+import AddProductModal from './Modal/AddProductModal';
 import AddCategoryModal from './Modal/AddCategoryModal';
 import AddSpecModal from './Modal/AddSpecModal';
 import UploadArea from './UploadArea';
-import { fetchCategories, fetchDeliverys, fetchSpecs, submitProduct } from '../../services/productAddService';
+import { fetchProductInfo, fetchCategories, fetchDeliverys, fetchSpecs, submitProduct } from '../../services/productAddService';
 import './ProductAddForm.css';
 
 export default function ProductAddForm() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const initialFormData = {
-        productName: '',
+        productId: '',
         categoryId: '',
         specId: '',
         price: '',
         purchasePrice: '',
-        quantity: '',
+        stockQty: '',
+        stockAlert: '',
         deliveryCompany: '',
         deliveryCompanyMethodId: '',
         image: null
     };
 
     const [formData, setFormData] = useState(initialFormData);
-
-
     const [categories, setCategories] = useState([]);
+    const [productInfo, setProductInfo] = useState([]);
     const [specs, setSpecs] = useState([]);
     const [deliveryOptions, setDeliveryOptions] = useState([]);
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     const [specModalOpen, setSpecModalOpen] = useState(false);
+    const [productModalOpen, setProductModalOpen] = useState(false);
 
     useEffect(() => { loadMasters(); }, []);
 
     const loadMasters = async () => {
-        setCategories(await fetchCategories());
-        setSpecs(await fetchSpecs());
-        setDeliveryOptions(await fetchDeliverys());
+        setCategories(await fetchCategories(currentUser));
+        setSpecs(await fetchSpecs(currentUser));
+        setDeliveryOptions(await fetchDeliverys(currentUser));
+        setProductInfo(await fetchProductInfo(currentUser)); // 假设你已经实现 fetchProducts
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // 限制价格、数量只能输入数字和小数点
-        if (['price', 'purchasePrice'].includes(name)) {
-            // 允许数字和小数点，最多两位小数
+        if (["price", "purchasePrice"].includes(name)) {
             if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
                 setFormData(prev => ({ ...prev, [name]: value }));
             }
-        } else if (name === 'quantity') {
-            // 只能输入非负整数
+        } else if (name === 'stockQty') {
             if (value === '' || /^\d+$/.test(value)) {
                 setFormData(prev => ({ ...prev, [name]: value }));
             }
@@ -64,9 +64,8 @@ export default function ProductAddForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const requiredFields = ['productName', 'categoryId', 'specId', 'price', 'purchasePrice', 'quantity'];
+        const requiredFields = ['productName', 'categoryId', 'specId', 'price', 'purchasePrice', 'stockQty'];
 
-        // 空值检查
         for (let field of requiredFields) {
             if (!formData[field]) {
                 alert("全ての項目を入力してください");
@@ -74,8 +73,7 @@ export default function ProductAddForm() {
             }
         }
 
-        // 数值必须大于 0 检查
-        const numericFields = ['price', 'purchasePrice', 'quantity'];
+        const numericFields = ['price', 'purchasePrice', 'stockQty'];
         for (let field of numericFields) {
             const value = parseFloat(formData[field]);
             if (isNaN(value) || value <= 0) {
@@ -104,26 +102,50 @@ export default function ProductAddForm() {
         setFormData(prev => ({ ...prev, deliveryCompanyMethodId: id }));
     };
 
-
     const resetForm = () => {
         setFormData(initialFormData);
     };
 
-
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: '1200px', margin: '0 auto' }}>
             <Grid container spacing={3}>
-                <Grid item xs={4}>
-                    <FormLabel className="form-label">商品名</FormLabel>
-                    <TextField fullWidth name="productName" value={formData.productName} onChange={handleChange}
-                        variant="outlined" size="small" className="text-input" required />
+                <Grid item xs={4} className="select-with-button">
+                    <Box sx={{ flexGrow: 1 }}>
+                        <FormLabel className="form-label">品番</FormLabel>
+                        <FormControl fullWidth required>
+                            <Select
+                                name="productName"
+                                value={formData.productId}
+                                onChange={handleChange}
+                                size="small"
+                                className="select-input"
+                            >
+                                {(productInfo || []).map((product) => (
+                                    <MenuItem key={product.id} value={product.productName}>
+                                        {product.productName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        className="add-button"
+                        onClick={() => setProductModalOpen(true)}
+                    >追加</Button>
                 </Grid>
 
                 <Grid item xs={4} className="select-with-button">
                     <Box sx={{ flexGrow: 1 }}>
                         <FormLabel className="form-label">カテゴリー</FormLabel>
                         <FormControl fullWidth required>
-                            <Select name="categoryId" value={formData.categoryId} onChange={handleChange} size="small" className="select-input">
+                            <Select name="categoryId"
+                                value={formData.categoryId}
+                                onChange={handleChange}
+                                size="small"
+                                className="select-input">
                                 {categories.map(cat => (
                                     <MenuItem key={cat.id} value={cat.id}>{cat.categoryName}</MenuItem>
                                 ))}
@@ -138,7 +160,11 @@ export default function ProductAddForm() {
                     <Box sx={{ flexGrow: 1 }}>
                         <FormLabel className="form-label">規格/仕様</FormLabel>
                         <FormControl fullWidth required>
-                            <Select name="specId" value={formData.specId} onChange={handleChange} size="small" className="select-input">
+                            <Select name="specId"
+                                value={formData.specId}
+                                onChange={handleChange}
+                                size="small"
+                                className="select-input">
                                 {specs.map(spec => (
                                     <MenuItem key={spec.id} value={spec.id}>{spec.specName}</MenuItem>
                                 ))}
@@ -163,11 +189,17 @@ export default function ProductAddForm() {
 
                 <Grid item xs={4}>
                     <FormLabel className="form-label">数量</FormLabel>
-                    <TextField fullWidth name="quantity" type="text" value={formData.quantity} onChange={handleChange}
+                    <TextField fullWidth name="stockQty" type="text" value={formData.stockQty} onChange={handleChange}
                         variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={4}>
+                    <FormLabel className="form-label">在庫アラート</FormLabel>
+                    <TextField fullWidth name="stockAlert" type="number" value={formData.stockAlert} onChange={handleChange}
+                        variant="outlined" size="small" className="text-input" required />
+                </Grid>
+
+                <Grid item xs={4}>
                     <FormLabel className="form-label">配送会社</FormLabel>
                     <FormControl fullWidth required>
                         <Select
@@ -183,8 +215,7 @@ export default function ProductAddForm() {
                     </FormControl>
                 </Grid>
 
-
-                <Grid item xs={2}>
+                <Grid item xs={4}>
                     <FormLabel className="form-label">配送方法</FormLabel>
                     <FormControl fullWidth required>
                         <Select
@@ -205,9 +236,6 @@ export default function ProductAddForm() {
                     </FormControl>
                 </Grid>
 
-
-
-
                 <Grid item xs={12}>
                     <UploadArea onFileSelect={handleFileSelect} />
                     {formData.image && (
@@ -221,6 +249,7 @@ export default function ProductAddForm() {
                 </Grid>
             </Grid>
 
+            <AddProductModal open={productModalOpen} onClose={() => setProductModalOpen(false)} onAdd={loadMasters} />
             <AddCategoryModal open={categoryModalOpen} onClose={() => setCategoryModalOpen(false)} onAdd={loadMasters} />
             <AddSpecModal open={specModalOpen} onClose={() => setSpecModalOpen(false)} onAdd={loadMasters} />
         </Box>

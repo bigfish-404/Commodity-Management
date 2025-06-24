@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.entity.ProductListEntity;
+import com.example.backend.entity.dto.ProductListEntity;
 import com.example.backend.service.ProductList.ProductListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,9 +1,11 @@
-package com.example.backend.entity;
+package com.example.backend.entity.db;
 
 import java.util.Date;
 
 public class SpecEntity {
     private Long id;
+    private String userId;
+    private String specId;
     private String specName;
     private String description; 
     private String createdBy;
@@ -21,6 +23,22 @@ public class SpecEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
     }
 
     public String getSpecName() {

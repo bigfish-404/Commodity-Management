@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.entity.DeliveryMethodEntity;
+import com.example.backend.entity.db.DeliveryMethodEntity;
 import com.example.backend.mapper.DeliveryMethodMapper;
 
 @Service
@@ -14,9 +14,9 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService{
     private DeliveryMethodMapper deliveryMethodMapper;
 
     @Override
-    public List<DeliveryMethodEntity> getAllDeliveryMethod(){
+    public List<DeliveryMethodEntity> getAllDeliveryMethod(String userId){
 
-        return deliveryMethodMapper.getAll();
+        return deliveryMethodMapper.getAll(userId);
     }
 
 }

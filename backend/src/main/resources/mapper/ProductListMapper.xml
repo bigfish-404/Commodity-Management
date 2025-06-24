@@ -6,7 +6,7 @@
 <mapper namespace="com.example.backend.mapper.ProductListMapper">
 
     <!-- 结果映射 -->
-    <resultMap id="ProductMap" type="com.example.backend.entity.ProductListEntity">
+    <resultMap id="ProductMap" type="com.example.backend.entity.dto.ProductListEntity">
         <id property="id" column="id" />
         <result property="userId" column="user_id" />
         <result property="productName" column="product_name" />

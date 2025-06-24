@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.entity.dto;
 
 public class RegisterEntity {
     private String username;

@@ -1,6 +1,6 @@
 package com.example.backend.service.ProductList;
 
-import com.example.backend.entity.ProductListEntity;
+import com.example.backend.entity.dto.ProductListEntity;
 import com.example.backend.mapper.ProductListMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

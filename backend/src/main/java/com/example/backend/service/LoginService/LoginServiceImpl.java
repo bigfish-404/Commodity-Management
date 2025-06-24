@@ -1,17 +1,18 @@
-package com.example.backend.service;
+package com.example.backend.service.LoginService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.entity.UserEntity;
+import com.example.backend.entity.db.UserEntity;
 import com.example.backend.mapper.LoginMapper;
 
 @Service
-public class LoginService {
+public class LoginServiceImpl implements LoginService{
 
     @Autowired
     private LoginMapper loginMapper;    
 
+    @Override
     public UserEntity validateUser(String email, String password) {
 
         // 基础校验

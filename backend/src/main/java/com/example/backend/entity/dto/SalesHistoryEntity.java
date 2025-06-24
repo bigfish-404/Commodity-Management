@@ -1,10 +1,9 @@
-package com.example.backend.entity;
+package com.example.backend.entity.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProfitEntity {
-
+public class SalesHistoryEntity {
     private Long id;
 
     private Long userId;
@@ -27,6 +26,10 @@ public class ProfitEntity {
 
     private Date salesDate;
 
+    private String channelName;
+
+    private String DisplayName;
+
     private Date updatedAt;
 
     private String updatedBy;
@@ -37,7 +40,6 @@ public class ProfitEntity {
 
     private String deletedFlg;
 
-    
     public Long getId() {
         return id;
     }
@@ -126,6 +128,14 @@ public class ProfitEntity {
         this.salesDate = salesDate;
     }
 
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -165,4 +175,14 @@ public class ProfitEntity {
     public void setDeletedFlg(String deletedFlg) {
         this.deletedFlg = deletedFlg;
     }
+
+    public String getDisplayName() {
+        return DisplayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        DisplayName = displayName;
+    }
+
+    
 }

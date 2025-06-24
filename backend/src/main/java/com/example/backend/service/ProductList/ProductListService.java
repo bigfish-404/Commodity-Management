@@ -1,7 +1,8 @@
 package com.example.backend.service.ProductList;
 
-import com.example.backend.entity.ProductListEntity;
 import java.util.List;
+
+import com.example.backend.entity.dto.ProductListEntity;
 
 /**
  * 商品列表服务接口

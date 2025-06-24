@@ -6,7 +6,7 @@
 <mapper namespace="com.example.backend.mapper.SalesInputMapper">
 
     <!-- 结果映射 -->
-    <resultMap id="SalesInputResultMap" type="com.example.backend.entity.SalesInputEntity">
+    <resultMap id="SalesInputResultMap" type="com.example.backend.entity.dto.SalesInputEntity">
         <id column="ID" property="id"/>
         <result column="USER_ID" property="userId"/>
         <result column="PRODUCT_NAME" property="productName"/>
@@ -53,7 +53,7 @@
             AND dp.CHANNEL_ID = #{channelId}
             AND dp.DELETED_FLG = '0'
     </select>
-    <insert id="insertProfit" parameterType="com.example.backend.entity.ProfitEntity">
+    <insert id="insertProfit" parameterType="com.example.backend.entity.db.ProfitEntity">
     INSERT INTO COMMODITY_MANAGEMENT.PROFIT (
         PRODUCT_NAME,
         CATEGORY,

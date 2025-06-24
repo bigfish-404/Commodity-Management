@@ -1,4 +1,4 @@
-package com.example.backend.entity;
+package com.example.backend.entity.db;
 
 public class ChannelEntity {
     private Long id;

@@ -4,10 +4,24 @@
 
 <mapper namespace="com.example.backend.mapper.LoginMapper">
 
-  <select id="findByEmail" parameterType="string" resultType="com.example.backend.entity.UserEntity">
-    SELECT id, email, password, username
-    FROM users
-    WHERE email = #{email}
-  </select>
+    <resultMap id="UserResultMap" type="com.example.backend.entity.db.UserEntity">
+        <result property="userId" column="USER_ID"/>
+        <result property="username" column="USERNAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+        <result property="deletedFlg" column="DELETED_FLG"/>
+    </resultMap>
+
+    <select id="findByEmail" resultMap="UserResultMap" parameterType="string">
+    SELECT
+            USER_ID, USERNAME, EMAIL, PASSWORD,
+            CREATED_AT, CREATED_BY, UPDATED_AT, UPDATED_BY, DELETED_FLG
+        FROM USERS
+        WHERE EMAIL = #{email}
+    </select>
 
 </mapper>

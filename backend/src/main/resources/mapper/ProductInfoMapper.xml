@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.mapper.ProductInfoMapper">
+
+    <resultMap id="ProductInfoResultMap" type="com.example.backend.entity.db.ProductInfoEntity">
+        <id property="id" column="ID" />
+        <result property="userId" column="USER_ID" />
+        <result property="productId" column="PRODUCT_ID" />
+        <result property="productName" column="PRODUCT_NAME" />
+        <result property="description" column="DESCRIPTION" />
+        <result property="createdAt" column="CREATED_AT" />
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="updatedAt" column="UPDATED_AT" />
+        <result property="updatedBy" column="UPDATED_BY" />
+        <result property="deletedFlg" column="DELETED_FLG" />
+    </resultMap>
+
+    <select id="getAllProductInfo" resultMap="ProductInfoResultMap">
+        SELECT * FROM PRODUCT_INFO
+        WHERE DELETED_FLG = '0'
+          AND USER_ID = #{userId}
+    </select>
+
+    <insert id="insertProductInfo" parameterType="com.example.backend.entity.db.ProductInfoEntity">
+        INSERT INTO PRODUCT_INFO (
+            USER_ID,
+            PRODUCT_ID,
+            PRODUCT_NAME,
+            DESCRIPTION,
+            CREATED_BY,
+            CREATED_AT,
+            UPDATED_BY,
+            UPDATED_AT,
+            DELETED_FLG
+        ) VALUES (
+            #{userId, jdbcType=VARCHAR},
+            #{productId, jdbcType=VARCHAR},
+            #{productName, jdbcType=VARCHAR},
+            #{description, jdbcType=VARCHAR},
+            #{createdBy, jdbcType=VARCHAR},
+            #{createdAt, jdbcType=TIMESTAMP},
+            #{updatedBy, jdbcType=VARCHAR},
+            #{updatedAt, jdbcType=TIMESTAMP},
+            #{deletedFlg, jdbcType=CHAR}
+        )
+    </insert>
+
+</mapper>

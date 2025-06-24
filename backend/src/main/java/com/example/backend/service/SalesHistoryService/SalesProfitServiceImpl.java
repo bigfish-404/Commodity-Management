@@ -3,8 +3,9 @@ package com.example.backend.service.SalesHistoryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.backend.entity.ProfitEntity;
-import com.example.backend.entity.SalesHistoryEntity;
+
+import com.example.backend.entity.db.ProfitEntity;
+import com.example.backend.entity.dto.SalesHistoryEntity;
 import com.example.backend.mapper.SalesHistoryMapper;
 
 @Service
@@ -23,6 +24,4 @@ public class SalesProfitServiceImpl implements SalesHistoryService {
         int updated = salesHistoryMapper.updateProfitIfChanged(profit);
         return updated > 0;
     }
-    
-
 }

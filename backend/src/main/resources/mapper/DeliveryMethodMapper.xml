@@ -5,36 +5,33 @@
 <mapper namespace="com.example.backend.mapper.DeliveryMethodMapper">
 
     <!-- 通用字段 -->
-    <resultMap id="DeliveryCompanyMethodResultMap" type="com.example.backend.entity.DeliveryMethodEntity">
+    <resultMap id="DeliveryCompanyMethodResultMap" type="com.example.backend.entity.db.DeliveryMethodEntity">
         <id property="id" column="ID" />
-        <result property="deliveryCompany" column="DELIVERY_COMPANY"/>
-        <result property="deliveryMethod" column="DELIVERY_METHOD"/>
-        <result property="createdBy" column="CREATED_BY"/>
-        <result property="createdAt" column="CREATED_AT"/>
-        <result property="updatedBy" column="UPDATED_BY"/>
-        <result property="updatedAt" column="UPDATED_AT"/>
-        <result property="deletedFlg" column="DELETED_FLG"/>
+        <result property="deliveryMethodId" column="DELIVERY_METHOD_ID" />
+        <result property="userId" column="USER_ID" />
+        <result property="deliveryCompany" column="DELIVERY_COMPANY" />
+        <result property="deliveryMethod" column="DELIVERY_METHOD" />
+        <result property="createdBy" column="CREATED_BY" />
+        <result property="createdAt" column="CREATED_AT" />
+        <result property="updatedBy" column="UPDATED_BY" />
+        <result property="updatedAt" column="UPDATED_AT" />
+        <result property="deletedFlg" column="DELETED_FLG" />
     </resultMap>
 
-    <!-- 根据 ID 查询 -->
-    <select id="getById" parameterType="long" resultMap="DeliveryCompanyMethodResultMap">
-        SELECT *
-        FROM DELIVERY_COMPANY_METHOD
-        WHERE ID = #{id}
-    </select>
-
     <!-- 查询全部 -->
-    <select id="getAll" resultMap="DeliveryCompanyMethodResultMap">
+    <select id="getAll" resultMap="DeliveryCompanyMethodResultMap" parameterType="string">
         SELECT *
-        FROM DELIVERY_COMPANY_METHOD
+        FROM DELIVERY_METHOD
         WHERE DELETED_FLG = '0'
+            AND USER_ID = #{userId}
     </select>
 
     <!-- 插入 -->
-    <insert id="insert" parameterType="com.example.backend.entity.DeliveryMethodEntity">
-        INSERT INTO DELIVERY_COMPANY_METHOD
+    <insert id="insert" parameterType="com.example.backend.entity.db.DeliveryMethodEntity">
+        INSERT INTO DELIVERY_METHOD
         (
-            ID,
+            USER_ID,
+            DELIVERY_METHOD_ID,
             DELIVERY_COMPANY,
             DELIVERY_METHOD,
             CREATED_BY,
@@ -43,7 +40,8 @@
             UPDATED_AT,
             DELETED_FLG
         ) VALUES (
-            #{id},
+            #{userId},
+            #{deliveryMethodId},
             #{deliveryCompany},
             #{deliveryMethod},
             #{createdBy},
@@ -55,22 +53,23 @@
     </insert>
 
     <!-- 更新 -->
-    <update id="update" parameterType="com.example.backend.entity.DeliveryMethodEntity">
-        UPDATE DELIVERY_COMPANY_METHOD
+    <update id="update" parameterType="com.example.backend.entity.db.DeliveryMethodEntity">
+        UPDATE DELIVERY_METHOD
         SET
             DELIVERY_COMPANY = #{deliveryCompany},
             DELIVERY_METHOD = #{deliveryMethod},
             UPDATED_BY = #{updatedBy},
-            UPDATED_AT = #{updatedAt},
-            DELETED_FLG = #{deletedFlg}
+            UPDATED_AT = #{updatedAt}
         WHERE ID = #{id}
+            AND USER_ID = #{userId}
     </update>
 
     <!-- 逻辑删除 -->
-    <update id="delete" parameterType="long">
-        UPDATE DELIVERY_COMPANY_METHOD
+    <update id="delete" parameterType="map">
+        UPDATE DELIVERY_METHOD
         SET DELETED_FLG = '1'
         WHERE ID = #{id}
+            AND USER_ID = #{userId}
     </update>
 
 </mapper>

@@ -6,7 +6,7 @@
 <mapper namespace="com.example.backend.mapper.SalesHistoryMapper">
 
     <!-- 结果映射 -->
-    <resultMap id="ProfitResultMap" type="com.example.backend.entity.SalesHistoryEntity">
+    <resultMap id="ProfitResultMap" type="com.example.backend.entity.dto.SalesHistoryEntity">
         <id column="ID" property="id"/>
         <result column="USER_ID" property="userId"/>
         <result column="PRODUCT_NAME" property="productName"/>
@@ -54,7 +54,7 @@
         ORDER BY SALES_DATE DESC
     </select>
 
-    <update id="updateProfitIfChanged" parameterType="com.example.backend.entity.ProfitEntity">
+    <update id="updateProfitIfChanged" parameterType="com.example.backend.entity.db.ProfitEntity">
         UPDATE COMMODITY_MANAGEMENT.PROFIT
         SET 
             SALES_PRICE = #{salesPrice},

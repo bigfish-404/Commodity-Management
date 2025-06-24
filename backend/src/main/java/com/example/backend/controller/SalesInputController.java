@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.entity.ProfitEntity;
-import com.example.backend.entity.SalesInputEntity;
+import com.example.backend.entity.db.ProfitEntity;
+import com.example.backend.entity.dto.SalesInputEntity;
 import com.example.backend.service.SalesInputService.SalesInputService;
 
 @RequestMapping("/api")

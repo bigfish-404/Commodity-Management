@@ -3,7 +3,7 @@ package com.example.backend.service.ProductAdd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.entity.ProductEntity;
+import com.example.backend.entity.db.ProductEntity;
 import com.example.backend.mapper.ProductAddMapper;
 
 @Service

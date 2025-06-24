@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import java.util.Collections;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.example.backend.entity.RegisterEntity;
+
+import com.example.backend.entity.dto.RegisterEntity;
+import com.example.backend.service.Register.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.example.backend.service.RegisterService;
 
 @RestController
 @RequestMapping("/api")

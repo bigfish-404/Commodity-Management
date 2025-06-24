@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.backend.mapper.ProductAddMapper">
 
-    <insert id="insertProduct" parameterType="com.example.backend.entity.ProductEntity">
+  <insert id="insertProduct" parameterType="com.example.backend.entity.db.ProductEntity">
         INSERT INTO PRODUCTS (
           ID,
           USER_ID,
@@ -13,6 +13,7 @@
           CATEGORY_ID,
           SPEC_ID,
           STOCK_QTY,
+          STOCK_ALERT,
           PRICE,
           PURCHASE_PRICE,
           LAST_SALES_DATE,
@@ -31,6 +32,7 @@
           #{categoryId, jdbcType=NUMERIC},
           #{specId, jdbcType=NUMERIC},
           #{stockQty, jdbcType=NUMERIC},
+          #{stockAlert, jdbcType=NUMERIC},
           #{price, jdbcType=NUMERIC},
           #{purchasePrice, jdbcType=NUMERIC},
           #{lastSalesDate, jdbcType=TIMESTAMP},
@@ -43,6 +45,6 @@
           SYSTIMESTAMP,
           #{deletedFlg, jdbcType=NUMERIC}
         )
-    </insert>
+  </insert>
 
 </mapper>

@@ -3,16 +3,28 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.backend.mapper.RegisterMapper">
-  <insert id="insertUser" >
+    <insert id="insertUser">
     INSERT INTO USERS(
-        username,
-        email,
-        password
+        USER_ID,
+        USERNAME,
+        EMAIL,
+        PASSWORD,
+        CREATED_AT,
+        CREATED_BY,
+        UPDATED_AT,
+        UPDATED_BY,
+        DELETED_FLG
     )
     VALUES(
-        #{username, jdbcType=VARCHAR},
-        #{email, jdbcType=VARCHAR},
-        #{password, jdbcType=VARCHAR}
+        #{userId},
+        #{username},
+        #{email},
+        #{password},
+        CURRENT_TIMESTAMP,
+        #{createdBy},
+        CURRENT_TIMESTAMP,
+        #{updatedBy},
+        #{deletedFlg}
     )
-  </insert>
+    </insert>
 </mapper>
