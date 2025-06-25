@@ -9,17 +9,22 @@
     <resultMap id="ProductMap" type="com.example.backend.entity.dto.ProductListEntity">
         <id property="id" column="id" />
         <result property="userId" column="user_id" />
+        <result property="productId" column="product_id" />
         <result property="productName" column="product_name" />
         <result property="categoryId" column="category_id" />
         <result property="categoryName" column="category_name" />
         <result property="specId" column="spec_id" />
         <result property="specName" column="spec_name" />
         <result property="stockQty" column="stock_qty" />
+        <result property="stockAlert" column="stock_alert" />
         <result property="price" column="price" />
         <result property="purchasePrice" column="purchase_price" />
-        <result property="lastSalesDate" column="last_sales_date" />
         <result property="totalSales" column="total_sales" />
+        <result property="lastSalesDate" column="last_sales_date" />
         <result property="staff" column="staff" />
+        <result property="deliveryMethodId" column="delivery_method_id" />
+        <result property="deliveryCompany" column="delivery_company" />
+        <result property="deliveryMethod" column="delivery_method" />
         <result property="createdBy" column="created_by" />
         <result property="createdAt" column="created_at" />
         <result property="updatedBy" column="updated_by" />
@@ -27,35 +32,63 @@
         <result property="deletedFlg" column="deleted_flg" />
     </resultMap>
 
+
     <!-- 分页查询商品列表，联表查出分类名称、规格名称 -->
     <select id="getAllProductsByUserId" resultMap="ProductMap">
-        SELECT p.id, p.user_id, p.product_name, p.category_id, c.category_name,
-               p.spec_id, s.spec_name, p.stock_qty, p.price, p.purchase_price, 
-               p.last_sales_date, p.total_sales, p.staff, p.created_by, p.created_at, 
-               p.updated_by, p.updated_at, p.deleted_flg
+        SELECT 
+            p.id,
+            p.user_id,
+            p.product_id,
+            pi.product_name,
+            p.category_id,
+            c.category_name,
+            p.spec_id,
+            s.spec_name,
+            p.stock_qty,
+            p.stock_alert,
+            p.price,
+            p.purchase_price,
+            p.total_sales,
+            p.last_sales_date,
+            p.staff,
+            p.delivery_method_id,
+            d.delivery_company,
+            d.delivery_method,
+            p.created_by,
+            p.created_at,
+            p.updated_by,
+            p.updated_at,
+            p.deleted_flg
         FROM products p
-        LEFT JOIN category c ON p.category_id = c.id
-        LEFT JOIN spec s ON p.spec_id = s.id
+        LEFT JOIN product_info pi
+            ON p.product_id = pi.product_id 
+            AND pi.deleted_flg = '0'
+            AND pi.user_id = p.user_id
+        LEFT JOIN categories c
+            ON p.category_id = c.category_id 
+            AND c.deleted_flg = '0'
+            AND c.user_id = p.user_id
+        LEFT JOIN spec s
+            ON p.spec_id = s.spec_id 
+            AND s.deleted_flg = '0'
+            AND s.user_id = p.user_id
+        LEFT JOIN delivery_method d
+            ON p.delivery_method_id = d.delivery_method_id 
+            AND d.deleted_flg = '0'
+            AND d.user_id = p.user_id
         WHERE p.user_id = #{userId}
             AND p.deleted_flg = 0
         ORDER BY ${orderBy} ${orderDirection}
         OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
+
     <!-- 查询商品总数 -->
     <select id="countProductsByUserId" resultType="int">
-        SELECT COUNT(*) FROM products WHERE user_id = #{userId}
+        SELECT COUNT(*) 
+        FROM products 
+        WHERE user_id = #{userId}
+            AND deleted_flg = 0
     </select>
-
-    <!-- 插入新商品记录 -->
-    <insert id="insertProduct">
-        INSERT INTO products (
-            user_id, product_name, category_id, spec_id, stock_qty, price, purchase_price,
-            last_sales_date, total_sales, staff, created_by, created_at, updated_by, updated_at, deleted_flg
-        ) VALUES (
-            #{userId}, #{productName}, #{categoryId}, #{specId}, #{stockQty}, #{price}, #{purchasePrice},
-            #{lastSalesDate}, #{totalSales}, #{staff}, #{createdBy}, #{createdAt}, #{updatedBy}, #{updatedAt}, #{deletedFlg}
-        )
-    </insert>
 
 </mapper>

@@ -11,7 +11,7 @@ import java.util.List;
  * 商品管理控制器
  */
 @RestController
-@RequestMapping("/api/productList")
+@RequestMapping("/api")
 public class ProductListController {
 
     @Autowired
@@ -20,29 +20,22 @@ public class ProductListController {
     /**
      * 分页查询指定用户的商品列表
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/productList")
     public List<ProductListEntity> getAllProductsByUserId(
-            @PathVariable Long userId,
+            @RequestParam String userId,
             @RequestParam int offset,
             @RequestParam int limit,
             @RequestParam(required = false, defaultValue = "productName") String orderBy,
             @RequestParam(required = false, defaultValue = "asc") String orderDirection) {
-        return productListService.getAllProductsByUserId(userId, offset, limit, orderBy, orderDirection);
+
+        return productListService.getAllProductsByUserId(userId, orderBy, orderDirection, offset, limit);
     }
 
     /**
      * 查询指定用户的商品总数量
      */
-    @GetMapping("/{userId}/count")
-    public int countProductsByUserId(@PathVariable("userId") Long userId) {
+    @GetMapping("/productListCount")
+    public int countProductsByUserId( @RequestParam String userId) {
         return productListService.countProductsByUserId(userId);
-    }
-
-    /**
-     * 新增商品
-     */
-    @PostMapping
-    public void insertProduct(@RequestBody ProductListEntity product) {
-        productListService.insertProduct(product);
     }
 }

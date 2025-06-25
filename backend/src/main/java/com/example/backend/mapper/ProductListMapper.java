@@ -22,7 +22,7 @@ public interface ProductListMapper {
      * @return 商品列表
      */
    List<ProductListEntity> getAllProductsByUserId(
-    @Param("userId") Long userId, 
+    @Param("userId") String userId, 
     @Param("offset") int offset, 
     @Param("limit") int limit,
     @Param("orderBy") String orderBy,
@@ -36,12 +36,6 @@ public interface ProductListMapper {
      * @param userId 用户ID
      * @return 商品总数量
      */
-    int countProductsByUserId(@Param("userId") Long userId);
+    int countProductsByUserId(@Param("userId") String userId);
 
-    /**
-     * 插入新的商品记录
-     *
-     * @param productListEntity 商品实体对象
-     */
-    void insertProduct(ProductListEntity productListEntity);
 }

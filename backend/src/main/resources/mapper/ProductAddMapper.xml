@@ -6,45 +6,43 @@
 <mapper namespace="com.example.backend.mapper.ProductAddMapper">
 
   <insert id="insertProduct" parameterType="com.example.backend.entity.db.ProductEntity">
-        INSERT INTO PRODUCTS (
-          ID,
-          USER_ID,
-          PRODUCT_NAME,
-          CATEGORY_ID,
-          SPEC_ID,
-          STOCK_QTY,
-          STOCK_ALERT,
-          PRICE,
-          PURCHASE_PRICE,
-          LAST_SALES_DATE,
-          TOTAL_SALES,
-          STAFF,
-          DELIVERY_COMPANY_METHOD_ID,  
-          CREATED_BY,
-          CREATED_AT,
-          UPDATED_BY,
-          UPDATED_AT,
-          DELETED_FLG
-        ) VALUES (
-          PRODUCTS_SEQ.NEXTVAL,
-          #{userId, jdbcType=NUMERIC},
-          #{productName, jdbcType=VARCHAR},
-          #{categoryId, jdbcType=NUMERIC},
-          #{specId, jdbcType=NUMERIC},
-          #{stockQty, jdbcType=NUMERIC},
-          #{stockAlert, jdbcType=NUMERIC},
-          #{price, jdbcType=NUMERIC},
-          #{purchasePrice, jdbcType=NUMERIC},
-          #{lastSalesDate, jdbcType=TIMESTAMP},
-          #{totalSales, jdbcType=NUMERIC},
-          #{staff, jdbcType=VARCHAR},
-          #{deliveryCompanyMethodId, jdbcType=NUMERIC}, 
-          #{createdBy, jdbcType=VARCHAR},
-          SYSTIMESTAMP,
-          #{updatedBy, jdbcType=VARCHAR},
-          SYSTIMESTAMP,
-          #{deletedFlg, jdbcType=NUMERIC}
-        )
+    INSERT INTO PRODUCTS (
+      USER_ID,
+      PRODUCT_ID,
+      CATEGORY_ID,
+      SPEC_ID,
+      STOCK_QTY,
+      STOCK_ALERT,
+      PRICE,
+      PURCHASE_PRICE,
+      LAST_SALES_DATE,
+      TOTAL_SALES,
+      STAFF,
+      DELIVERY_METHOD_ID,
+      CREATED_BY,
+      CREATED_AT,
+      UPDATED_BY,
+      UPDATED_AT,
+      DELETED_FLG
+    ) VALUES (
+      #{userId, jdbcType=VARCHAR},
+      #{productId, jdbcType=VARCHAR},
+      #{categoryId, jdbcType=VARCHAR},
+      #{specId, jdbcType=VARCHAR},
+      #{stockQty, jdbcType=NUMERIC},
+      #{stockAlert, jdbcType=NUMERIC},
+      #{price, jdbcType=NUMERIC},
+      #{purchasePrice, jdbcType=NUMERIC},
+      #{lastSalesDate, jdbcType=TIMESTAMP},
+      #{totalSales, jdbcType=NUMERIC},
+      #{staff, jdbcType=VARCHAR},
+      #{deliveryMethodId, jdbcType=NUMERIC},
+      #{createdBy, jdbcType=VARCHAR},
+      SYSTIMESTAMP,
+      #{updatedBy, jdbcType=VARCHAR},
+      SYSTIMESTAMP,
+      #{deletedFlg, jdbcType=NUMERIC}
+    )
   </insert>
 
 </mapper>

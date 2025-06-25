@@ -36,7 +36,7 @@ export const fetchDeliverys = async (currentUser) => {
 export const addProductInfo = async (productName, currentUser) => {
     const data = {
         userId: currentUser.userId,
-        productName: productName, 
+        productName: productName,
         description: null,
         createdBy: currentUser.name,
         updatedBy: currentUser.name,
@@ -70,17 +70,24 @@ export const addSpec = async (specName, currentUser) => {
     });
 };
 
+
+//新增配送方法
+export const addDeliveryMethod = async (data) => {
+    await axios.post('/api/addDeliveryMethod', data);
+};
+
 // 新增商品
 export const submitProduct = async (formData, currentUser) => {
     const productData = {
-        productName: formData.productName,
-        categoryId: parseInt(formData.categoryId),
-        specId: parseInt(formData.specId),
+        userId: currentUser.userId,
+        productId: formData.productId,
+        categoryId: formData.categoryId,
+        specId: formData.specId,
         price: parseFloat(formData.price),
         purchasePrice: parseFloat(formData.purchasePrice),
-        stockQty: parseInt(formData.quantity),
-        deliveryCompanyMethodId: parseInt(formData.deliveryCompanyMethodId),
-        userId: currentUser.id,
+        stockQty: parseInt(formData.stockQty),
+        stockAlert: parseInt(formData.stockAlert || '0'),
+        deliveryMethodId: parseInt(formData.deliveryMethodId),
         createdBy: currentUser.name,
         updatedBy: currentUser.name,
         lastSalesDate: null,

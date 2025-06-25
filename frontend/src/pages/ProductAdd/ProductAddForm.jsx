@@ -3,6 +3,8 @@ import { TextField, Grid, Button, Box, FormControl, FormLabel, Select, MenuItem,
 import AddProductModal from './Modal/AddProductModal';
 import AddCategoryModal from './Modal/AddCategoryModal';
 import AddSpecModal from './Modal/AddSpecModal';
+import AddDeliveryMethodModal from './Modal/AddDeliveryMethodModal';
+
 import UploadArea from './UploadArea';
 import { fetchProductInfo, fetchCategories, fetchDeliverys, fetchSpecs, submitProduct } from '../../services/productAddService';
 import './ProductAddForm.css';
@@ -19,8 +21,7 @@ export default function ProductAddForm() {
         stockQty: '',
         stockAlert: '',
         deliveryCompany: '',
-        deliveryCompanyMethodId: '',
-        image: null
+        deliveryMethodId: '',
     };
 
     const [formData, setFormData] = useState(initialFormData);
@@ -31,6 +32,8 @@ export default function ProductAddForm() {
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     const [specModalOpen, setSpecModalOpen] = useState(false);
     const [productModalOpen, setProductModalOpen] = useState(false);
+    const [addMethodModalOpen, setAddMethodModalOpen] = useState(false);
+
 
     useEffect(() => { loadMasters(); }, []);
 
@@ -64,10 +67,11 @@ export default function ProductAddForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const requiredFields = ['productName', 'categoryId', 'specId', 'price', 'purchasePrice', 'stockQty'];
+        const requiredFields = ['productId', 'categoryId', 'specId', 'price', 'purchasePrice', 'stockQty'];
+
 
         for (let field of requiredFields) {
-            if (!formData[field]) {
+            if (formData[field] === '' || formData[field] === null || formData[field] === undefined) {
                 alert("全ての項目を入力してください");
                 return;
             }
@@ -99,7 +103,7 @@ export default function ProductAddForm() {
 
     const handleMethodChange = (e) => {
         const id = e.target.value;
-        setFormData(prev => ({ ...prev, deliveryCompanyMethodId: id }));
+        setFormData(prev => ({ ...prev, deliveryMethodId: id }));
     };
 
     const resetForm = () => {
@@ -114,16 +118,14 @@ export default function ProductAddForm() {
                         <FormLabel className="form-label">品番</FormLabel>
                         <FormControl fullWidth required>
                             <Select
-                                name="productName"
+                                name="productId"
                                 value={formData.productId}
                                 onChange={handleChange}
                                 size="small"
                                 className="select-input"
                             >
                                 {(productInfo || []).map((product) => (
-                                    <MenuItem key={product.id} value={product.productName}>
-                                        {product.productName}
-                                    </MenuItem>
+                                    <MenuItem key={product.id} value={product.productId}>{product.productName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -147,7 +149,7 @@ export default function ProductAddForm() {
                                 size="small"
                                 className="select-input">
                                 {categories.map(cat => (
-                                    <MenuItem key={cat.id} value={cat.id}>{cat.categoryName}</MenuItem>
+                                    <MenuItem key={cat.id} value={cat.categoryId}>{cat.categoryName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -166,7 +168,7 @@ export default function ProductAddForm() {
                                 size="small"
                                 className="select-input">
                                 {specs.map(spec => (
-                                    <MenuItem key={spec.id} value={spec.id}>{spec.specName}</MenuItem>
+                                    <MenuItem key={spec.id} value={spec.specId}>{spec.specName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -199,27 +201,37 @@ export default function ProductAddForm() {
                         variant="outlined" size="small" className="text-input" required />
                 </Grid>
 
-                <Grid item xs={4}>
-                    <FormLabel className="form-label">配送会社</FormLabel>
-                    <FormControl fullWidth required>
-                        <Select
-                            value={formData.deliveryCompany}
-                            onChange={handleCompanyChange}
-                            size="small"
-                            className="select-input"
-                        >
-                            {[...new Set(deliveryOptions.map(opt => opt.deliveryCompany))].map((company, index) => (
-                                <MenuItem key={index} value={company}>{company}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <Grid item xs={4} className="select-with-button">
+                    <Box sx={{ flexGrow: 1 }}>
+                        <FormLabel className="form-label">配送会社</FormLabel>
+                        <FormControl fullWidth required>
+                            <Select
+                                value={formData.deliveryCompany}
+                                onChange={handleCompanyChange}
+                                size="small"
+                                className="select-input"
+                            >
+                                {[...new Set(deliveryOptions.map(opt => opt.deliveryCompany))].map((company, index) => (
+                                    <MenuItem key={index} value={company}>{company}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        className="add-button"
+                        onClick={() => setAddMethodModalOpen(true)}
+                    >
+                        追加
+                    </Button>
                 </Grid>
-
                 <Grid item xs={4}>
                     <FormLabel className="form-label">配送方法</FormLabel>
                     <FormControl fullWidth required>
                         <Select
-                            value={formData.deliveryCompanyMethodId}
+                            value={formData.deliveryMethodId}
                             onChange={handleMethodChange}
                             size="small"
                             className="select-input"
@@ -249,9 +261,33 @@ export default function ProductAddForm() {
                 </Grid>
             </Grid>
 
-            <AddProductModal open={productModalOpen} onClose={() => setProductModalOpen(false)} onAdd={loadMasters} />
-            <AddCategoryModal open={categoryModalOpen} onClose={() => setCategoryModalOpen(false)} onAdd={loadMasters} />
-            <AddSpecModal open={specModalOpen} onClose={() => setSpecModalOpen(false)} onAdd={loadMasters} />
+            <AddProductModal
+                open={productModalOpen}
+                onClose={() =>
+                    setProductModalOpen(false)}
+                onAdd={loadMasters}
+            />
+
+            <AddCategoryModal
+                open={categoryModalOpen}
+                onClose={() => setCategoryModalOpen(false)}
+                onAdd={loadMasters}
+            />
+
+            <AddSpecModal
+                open={specModalOpen}
+                onClose={() => setSpecModalOpen(false)}
+                onAdd={loadMasters}
+            />
+
+
+            <AddDeliveryMethodModal
+                open={addMethodModalOpen}
+                onClose={() => setAddMethodModalOpen(false)}
+                onAdd={loadMasters}
+                selectedCompany={formData.deliveryCompany}
+            />
+
         </Box>
     );
 }

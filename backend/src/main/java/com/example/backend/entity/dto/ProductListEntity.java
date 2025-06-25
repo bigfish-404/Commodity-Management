@@ -1,6 +1,6 @@
 package com.example.backend.entity.dto;
 
-import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -8,60 +8,29 @@ import java.util.Date;
  */
 public class ProductListEntity {
 
-    /** 商品ID (主键) */
     private Long id;
-
-    /** 所属用户ID (外键，关联 USERS 表 ID) */
-    private Long userId;
-
-    /** 商品名称 */
+    private String userId;
+    private String productId;
     private String productName;
-
-    /** 商品分类 */
     private String categoryId;
-
-    /** 商品分类名称 */
     private String categoryName;
-
-    /** 规格/型号 */
+    private String specId;
     private String specName;
-
-    private Long specId;
-
-    /** 库存数量 */
     private Integer stockQty;
-
-    /** 销售单价（含税） */
-    private BigDecimal price;
-
-    /** 进货价 */
-    private BigDecimal purchasePrice;
-
-    /** 最后销售日期 */
-    private Date lastSalesDate;
-
-    /** 累计销售数量 */
+    private Integer stockAlert;
+    private Double price;
+    private Double purchasePrice;
     private Integer totalSales;
-
-    /** 负责人 */
+    private Date lastSalesDate;
     private String staff;
-
-    /** 创建人 */
+    private Long deliveryMethodId;
+    private String deliveryCompany;
+    private String deliveryMethod;
+    private Timestamp createdAt;
     private String createdBy;
-
-    /** 创建时间 */
-    private Date createdAt;
-
-    /** 修改人 */
+    private Timestamp updatedAt;
     private String updatedBy;
-
-    /** 修改时间 */
-    private Date updatedAt;
-
-    /** 逻辑删除标志（0:正常 1:已删除） */
     private Integer deletedFlg;
-
-    // Getter 和 Setter
     public Long getId() {
         return id;
     }
@@ -70,12 +39,20 @@ public class ProductListEntity {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -86,94 +63,6 @@ public class ProductListEntity {
         this.productName = productName;
     }
 
-    public Integer getStockQty() {
-        return stockQty;
-    }
-
-    public void setStockQty(Integer stockQty) {
-        this.stockQty = stockQty;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(BigDecimal purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-
-    public Date getLastSalesDate() {
-        return lastSalesDate;
-    }
-
-    public void setLastSalesDate(Date lastSalesDate) {
-        this.lastSalesDate = lastSalesDate;
-    }
-
-    public Integer getTotalSales() {
-        return totalSales;
-    }
-
-    public void setTotalSales(Integer totalSales) {
-        this.totalSales = totalSales;
-    }
-
-    public String getStaff() {
-        return staff;
-    }
-
-    public void setStaff(String staff) {
-        this.staff = staff;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Integer getDeletedFlg() {
-        return deletedFlg;
-    }
-
-    public void setDeletedFlg(Integer deletedFlg) {
-        this.deletedFlg = deletedFlg;
-    }
-
     public String getCategoryId() {
         return categoryId;
     }
@@ -182,19 +71,19 @@ public class ProductListEntity {
         this.categoryId = categoryId;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
     public String getCategoryName() {
         return categoryName;
     }
 
-    public Long getSpecId() {
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getSpecId() {
         return specId;
     }
 
-    public void setSpecId(Long specId) {
+    public void setSpecId(String specId) {
         this.specId = specId;
     }
 
@@ -205,5 +94,124 @@ public class ProductListEntity {
     public void setSpecName(String specName) {
         this.specName = specName;
     }
-    
+
+    public Integer getStockQty() {
+        return stockQty;
+    }
+
+    public void setStockQty(Integer stockQty) {
+        this.stockQty = stockQty;
+    }
+
+    public Integer getStockAlert() {
+        return stockAlert;
+    }
+
+    public void setStockAlert(Integer stockAlert) {
+        this.stockAlert = stockAlert;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(Double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public Integer getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(Integer totalSales) {
+        this.totalSales = totalSales;
+    }
+
+    public Date getLastSalesDate() {
+        return lastSalesDate;
+    }
+
+    public void setLastSalesDate(Date lastSalesDate) {
+        this.lastSalesDate = lastSalesDate;
+    }
+
+    public String getStaff() {
+        return staff;
+    }
+
+    public void setStaff(String staff) {
+        this.staff = staff;
+    }
+
+    public Long getDeliveryMethodId() {
+        return deliveryMethodId;
+    }
+
+    public void setDeliveryMethodId(Long deliveryMethodId) {
+        this.deliveryMethodId = deliveryMethodId;
+    }
+
+    public String getDeliveryCompany() {
+        return deliveryCompany;
+    }
+
+    public void setDeliveryCompany(String deliveryCompany) {
+        this.deliveryCompany = deliveryCompany;
+    }
+
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Integer getDeletedFlg() {
+        return deletedFlg;
+    }
+
+    public void setDeletedFlg(Integer deletedFlg) {
+        this.deletedFlg = deletedFlg;
+    }
 }

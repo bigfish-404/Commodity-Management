@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Service
 public class ProductListServiceImpl implements ProductListService {
@@ -14,40 +14,35 @@ public class ProductListServiceImpl implements ProductListService {
     @Autowired
     private ProductListMapper productListMapper;
 
-    // 字段映射表
-    public static final Map<String, String> ORDER_BY_COLUMNS = Map.of(
-        "productName", "product_name",
-        "categoryName", "category_name",
-        "specName", "spec_name",
-        "stockQty", "stock_qty",
-        "price", "price",
-        "purchasePrice", "purchase_price",
-        "lastSalesDate", "last_sales_date",
-        "totalSales", "total_sales",
-        "staff", "staff",
-        "createdAt", "created_at"
-    );
+    // 允许的排序字段（拼接用完整字段名）
+    private static final Set<String> ALLOWED_ORDER_BY = Set.of(
+            "pi.product_name", "c.category_name", "s.spec_name",
+            "p.stock_qty", "p.price", "p.last_sales_date",
+            "p.total_sales", "p.staff");
+
+    private static final Set<String> ALLOWED_ORDER_DIRECTION = Set.of("ASC", "DESC");
 
     @Override
     public List<ProductListEntity> getAllProductsByUserId(
-            Long userId, int offset, int limit, String orderBy, String orderDirection) {
+            String userId, String orderBy, String orderDirection, int offset, int limit) {
 
-        // 先做字段转换：驼峰 => 下划线
-        String orderByColumn = ORDER_BY_COLUMNS.getOrDefault(orderBy, "created_at");
+        // 默认排序字段与方向
+        String orderBySafe = "pi.product_name";
+        String orderDirSafe = "ASC";
 
-        // 防御性处理，避免非法方向参数
-        String safeOrderDirection = ("DESC".equalsIgnoreCase(orderDirection)) ? "DESC" : "ASC";
+        if (orderBy != null && ALLOWED_ORDER_BY.contains(orderBy)) {
+            orderBySafe = orderBy;
+        }
 
-        return productListMapper.getAllProductsByUserId(userId, offset, limit, orderByColumn, safeOrderDirection);
+        if (orderDirection != null && ALLOWED_ORDER_DIRECTION.contains(orderDirection.toUpperCase())) {
+            orderDirSafe = orderDirection.toUpperCase();
+        }
+
+        return productListMapper.getAllProductsByUserId(userId, offset, limit, orderBySafe, orderDirSafe);
     }
 
     @Override
-    public int countProductsByUserId(Long userId) {
+    public int countProductsByUserId(String userId) {
         return productListMapper.countProductsByUserId(userId);
-    }
-
-    @Override
-    public void insertProduct(ProductListEntity product) {
-        productListMapper.insertProduct(product);
     }
 }

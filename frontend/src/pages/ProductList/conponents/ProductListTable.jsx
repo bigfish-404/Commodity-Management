@@ -4,7 +4,7 @@ import './ProductListTable.css';
 
 
 // 从父组件接受4个props
-function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
+function ProductListTable({ products, orderBy, orderDirection, handleSort, onEdit }) {
 
     const renderSortArrow = (field) => {
         if (orderBy !== field) return null;
@@ -19,7 +19,7 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
                         renderSortArrow("productName")} 负责显示对应排序箭头。*/}
                     <th onClick={() => handleSort("productName")}>商品名 {renderSortArrow("productName")}</th>
                     <th onClick={() => handleSort("categoryName")}>カテゴリ {renderSortArrow("categoryName")}</th>
-                    <th onClick={() => handleSort("specName")}>規格・仕様 {renderSortArrow("specname")}</th>
+                    <th onClick={() => handleSort("specName")}>規格・仕様 {renderSortArrow("specName")}</th>
                     <th onClick={() => handleSort("stockQty")}>在庫数量 {renderSortArrow("stockQty")}</th>
                     <th onClick={() => handleSort("price")}>単価（税込） {renderSortArrow("price")}</th>
                     <th onClick={() => handleSort("lastSalesDate")}>最終販売日 {renderSortArrow("lastSalesDate")}</th>
@@ -42,8 +42,7 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort }) {
                         <td>{p.totalSales}</td>
                         <td>{p.staff}</td>
                         <td>
-                            <span className="action-btn">👁</span>
-                            <span className="action-btn">✏️</span>
+                            <span className="action-btn" >✏️</span>
                             <span className="action-btn">🗑</span>
                         </td>
                     </tr>

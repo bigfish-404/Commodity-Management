@@ -5,6 +5,6 @@ import com.example.backend.entity.db.ProductEntity;
 
 @Mapper
 public interface ProductAddMapper {
-    void insertProduct (ProductEntity productEntity);
+    int insertProduct (ProductEntity productEntity);
     
 } 

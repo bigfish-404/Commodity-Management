@@ -27,11 +27,10 @@
     </select>
 
     <!-- 插入 -->
-    <insert id="insert" parameterType="com.example.backend.entity.db.DeliveryMethodEntity">
+    <insert id="insertDeliveryMethod" parameterType="com.example.backend.entity.db.DeliveryMethodEntity">
         INSERT INTO DELIVERY_METHOD
         (
             USER_ID,
-            DELIVERY_METHOD_ID,
             DELIVERY_COMPANY,
             DELIVERY_METHOD,
             CREATED_BY,
@@ -40,15 +39,14 @@
             UPDATED_AT,
             DELETED_FLG
         ) VALUES (
-            #{userId},
-            #{deliveryMethodId},
-            #{deliveryCompany},
-            #{deliveryMethod},
-            #{createdBy},
-            #{createdAt},
-            #{updatedBy},
-            #{updatedAt},
-            #{deletedFlg}
+            #{userId, jdbcType=VARCHAR},
+            #{deliveryCompany, jdbcType=VARCHAR},
+            #{deliveryMethod, jdbcType=VARCHAR},
+            #{createdBy, jdbcType=VARCHAR},
+            CURRENT_TIMESTAMP,
+            #{updatedBy, jdbcType=VARCHAR},
+            CURRENT_TIMESTAMP,
+            #{deletedFlg, jdbcType=NUMERIC}
         )
     </insert>
 
@@ -56,19 +54,19 @@
     <update id="update" parameterType="com.example.backend.entity.db.DeliveryMethodEntity">
         UPDATE DELIVERY_METHOD
         SET
-            DELIVERY_COMPANY = #{deliveryCompany},
             DELIVERY_METHOD = #{deliveryMethod},
             UPDATED_BY = #{updatedBy},
             UPDATED_AT = #{updatedAt}
         WHERE ID = #{id}
             AND USER_ID = #{userId}
+            AND 
     </update>
 
     <!-- 逻辑删除 -->
     <update id="delete" parameterType="map">
         UPDATE DELIVERY_METHOD
         SET DELETED_FLG = '1'
-        WHERE ID = #{id}
+        WHERE DELETED_FLG = '0'
             AND USER_ID = #{userId}
     </update>
 

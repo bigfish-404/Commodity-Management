@@ -4,15 +4,14 @@ import ProductListTable from './conponents/ProductListTable';
 import { fetchProducts, fetchTotalCount } from '../../services/productListService';
 
 function ProductList() {
+     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
     const [products, setProducts] = useState([]);//定义商品的状态，默认是空数组
     const [totalItems, setTotalItems] = useState(0);//定义商品总数，默认是0
     const [currentPage, setCurrentPage] = useState(1);//定义当前页码，默认是第一页
     const [itemsPerPage, setItemsPerPage] = useState(10);//定义每页显示多少条数据，默认是10页
     const [orderBy, setOrderBy] = useState("productName");//定义默认排序的字段，默认是productName
     const [orderDirection, setOrderDirection] = useState("asc");//定义排序方向，默认升序
-
-   
-    const userId = parseInt(localStorage.getItem("userId"));
 
     useEffect(() => {
         loadData();
@@ -22,8 +21,8 @@ function ProductList() {
     //定义一个异步函数，用来取数据
     const loadData = async () => {
         const offset = (currentPage - 1) * itemsPerPage;//计算偏移量
-        const data = await fetchProducts(userId, offset, itemsPerPage, orderBy, orderDirection);
-        const count = await fetchTotalCount(userId);
+        const data = await fetchProducts(currentUser, offset, itemsPerPage, orderBy, orderDirection);
+        const count = await fetchTotalCount(currentUser);
         setProducts(data);
         setTotalItems(count);
     };
