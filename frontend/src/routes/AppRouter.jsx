@@ -9,6 +9,7 @@ import Register from '../pages/Register/Register';
 import ProductList from '../pages/ProductList/ProductList';
 import ProductAdd from '../pages/ProductAdd/ProductAdd';
 import SalesHistory from '../pages/SalesHistory/SalesHistory';
+import Channel from '../pages/Channel/Channel';
 
 function AppRouter() {
   return (
@@ -24,6 +25,7 @@ function AppRouter() {
       <Route path="/api/mypage" element={<MainLayout><Mypage /></MainLayout>} />
       <Route path="/api/productList" element={<MainLayout><ProductList /></MainLayout>} />
       <Route path="/api/productAdd" element={<MainLayout><ProductAdd /></MainLayout>} />
+      <Route path="/api/channel" element={<MainLayout><Channel /></MainLayout>} />
     </Routes>
   );
 }

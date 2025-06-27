@@ -7,11 +7,34 @@
 
     <select id="getAllChannels" resultType="com.example.backend.entity.db.ChannelEntity">
         SELECT
-            id,
+            channel_id AS channelId,
             channel_name AS channelName,
-            display_name AS displayName
+            handling_fee AS handlingFee
         FROM channel
         WHERE deleted_flg = '0'
+        AND user_id = #{userId}
     </select>
+
+    <insert id="insertChannel" parameterType="com.example.backend.entity.db.ChannelEntity">
+        INSERT INTO COMMODITY_MANAGEMENT.CHANNEL (
+            USER_ID,
+            CHANNEL_NAME,
+            HANDLING_FEE,
+            CREATED_BY,
+            UPDATED_BY,
+            CREATED_AT,
+            UPDATED_AT,
+            DELETED_FLG
+        ) VALUES (
+            #{userId},
+            #{channelName},
+            #{handlingFee},
+            #{createdBy},
+            #{updatedBy},
+            SYSTIMESTAMP,
+            SYSTIMESTAMP,
+            '0'
+        )
+    </insert>
 
 </mapper>

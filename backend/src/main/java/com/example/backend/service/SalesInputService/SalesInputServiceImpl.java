@@ -19,7 +19,7 @@ public class SalesInputServiceImpl implements SalesInputService {
     private SalesInputMapper salesInputMapper;
 
     @Override
-    public List<SalesInputEntity> getAvailableSalesProducts(Long userId, Long channelId) {
+    public List<SalesInputEntity> getAvailableSalesProducts(String userId, Long channelId) {
         return salesInputMapper.selectAvailableSalesProductsByUserId(userId, channelId);
     }
 

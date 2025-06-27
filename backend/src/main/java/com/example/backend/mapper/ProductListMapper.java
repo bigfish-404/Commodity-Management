@@ -38,4 +38,8 @@ public interface ProductListMapper {
      */
     int countProductsByUserId(@Param("userId") String userId);
 
+    int updateProduct(@Param("product") ProductListEntity product);
+
+    int deleteProduct(@Param("product") ProductListEntity product);
+
 }

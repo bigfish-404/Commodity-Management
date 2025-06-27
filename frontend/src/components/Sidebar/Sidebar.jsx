@@ -39,6 +39,8 @@ function Sidebar() {
                 <SidebarItem icon={<CategoryIcon />} text="マイページ" to="/api/Mypage" />
                 <SidebarItem icon={<SubtitlesIcon />} text="商品リスト"  to="/api/productList" />
                 <SidebarItem icon={<SubtitlesIcon />} text="商品追加"  to="/api/productAdd"/>
+                <SidebarItem icon={<SubtitlesIcon />} text="販売チャネル"  to="/api/channel"/>
+                <SidebarItem icon={<SubtitlesIcon />} text="品番"  to="/api/productInfo"/>
                 <SidebarItem icon={<BrandingWatermarkIcon />} text="カテゴリー" />
                 <SidebarItem icon={<BrandingWatermarkIcon />} text="規格・仕様" />
                 <SidebarItem icon={<UploadFileIcon />} text="Import Products" />

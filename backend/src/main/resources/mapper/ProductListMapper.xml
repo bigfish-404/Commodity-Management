@@ -91,4 +91,33 @@
             AND deleted_flg = 0
     </select>
 
+    <update id="updateProduct" parameterType="ProductListEntity">
+        UPDATE PRODUCTS
+            SET
+                PRODUCT_ID = #{product.productId},
+                CATEGORY_ID = #{product.categoryId},
+                SPEC_ID = #{product.specId},
+                STOCK_QTY = #{product.stockQty},
+                STOCK_ALERT = #{product.stockAlert},
+                PRICE = #{product.price},
+                PURCHASE_PRICE = #{product.purchasePrice},
+                DELIVERY_METHOD_ID = #{product.deliveryMethodId},
+                UPDATED_BY = #{product.updatedBy},
+                UPDATED_AT = SYSTIMESTAMP
+            WHERE
+                USER_ID = #{product.userId}
+                AND ID = #{product.id}
+    </update>
+
+    <update id="deleteProduct" parameterType="ProductListEntity">
+        UPDATE PRODUCTS
+            SET
+                UPDATED_BY = #{product.updatedBy},
+                UPDATED_AT = SYSTIMESTAMP,
+                deleted_flg = 1
+            WHERE
+                USER_ID = #{product.userId}
+                AND ID = #{product.id}
+    </update>
+
 </mapper>

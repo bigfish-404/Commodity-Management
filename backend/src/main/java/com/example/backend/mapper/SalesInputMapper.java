@@ -12,7 +12,7 @@ import com.example.backend.entity.dto.SalesInputEntity;
 public interface SalesInputMapper {
 
     List<SalesInputEntity> selectAvailableSalesProductsByUserId(
-            @Param("userId") Long userId,
+            @Param("userId") String userId,
             @Param("channelId") Long channelId);
 
     int insertProfit(ProfitEntity profit);

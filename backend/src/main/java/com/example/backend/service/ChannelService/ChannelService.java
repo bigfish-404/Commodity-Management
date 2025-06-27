@@ -5,5 +5,6 @@ import java.util.List;
 import com.example.backend.entity.db.ChannelEntity;
 
 public interface ChannelService {
-    List<ChannelEntity> getAllChannels();
+    List<ChannelEntity> getAllChannels(String userId);
+    void addChannel(ChannelEntity channel);
 }

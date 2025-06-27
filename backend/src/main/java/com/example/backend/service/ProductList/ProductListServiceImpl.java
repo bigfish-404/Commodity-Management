@@ -4,6 +4,7 @@ import com.example.backend.entity.dto.ProductListEntity;
 import com.example.backend.mapper.ProductListMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -44,5 +45,33 @@ public class ProductListServiceImpl implements ProductListService {
     @Override
     public int countProductsByUserId(String userId) {
         return productListMapper.countProductsByUserId(userId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateProduct(ProductListEntity product) {
+        try {
+            int result = productListMapper.updateProduct(product);
+            if (result == 0) {
+                throw new RuntimeException("更新失败：找不到对应商品");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteProduct(ProductListEntity product) {
+        try {
+            int result = productListMapper.deleteProduct(product);
+            if (result == 0) {
+                throw new RuntimeException("删除失败：找不到对应商品");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

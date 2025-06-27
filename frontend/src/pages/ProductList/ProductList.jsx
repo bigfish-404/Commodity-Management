@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import ProductListTable from './conponents/ProductListTable';
-import { fetchProducts, fetchTotalCount } from '../../services/productListService';
+import ProductListTable from './components/ProductListTable';
+import { fetchProducts, fetchTotalCount, fetchProductInfo, fetchCategories, fetchSpecs, fetchDeliverys, updateProduct, deleteProduct } from '../../services/productListService';
+import EditProductModal from './EditModal/EditProductModal';
+import ConfirmDeleteDialog from './DeleteDialog/ConfirmDeleteDialog';
 
 function ProductList() {
-     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const [products, setProducts] = useState([]);//定义商品的状态，默认是空数组
     const [totalItems, setTotalItems] = useState(0);//定义商品总数，默认是0
@@ -12,6 +15,88 @@ function ProductList() {
     const [itemsPerPage, setItemsPerPage] = useState(10);//定义每页显示多少条数据，默认是10页
     const [orderBy, setOrderBy] = useState("productName");//定义默认排序的字段，默认是productName
     const [orderDirection, setOrderDirection] = useState("asc");//定义排序方向，默认升序
+
+    const [editingProduct, setEditingProduct] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [productInfo, setProductInfo] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [specList, setSpecList] = useState([]);
+    const [deliveryList, setDilivery] = useState([]);
+
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [targetProduct, setTargetProduct] = useState(null);
+
+    useEffect(() => {
+        const loadProductInfo = async () => {
+            const res = await fetchProductInfo(currentUser);
+            const categories = await fetchCategories(currentUser);
+            const specs = await fetchSpecs(currentUser);
+            const deliverys = await fetchDeliverys(currentUser);
+            setProductInfo(res);
+            setCategoryList(categories);
+            setSpecList(specs);
+            setDilivery(deliverys);
+
+        };
+        loadProductInfo();
+    }, []);
+
+
+
+    useEffect(() => {
+        const loadMasters = async () => {
+            const categories = await fetchCategories(currentUser);
+            const specs = await fetchSpecs(currentUser);
+            setCategoryList(categories);
+            setSpecList(specs);
+        };
+        loadMasters();
+    }, []);
+
+
+
+    const handleEdit = (product) => {
+        setEditingProduct(product);
+        setModalOpen(true);
+    };
+
+    const handleEditSubmit = async () => {
+        try {
+            await updateProduct(editingProduct);
+            alert("更新成功！");
+            setModalOpen(false);
+            loadData();
+        } catch (error) {
+            alert("更新に失敗しました。");
+            console.error(error);
+        }
+    };
+
+
+    const handleFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditingProduct((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleDeleteProduct = async () => {
+        try {
+            await deleteProduct(targetProduct); // 👈 假设你定义了 deleteProduct(product)
+            alert("削除に成功しました");
+            setDeleteDialogOpen(false);
+            loadData();
+        } catch (error) {
+            alert("削除に失敗しました");
+            console.error(error);
+        }
+    };
+    const onDeleteClick = (product) => {
+        setTargetProduct(product);
+        setDeleteDialogOpen(true);
+    };
+
 
     useEffect(() => {
         loadData();
@@ -64,6 +149,8 @@ function ProductList() {
                     orderBy={orderBy}
                     orderDirection={orderDirection}
                     handleSort={handleSort}
+                    onEdit={handleEdit}
+                    onDelete={onDeleteClick}
                 />
 
                 <div className="pagination-container">
@@ -95,6 +182,25 @@ function ProductList() {
                     </div>
                 </div>
             </div>
+            <EditProductModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                formData={editingProduct}
+                handleChange={handleFormChange}
+                handleSubmit={handleEditSubmit}
+                productInfo={productInfo}
+                categoryList={categoryList}
+                specList={specList}
+                deliveryList={deliveryList}
+            />
+
+            <ConfirmDeleteDialog
+                open={deleteDialogOpen}
+                onClose={() => setDeleteDialogOpen(false)}
+                onConfirm={handleDeleteProduct}
+            />
+
+
         </>
     );
 }

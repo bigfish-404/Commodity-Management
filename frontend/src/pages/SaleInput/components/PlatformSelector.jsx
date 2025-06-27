@@ -1,46 +1,62 @@
+// src/components/PlatformSelector/PlatformSelector.jsx
 import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
-import axios from 'axios';
+import { fetchChannelsByUserId } from '../../../services/channelService';
 import './PlatformSelector.css';
 
-export default function PlatformSelector({ platform, setPlatform, setChannelMap }) {
-  const [displayMap, setDisplayMap] = useState({}); // { mercari: "メルカリ", yahoo: "ヤフオク" }
-  const [internalChannelMap, setInternalChannelMap] = useState({}); // { mercari: 1, yahoo: 2 }
+export default function PlatformSelector({ platform, setPlatform, setChannelMap, setHandlingFeeMap}) {
+  const [channelNames, setChannelNames] = useState([]);
+  const [internalChannelMap, setInternalChannelMap] = useState({});
 
   useEffect(() => {
-    const fetchChannels = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('/api/channels');
-        const display = {};
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        const userId = currentUser?.userId;
+
+        if (!userId) {
+          console.warn("❗ ユーザー情報が取得できません");
+          return;
+        }
+
+        const data = await fetchChannelsByUserId(userId);
         const map = {};
-        response.data.forEach((channel) => {
-          display[channel.channelName] = channel.displayName;
-          map[channel.channelName] = channel.id;
+        const names = [];
+        const feeMap = {};
+
+        data.forEach((channel) => {
+          map[channel.channelName] = channel.channelId;
+          feeMap[channel.channelName] = channel.handlingFee;
+          names.push(channel.channelName);
         });
-        setDisplayMap(display);
+
         setInternalChannelMap(map);
         setChannelMap(map);
+        setChannelNames(names)
+        setHandlingFeeMap(feeMap);
 
-        if (!platform && Object.keys(display).length > 0) {
-          setPlatform(Object.keys(display)[0]);
+        if (!platform && names.length > 0) {
+          setPlatform(names[0]);
         }
-      } catch (error) {
-        console.error("❌error", error);
+      } catch (err) {
+        console.error("❌ fetchChannelsByUserId error:", err);
       }
     };
 
-    fetchChannels();
+    fetchData();
   }, []);
+
+  if (!platform) return null; // 初期化前は描画しない
 
   return (
     <Box className="platform-selector-box">
       <Tabs value={platform} onChange={(e, v) => setPlatform(v)} centered>
-        {Object.keys(displayMap).map((key) => (
+        {channelNames.map((name) => (
           <Tab
-            key={key}
-            label={displayMap[key]}
-            value={key}
-            className={`platform-tab ${platform === key ? 'selected' : ''}`}
+            key={name}
+            label={name}
+            value={name}
+            className={`platform-tab ${platform === name ? 'selected' : ''}`}
           />
         ))}
       </Tabs>

@@ -1,145 +1,235 @@
 package com.example.backend.entity.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class SalesInputEntity {
-    /** 商品ID (主键) */
     private Long id;
 
-    /** 所属用户ID (外键，关联 USERS 表 ID) */
-    private Long userId;
+private String userId;
+private String productId;
+private String productName;
 
-    /** 商品名称 */
-    private String productName;
+private String categoryId;
+private String categoryName;
 
-    /** 商品分类 */
-    private String categoryId;
+private String specId;
+private String specName;
 
-    /** 商品分类名称 */
-    private String categoryName;
+private Integer stockQty;
+private Integer stockAlert;
 
-    /** 规格/型号 */
-    private String specName;
+private BigDecimal price;
+private BigDecimal purchasePrice;
+private Integer totalSales;
 
-    private Long specId;
+private Date lastSalesDate;
+private String staff;
 
-    /** 库存数量 */
-    private Integer stockQty;
+private String deliveryMethodId;
+private String deliveryCompany;
+private String deliveryMethod;
 
-    /** 销售单价（含税） */
-    private BigDecimal price;
+private BigDecimal deliveryPrice;
 
-    /** 进货价 */
-    private BigDecimal purchasePrice;
+private String createdBy;
+private Date createdAt;
+private String updatedBy;
+private Date updatedAt;
 
-    private String deliveryMethod;
+private String deletedFlg;
 
-    private Long channelId; 
+public Long getId() {
+    return id;
+}
 
-    private BigDecimal deliveryPrice;
+public void setId(Long id) {
+    this.id = id;
+}
 
-    public Long getChannelId() {
-        return channelId;
-    }
+public String getUserId() {
+    return userId;
+}
 
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
-    }
+public void setUserId(String userId) {
+    this.userId = userId;
+}
 
-    public Long getId() {
-        return id;
-    }
+public String getProductId() {
+    return productId;
+}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+public void setProductId(String productId) {
+    this.productId = productId;
+}
 
-    public Long getUserId() {
-        return userId;
-    }
+public String getProductName() {
+    return productName;
+}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+public void setProductName(String productName) {
+    this.productName = productName;
+}
 
-    public String getProductName() {
-        return productName;
-    }
+public String getCategoryId() {
+    return categoryId;
+}
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+public void setCategoryId(String categoryId) {
+    this.categoryId = categoryId;
+}
 
-    public String getCategoryId() {
-        return categoryId;
-    }
+public String getCategoryName() {
+    return categoryName;
+}
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
+public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+}
 
-    public String getCategoryName() {
-        return categoryName;
-    }
+public String getSpecId() {
+    return specId;
+}
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
+public void setSpecId(String specId) {
+    this.specId = specId;
+}
 
-    public String getSpecName() {
-        return specName;
-    }
+public String getSpecName() {
+    return specName;
+}
 
-    public void setSpecName(String specName) {
-        this.specName = specName;
-    }
+public void setSpecName(String specName) {
+    this.specName = specName;
+}
 
-    public Long getSpecId() {
-        return specId;
-    }
+public Integer getStockQty() {
+    return stockQty;
+}
 
-    public void setSpecId(Long specId) {
-        this.specId = specId;
-    }
+public void setStockQty(Integer stockQty) {
+    this.stockQty = stockQty;
+}
 
-    public Integer getStockQty() {
-        return stockQty;
-    }
+public Integer getStockAlert() {
+    return stockAlert;
+}
 
-    public void setStockQty(Integer stockQty) {
-        this.stockQty = stockQty;
-    }
+public void setStockAlert(Integer stockAlert) {
+    this.stockAlert = stockAlert;
+}
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+public BigDecimal getPrice() {
+    return price;
+}
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+public void setPrice(BigDecimal price) {
+    this.price = price;
+}
 
-    public BigDecimal getPurchasePrice() {
-        return purchasePrice;
-    }
+public BigDecimal getPurchasePrice() {
+    return purchasePrice;
+}
 
-    public void setPurchasePrice(BigDecimal purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
+public void setPurchasePrice(BigDecimal purchasePrice) {
+    this.purchasePrice = purchasePrice;
+}
 
-    public String getDeliveryMethod() {
-        return deliveryMethod;
-    }
+public Integer getTotalSales() {
+    return totalSales;
+}
 
-    public void setDeliveryMethod(String deliveryMethod) {
-        this.deliveryMethod = deliveryMethod;
-    }
+public void setTotalSales(Integer totalSales) {
+    this.totalSales = totalSales;
+}
 
-    public BigDecimal getDeliveryPrice() {
-        return deliveryPrice;
-    }
+public Date getLastSalesDate() {
+    return lastSalesDate;
+}
 
-    public void setDeliveryPrice(BigDecimal deliveryPrice) {
-        this.deliveryPrice = deliveryPrice;
-    }
+public void setLastSalesDate(Date lastSalesDate) {
+    this.lastSalesDate = lastSalesDate;
+}
 
+public String getStaff() {
+    return staff;
+}
+
+public void setStaff(String staff) {
+    this.staff = staff;
+}
+
+public String getDeliveryMethodId() {
+    return deliveryMethodId;
+}
+
+public void setDeliveryMethodId(String deliveryMethodId) {
+    this.deliveryMethodId = deliveryMethodId;
+}
+
+public String getDeliveryCompany() {
+    return deliveryCompany;
+}
+
+public void setDeliveryCompany(String deliveryCompany) {
+    this.deliveryCompany = deliveryCompany;
+}
+
+public String getDeliveryMethod() {
+    return deliveryMethod;
+}
+
+public void setDeliveryMethod(String deliveryMethod) {
+    this.deliveryMethod = deliveryMethod;
+}
+
+public BigDecimal getDeliveryPrice() {
+    return deliveryPrice;
+}
+
+public void setDeliveryPrice(BigDecimal deliveryPrice) {
+    this.deliveryPrice = deliveryPrice;
+}
+
+public String getCreatedBy() {
+    return createdBy;
+}
+
+public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+}
+
+public Date getCreatedAt() {
+    return createdAt;
+}
+
+public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+}
+
+public String getUpdatedBy() {
+    return updatedBy;
+}
+
+public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+}
+
+public Date getUpdatedAt() {
+    return updatedAt;
+}
+
+public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+}
+
+public String getDeletedFlg() {
+    return deletedFlg;
+}
+
+public void setDeletedFlg(String deletedFlg) {
+    this.deletedFlg = deletedFlg;
+}
+
+   
 }

@@ -7,52 +7,87 @@
 
     <!-- 结果映射 -->
     <resultMap id="SalesInputResultMap" type="com.example.backend.entity.dto.SalesInputEntity">
-        <id column="ID" property="id"/>
-        <result column="USER_ID" property="userId"/>
-        <result column="PRODUCT_NAME" property="productName"/>
-        <result column="CATEGORY_ID" property="categoryId"/>
-        <result column="CATEGORY_NAME" property="categoryName"/>
-        <result column="SPEC_ID" property="specId"/>
-        <result column="SPEC_NAME" property="specName"/>
-        <result column="STOCK_QTY" property="stockQty"/>
-        <result column="PRICE" property="price"/>
-        <result column="PURCHASE_PRICE" property="purchasePrice"/>
-        <result column="DELIVERY_METHOD" property="deliveryMethod"/>
-        <result column="DELIVERY_PRICE" property="deliveryPrice"/>
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="productId" column="product_id" />
+        <result property="productName" column="product_name" />
+        <result property="categoryId" column="category_id" />
+        <result property="categoryName" column="category_name" />
+        <result property="specId" column="spec_id" />
+        <result property="specName" column="spec_name" />
+        <result property="stockQty" column="stock_qty" />
+        <result property="stockAlert" column="stock_alert" />
+        <result property="price" column="price" />
+        <result property="purchasePrice" column="purchase_price" />
+        <result property="totalSales" column="total_sales" />
+        <result property="lastSalesDate" column="last_sales_date" />
+        <result property="staff" column="staff" />
+        <result property="deliveryMethodId" column="delivery_method_id" />
+        <result property="deliveryCompany" column="delivery_company" />
+        <result property="deliveryMethod" column="delivery_method" />
+        <result property="deliveryPrice" column="delivery_price" />
+        <result property="createdBy" column="created_by" />
+        <result property="createdBy" column="created_by" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedBy" column="updated_by" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="deletedFlg" column="deleted_flg" />
     </resultMap>
 
     <!-- 查询库存数大于0的商品 -->
     <select id="selectAvailableSalesProductsByUserId" resultMap="SalesInputResultMap">
-        SELECT
-            p.ID,
-            p.USER_ID,
-            p.PRODUCT_NAME,
-            p.CATEGORY_ID,
-            c.CATEGORY_NAME,
-            p.SPEC_ID,
-            s.SPEC_NAME,
-            p.STOCK_QTY,
-            p.PRICE,
-            p.PURCHASE_PRICE,
-            d.DELIVERY_METHOD,
-            dp.PRICE AS DELIVERY_PRICE
-        FROM
-            COMMODITY_MANAGEMENT.PRODUCTS p
-        LEFT JOIN COMMODITY_MANAGEMENT.CATEGORY c
-            ON p.CATEGORY_ID = c.ID
-        LEFT JOIN COMMODITY_MANAGEMENT.SPEC s
-            ON p.SPEC_ID = s.ID
-        LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_COMPANY_METHOD d
-            ON p.DELIVERY_COMPANY_METHOD_ID = d.ID
-        LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_PRICE dp
-            ON dp.DELIVERY_COMPANY_METHOD_ID = d.ID
-        WHERE
-            p.DELETED_FLG = 0
-            AND NVL(p.STOCK_QTY, 0) > 0
-            AND p.USER_ID = #{userId}
-            AND dp.CHANNEL_ID = #{channelId}
-            AND dp.DELETED_FLG = '0'
+    SELECT 
+            p.id,
+        p.user_id,
+        p.product_id,
+        pi.product_name,
+        p.category_id,
+        c.category_name,
+        p.spec_id,
+        s.spec_name,
+        p.stock_qty,
+        p.stock_alert,
+        p.price,
+        p.purchase_price,
+        p.total_sales,
+        p.last_sales_date,
+        p.staff,
+        p.delivery_method_id,
+        d.delivery_company,
+        d.delivery_method,
+        dp.price AS delivery_price, 
+        p.created_by,
+        p.created_at,
+        p.updated_by,
+        p.updated_at,
+        p.deleted_flg
+    FROM products p
+    LEFT JOIN product_info pi
+        ON p.product_id = pi.product_id 
+        AND pi.deleted_flg = '0'
+        AND pi.user_id = p.user_id
+    LEFT JOIN categories c
+        ON p.category_id = c.category_id 
+        AND c.deleted_flg = '0'
+        AND c.user_id = p.user_id
+    LEFT JOIN spec s
+        ON p.spec_id = s.spec_id 
+        AND s.deleted_flg = '0'
+        AND s.user_id = p.user_id
+    LEFT JOIN delivery_method d
+        ON p.delivery_method_id = d.delivery_method_id 
+        AND d.deleted_flg = '0'
+        AND d.user_id = p.user_id
+    LEFT JOIN delivery_price dp
+        ON dp.user_id = p.user_id
+        AND dp.channel_id = #{channelId}          
+        AND dp.delivery_method_id = p.delivery_method_id
+        AND dp.deleted_flg = '0'
+    WHERE p.user_id = #{userId}
+        AND p.deleted_flg = '0'
     </select>
+
+
     <insert id="insertProfit" parameterType="com.example.backend.entity.db.ProfitEntity">
     INSERT INTO COMMODITY_MANAGEMENT.PROFIT (
         PRODUCT_NAME,

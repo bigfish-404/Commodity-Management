@@ -3,8 +3,8 @@ import { formatDate } from "../../../utils/dateFormatter";
 import './ProductListTable.css';
 
 
-// 从父组件接受4个props
-function ProductListTable({ products, orderBy, orderDirection, handleSort, onEdit }) {
+
+function ProductListTable({ products, orderBy, orderDirection, handleSort, onEdit, onDelete }) {
 
     const renderSortArrow = (field) => {
         if (orderBy !== field) return null;
@@ -42,8 +42,9 @@ function ProductListTable({ products, orderBy, orderDirection, handleSort, onEdi
                         <td>{p.totalSales}</td>
                         <td>{p.staff}</td>
                         <td>
-                            <span className="action-btn" >✏️</span>
-                            <span className="action-btn">🗑</span>
+                            <span className="action-btn" onClick={() => onEdit(p)}>✏️</span>
+
+                            <span className="action-btn" onClick={() => onDelete(p)}>🗑</span>
                         </td>
                     </tr>
                 ))}

@@ -4,9 +4,10 @@ import PlatformSelector from './components/PlatformSelector';
 import SalesInputTable from './components/SalesInputTable';
 
 function SaleInput() {
-  const [platform, setPlatform] = useState("mercari");
-  const [channelMap, setChannelMap] = useState({});  // 👈 用于存储渠道映射
+  const [platform, setPlatform] = useState("");
+  const [channelMap, setChannelMap] = useState({});  
   const [channelId, setChannelId] = useState(null);
+  const [handlingFeeMap, setHandlingFeeMap] = useState({});
 
   // 每当平台变更，就同步设置对应的 channelId
   useEffect(() => {
@@ -18,17 +19,19 @@ function SaleInput() {
   return (
     <>
       <Helmet>
-        <title>販売</title>
+        <title>販売登録</title>
       </Helmet>
       <div>
         <PlatformSelector
           platform={platform}
           setPlatform={setPlatform}
           setChannelMap={setChannelMap} 
+          setHandlingFeeMap={setHandlingFeeMap}
         />
         <SalesInputTable
           platform={platform}
           channelId={channelId} 
+          handlingFeeMap={handlingFeeMap}
         />
       </div>
     </>
