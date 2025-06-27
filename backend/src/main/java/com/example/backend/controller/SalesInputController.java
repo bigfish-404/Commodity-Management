@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +31,15 @@ public class SalesInputController {
         return salesInputService.getAvailableSalesProducts(userId, channelId);
     }
 
-    @PostMapping("/sellProductSubmit")
-    public void submitProduct(@RequestBody ProfitEntity profitEntity){
-        salesInputService.submitProduct(profitEntity);
-    }
+    @PostMapping("/submit")
 
+    public ResponseEntity<String> submitProduct(@RequestBody ProfitEntity profitEntity) {
+        try {
+            salesInputService.submitProduct(profitEntity);
+            return ResponseEntity.ok("販売記録の登録に成功しました。");
+        } catch (Exception e) {
+            e.printStackTrace(); // for debug
+            return ResponseEntity.badRequest().body("販売処理に失敗しました: " + e.getMessage());
+        }
+    }
 }

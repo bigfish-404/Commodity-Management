@@ -59,7 +59,7 @@ export default function EditModal({ open, item, onClose, onSave }) {
                                 name="category"
                                 fullWidth
                                 size="small"
-                                value={formData.category || ''}
+                                value={formData.categoryName || ''}
                                 onChange={handleChange}
                                 InputProps={{ readOnly: true }}
                                 variant="filled"
@@ -73,7 +73,7 @@ export default function EditModal({ open, item, onClose, onSave }) {
                                 name="spec"
                                 fullWidth
                                 size="small"
-                                value={formData.spec || ''}
+                                value={formData.specName || ''}
                                 onChange={handleChange}
                                 InputProps={{ readOnly: true }}
                                 variant="filled"

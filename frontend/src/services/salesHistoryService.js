@@ -1,14 +1,16 @@
 import axios from "axios";
 
 export const fetchAllsalesHistoryByUserId = async (currentUser) => {
-    try{
-        const response =await axios.get(`/api/sales-history/${currentUser.id}`);
-        return response.data;
-    }catch(error){
-        console.error("Error fetching SalesHistory",error)
-        return [];
-    }
-}
+  try {
+    const response = await axios.get('/api/salesHistory/list', {
+      params: { userId: currentUser.userId } 
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching SalesHistory:', error);
+    return [];
+  }
+};
 
 
 
@@ -19,7 +21,7 @@ export const fetchAllsalesHistoryByUserId = async (currentUser) => {
  */
 export const updateProfit = async (profit) => {
   try {
-    const res = await axios.post('/api/updateProfit', profit);
+    const res = await axios.post('/api/salesHistory/update', profit);
     return res.data; // "更新成功" 或 "无变更，无需更新"
   } catch (err) {
     console.error('❌ 更新失败:', err);
@@ -28,17 +30,12 @@ export const updateProfit = async (profit) => {
 };
 
 
-// 删除销售记录（逻辑删除）
-export const deleteProfitById = async (profitId) => {
-  const response = await axios.post('/api/profit/delete', { id: profitId });
-  return response.data;
-};
-
-// 恢复库存（传入销售记录）
-export const increaseProductStock = async (item) => {
-  const response = await axios.post('/api/product/increase-stock', {
-    productName: item.productName,
-    quantity: item.quantity
-  });
-  return response.data;
+export const deleteProfit = async (profitItem) => {
+  try {
+    const response = await axios.post('/api/salesHistory/delete', profitItem);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 削除失敗:', error);
+    throw error;
+  }
 };

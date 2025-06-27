@@ -7,7 +7,9 @@ import com.example.backend.entity.dto.SalesHistoryEntity;
 
 public interface SalesHistoryService {
 
-    List<SalesHistoryEntity> getAllProfitByUserId(Long Id);
+    List<SalesHistoryEntity> getAllProfitByUserId(String Id);
 
-    boolean updateProfitIfChanged(ProfitEntity profit);
+    boolean updateProfitIfChanged(SalesHistoryEntity salesHistoryEntity);
+
+    void deleteProfitAndRollbackProduct(ProfitEntity profit);
 }

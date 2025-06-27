@@ -1,6 +1,12 @@
-// ConfirmDeleteDialog.jsx
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography
+} from '@mui/material';
 
 export default function ConfirmDeleteDialog({ open, onClose, onConfirm }) {
   return (
@@ -11,7 +17,9 @@ export default function ConfirmDeleteDialog({ open, onClose, onConfirm }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>キャンセル</Button>
-        <Button onClick={onConfirm} color="error" variant="contained">削除</Button>
+        <Button onClick={onConfirm} color="error" variant="contained">
+          削除
+        </Button>
       </DialogActions>
     </Dialog>
   );

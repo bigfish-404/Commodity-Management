@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   fetchAllsalesHistoryByUserId,
-  deleteProfitById,
-  increaseProductStock
+  deleteProfit
 } from '../../services/salesHistoryService';
 import EditModal from './EditModal/EditModal';
 import ConfirmDeleteDialog from './DeleteDialog/ConfirmDeleteDialog';
@@ -76,10 +75,20 @@ function SalesHistory() {
     setDeleteDialogOpen(true);
   };
 
+
   const handleConfirmDelete = async () => {
     try {
-      await deleteProfitById(deleteTarget.id);
-      await increaseProductStock(deleteTarget);
+      const deleteTargetData = {
+        id: deleteTarget.id,
+        userId: deleteTarget.userId,
+        productId: deleteTarget.productId,
+        categoryId: deleteTarget.categoryId,
+        specId: deleteTarget.specId,
+        salesPerson: deleteTarget.salesPerson,
+        updatedBy: currentUser.name || currentUser.userId
+      };
+
+      await deleteProfit(deleteTargetData); // 服务方法调用
       setFullData((prev) => prev.filter((item) => item.id !== deleteTarget.id));
     } catch (e) {
       console.error('❌ 削除失敗:', e);
@@ -88,6 +97,7 @@ function SalesHistory() {
       setDeleteTarget(null);
     }
   };
+
 
   return (
     <>
@@ -130,13 +140,13 @@ function SalesHistory() {
                   products.map((p) => (
                     <tr key={p.id}>
                       <td>{p.productName}</td>
-                      <td>{p.category}</td>
-                      <td>{p.spec}</td>
+                      <td>{p.categoryName}</td>
+                      <td>{p.specName}</td>
                       <td>{p.quantity}</td>
                       <td>{p.salesPrice}</td>
                       <td>{p.profit}</td>
                       <td>{p.salesDate?.slice(0, 10)}</td>
-                      <td>{p.displayName}</td>
+                      <td>{p.channelName}</td>
                       <td>{p.salesPerson}</td>
                       <td>
                         <span className="action-btn" onClick={() => handleOpenModal(p)}>
@@ -193,6 +203,7 @@ function SalesHistory() {
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={handleConfirmDelete}
       />
+
     </>
   );
 }

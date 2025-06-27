@@ -5,20 +5,28 @@
 
 <mapper namespace="com.example.backend.mapper.SalesHistoryMapper">
 
-    <!-- 结果映射 -->
+    <!-- 結果マッピング -->
     <resultMap id="ProfitResultMap" type="com.example.backend.entity.dto.SalesHistoryEntity">
         <id column="ID" property="id"/>
         <result column="USER_ID" property="userId"/>
+        <result column="PRODUCT_ID" property="productId"/>
+        <result column="CATEGORY_ID" property="categoryId"/>
+        <result column="SPEC_ID" property="specId"/>
+        <result column="CHANNEL_ID" property="channelId"/>
+        <result column="DELIVERY_METHOD_ID" property="deliveryMethodId"/>
+
+        <!-- 名称情報 -->
         <result column="PRODUCT_NAME" property="productName"/>
-        <result column="CATEGORY" property="category"/>
-        <result column="SPEC" property="spec"/>
-        <result column="PLATFORM" property="platform"/>
+        <result column="CATEGORY_NAME" property="categoryName"/>
+        <result column="SPEC_NAME" property="specName"/>
+        <result column="CHANNEL_NAME" property="channelName"/>
+        <result column="DELIVERY_METHOD" property="deliveryMethod"/>
+
+        <!-- 数値情報 -->
         <result column="SALES_PRICE" property="salesPrice"/>
         <result column="PROFIT" property="profit"/>
         <result column="QUANTITY" property="quantity"/>
         <result column="SALES_PERSON" property="salesPerson"/>
-        <result column="CHANNEL_NAME" property="channelName"/>
-        <result column="DISPLAY_NAME" property="displayName"/>
         <result column="SALES_DATE" property="salesDate"/>
         <result column="UPDATED_AT" property="updatedAt"/>
         <result column="UPDATED_BY" property="updatedBy"/>
@@ -27,34 +35,58 @@
         <result column="DELETED_FLG" property="deletedFlg"/>
     </resultMap>
 
+    <!-- 利益履歴一覧取得 -->
     <select id="selectAllProfits" resultMap="ProfitResultMap">
         SELECT
             p.ID,
-            p.PRODUCT_NAME,
-            p.CATEGORY,
-            p.SPEC,
-            p.PLATFORM,
+            p.USER_ID,
+            p.PRODUCT_ID,
+            p.CATEGORY_ID,
+            p.SPEC_ID,
+            p.CHANNEL_ID,
+            p.DELIVERY_METHOD_ID,
+
+            pi.PRODUCT_NAME,
+            cat.CATEGORY_NAME,
+            spec.SPEC_NAME,
+            c.CHANNEL_NAME,
+            d.DELIVERY_METHOD,
+
             p.SALES_PRICE,
             p.PROFIT,
             p.QUANTITY,
             p.SALES_PERSON,
             p.SALES_DATE,
-            c.CHANNEL_NAME,
-            c.DISPLAY_NAME,
             p.UPDATED_AT,
             p.UPDATED_BY,
             p.CREATED_AT,
             p.CREATED_BY,
             p.DELETED_FLG
+
         FROM COMMODITY_MANAGEMENT.PROFIT p
+
+        LEFT JOIN COMMODITY_MANAGEMENT.PRODUCT_INFO pi
+            ON p.PRODUCT_ID = pi.PRODUCT_ID
+
+        LEFT JOIN COMMODITY_MANAGEMENT.CATEGORIES cat
+            ON p.CATEGORY_ID = cat.CATEGORY_ID
+
+        LEFT JOIN COMMODITY_MANAGEMENT.SPEC spec
+            ON p.SPEC_ID = spec.SPEC_ID
+
         LEFT JOIN COMMODITY_MANAGEMENT.CHANNEL c
-          ON p.PLATFORM = c.ID
+            ON p.CHANNEL_ID = c.CHANNEL_ID
+
+        LEFT JOIN COMMODITY_MANAGEMENT.DELIVERY_METHOD d
+            ON p.DELIVERY_METHOD_ID = d.DELIVERY_METHOD_ID
+
         WHERE p.DELETED_FLG = '0'
           AND p.USER_ID = #{userId}
-        ORDER BY SALES_DATE DESC
+        ORDER BY p.SALES_DATE DESC
     </select>
 
-    <update id="updateProfitIfChanged" parameterType="com.example.backend.entity.db.ProfitEntity">
+    <!-- 利益更新（差分がある場合のみ） -->
+    <update id="updateProfitIfChanged" parameterType="com.example.backend.entity.dto.SalesHistoryEntity">
         UPDATE COMMODITY_MANAGEMENT.PROFIT
         SET 
             SALES_PRICE = #{salesPrice},
@@ -62,25 +94,45 @@
             QUANTITY = #{quantity},
             SALES_PERSON = #{salesPerson},
             SALES_DATE = #{salesDate},
+            CHANNEL_ID = #{channelId},
             UPDATED_BY = #{updatedBy},
             UPDATED_AT = SYSTIMESTAMP
         WHERE ID = #{id}
-            AND DELETED_FLG = '0'
-            AND (
-            SALES_PRICE != #{salesPrice}
-            OR PROFIT != #{profit}
-            OR QUANTITY != #{quantity}
-            OR SALES_PERSON != #{salesPerson}
-            OR SALES_DATE != #{salesDate}
-      )
+          AND DELETED_FLG = '0'
+          AND (
+              SALES_PRICE != #{salesPrice}
+              OR PROFIT != #{profit}
+              OR QUANTITY != #{quantity}
+              OR SALES_PERSON != #{salesPerson}
+              OR SALES_DATE != #{salesDate}
+              OR CHANNEL_ID != #{channelId}
+          )
     </update>
 
+    <!-- 利益レコード削除（ソフト削除） -->
     <update id="markAsDeleted">
         UPDATE COMMODITY_MANAGEMENT.PROFIT
-        SET DELETED_FLG = '1', 
-        UPDATED_AT = SYSTIMESTAMP
+        SET 
+            DELETED_FLG = '1',
+            UPDATED_AT = SYSTIMESTAMP
         WHERE ID = #{id}
     </update>
 
+    <!-- 削除時にPRODUCTS表の在庫等を更新 -->
+   <update id="updateProductOnDelete" parameterType="com.example.backend.entity.db.ProductEntity">
+        UPDATE COMMODITY_MANAGEMENT.PRODUCTS
+        SET 
+            STOCK_QTY = NVL(STOCK_QTY, 0) + 1,
+            TOTAL_SALES = GREATEST(NVL(TOTAL_SALES, 0) - 1, 0),
+            LAST_SALES_DATE = SYSTIMESTAMP,
+            STAFF = #{staff},
+            UPDATED_BY = #{updatedBy},
+            UPDATED_AT = SYSTIMESTAMP
+        WHERE USER_ID = #{userId}
+            AND PRODUCT_ID = #{productId}
+            AND CATEGORY_ID = #{categoryId}
+            AND SPEC_ID = #{specId}
+            AND DELETED_FLG = 0
+    </update>
 
 </mapper>

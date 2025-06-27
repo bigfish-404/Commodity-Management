@@ -17,12 +17,12 @@ public interface SalesInputMapper {
 
     int insertProfit(ProfitEntity profit);
 
-    void updateProductAfterSale(
-            @Param("userId") Long userId,
+    int updateProductAfterSale(
+            @Param("userId") String userId,
             @Param("quantity") Integer quantity,
             @Param("salesPerson") String salesPerson,
-            @Param("productName") String productName,
-            @Param("categoryName") String category,
-            @Param("specName") String spec
+            @Param("productId") String productId,
+            @Param("categoryId") String categoryId,
+            @Param("specId") String specId
             );
 }

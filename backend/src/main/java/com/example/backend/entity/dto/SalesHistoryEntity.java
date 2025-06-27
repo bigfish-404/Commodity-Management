@@ -6,38 +6,32 @@ import java.util.Date;
 public class SalesHistoryEntity {
     private Long id;
 
-    private Long userId;
+    private String userId;
+    private String productId;
+    private String categoryId;
+    private String specId;
+    private Long channelId;
+    private Long deliveryMethodId;
 
+    // 名称信息（通过 JOIN 取得）
     private String productName;
+    private String categoryName;
+    private String specName;
+    private String channelName;
+    private String deliveryMethod;
 
-    private String category;
-
-    private String spec;
-
-    private String platform;
-
+    // 销售信息
     private BigDecimal salesPrice;
-
     private BigDecimal profit;
-
     private Integer quantity;
-
     private String salesPerson;
-
     private Date salesDate;
 
-    private String channelName;
-
-    private String DisplayName;
-
+    // 记录信息
     private Date updatedAt;
-
     private String updatedBy;
-
     private Date createdAt;
-
     private String createdBy;
-
     private String deletedFlg;
 
     public Long getId() {
@@ -48,12 +42,52 @@ public class SalesHistoryEntity {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
+    }
+
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
+
+    public Long getDeliveryMethodId() {
+        return deliveryMethodId;
+    }
+
+    public void setDeliveryMethodId(Long deliveryMethodId) {
+        this.deliveryMethodId = deliveryMethodId;
     }
 
     public String getProductName() {
@@ -64,28 +98,36 @@ public class SalesHistoryEntity {
         this.productName = productName;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 
-    public String getPlatform() {
-        return platform;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setPlatform(String platform) {
-        this.platform = platform;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 
     public BigDecimal getSalesPrice() {
@@ -128,14 +170,6 @@ public class SalesHistoryEntity {
         this.salesDate = salesDate;
     }
 
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -175,14 +209,4 @@ public class SalesHistoryEntity {
     public void setDeletedFlg(String deletedFlg) {
         this.deletedFlg = deletedFlg;
     }
-
-    public String getDisplayName() {
-        return DisplayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        DisplayName = displayName;
-    }
-
-    
 }

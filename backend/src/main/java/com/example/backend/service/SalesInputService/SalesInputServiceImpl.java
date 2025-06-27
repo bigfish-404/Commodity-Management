@@ -9,7 +9,7 @@ import com.example.backend.entity.db.ProfitEntity;
 import com.example.backend.entity.dto.SalesInputEntity;
 import com.example.backend.mapper.SalesInputMapper;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -24,19 +24,29 @@ public class SalesInputServiceImpl implements SalesInputService {
     }
 
     @Override
-    public void submitProduct(ProfitEntity profitEntity){
+    @Transactional(rollbackFor = Exception.class)
+    public void submitProduct(ProfitEntity profitEntity) {
+
+        // 插入销售记录
         salesInputMapper.insertProfit(profitEntity);
 
         if (profitEntity.getUserId() != null && profitEntity.getQuantity() != null) {
 
-            salesInputMapper.updateProductAfterSale(
-                profitEntity.getUserId(),
-                profitEntity.getQuantity(),
-                profitEntity.getSalesPerson(),
-                profitEntity.getProductName(),
-                profitEntity.getCategory(),
-                profitEntity.getSpec()
+            int updated = salesInputMapper.updateProductAfterSale(
+                    profitEntity.getUserId(),
+                    profitEntity.getQuantity(),
+                    profitEntity.getSalesPerson(),
+                    profitEntity.getProductId(),
+                    profitEntity.getCategoryId(),
+                    profitEntity.getSpecId()
             );
-    }
+
+            if (updated == 0) {
+                // 抛出运行时异常，Spring 将自动回滚 insert 操作
+                throw new RuntimeException("❌ 商品更新失败，在 PRODUCTS 表中找不到匹配记录！");
+            }
+        } else {
+            throw new IllegalArgumentException("❌ 参数不足：用户IDまたは販売数量が null です");
+        }
     }
 }

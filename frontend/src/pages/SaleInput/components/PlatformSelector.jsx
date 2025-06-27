@@ -4,7 +4,7 @@ import { Tabs, Tab, Box } from '@mui/material';
 import { fetchChannelsByUserId } from '../../../services/channelService';
 import './PlatformSelector.css';
 
-export default function PlatformSelector({ platform, setPlatform, setChannelMap, setHandlingFeeMap}) {
+export default function PlatformSelector({ platform, setPlatform, setChannelMap, setHandlingFeeMap }) {
   const [channelNames, setChannelNames] = useState([]);
   const [internalChannelMap, setInternalChannelMap] = useState({});
 

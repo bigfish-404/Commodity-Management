@@ -1,21 +1,24 @@
 package com.example.backend.entity.db;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ProfitEntity {
 
-    private Long id;
+     private Long id;
 
-    private Long userId;
+    private String userId;
 
-    private String productName;
+    private String productId;
 
-    private String category;
+    private String categoryId;
 
-    private String spec;
+    private String specId;
 
-    private String platform;
+    private Long channelId;
+
+    private Long deliveryMethodId;
 
     private BigDecimal salesPrice;
 
@@ -27,17 +30,16 @@ public class ProfitEntity {
 
     private Date salesDate;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     private String updatedBy;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     private String createdBy;
 
     private String deletedFlg;
 
-    
     public Long getId() {
         return id;
     }
@@ -46,44 +48,52 @@ public class ProfitEntity {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecId() {
+        return specId;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecId(String specId) {
+        this.specId = specId;
     }
 
-    public String getPlatform() {
-        return platform;
+    public Long getChannelId() {
+        return channelId;
     }
 
-    public void setPlatform(String platform) {
-        this.platform = platform;
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
+
+    public Long getDeliveryMethodId() {
+        return deliveryMethodId;
+    }
+
+    public void setDeliveryMethodId(Long deliveryMethodId) {
+        this.deliveryMethodId = deliveryMethodId;
     }
 
     public BigDecimal getSalesPrice() {
@@ -126,11 +136,11 @@ public class ProfitEntity {
         this.salesDate = salesDate;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -142,11 +152,11 @@ public class ProfitEntity {
         this.updatedBy = updatedBy;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

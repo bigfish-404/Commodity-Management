@@ -25,34 +25,34 @@ export const fetchSalesData = async (currentUser, channelId) => {
   }
 };
 
-/**
- * 商品销售请求（插入 PROFIT 表）
- * @param {Object} product 商品数据（包含价格、数量、利润等）
- * @param {Object} currentUser 当前登录用户
- */
-export const sellProduct = async (product, currentUser,channelId) => {
+
+export const sellProduct = async (product, currentUser) => {
   const payload = {
-    productName: product.productName,
-    category: product.categoryName,
-    spec: product.specName,
-    platform: channelId,
+    userId: currentUser.userId, // VARCHAR2(50)
+    productId: product.productId, // VARCHAR2(50)
+    categoryId: product.categoryId, // VARCHAR2(50)
+    specId: product.specId, // VARCHAR2(50)
+    channelId: product.channelId, // NUMBER(19,0)
+    deliveryMethodId: product.deliveryMethodId, // NUMBER(19,0)
+
     salesPrice: parseFloat(product.salesPrice),
     profit: parseFloat(product.profit),
     quantity: parseInt(product.quantity),
     salesPerson: currentUser.name,
     salesDate: new Date(),
+
     updatedBy: currentUser.name,
     createdBy: currentUser.name,
-    deletedFlg: '0',
-    userId: currentUser.id
+    deletedFlg: '0'
   };
 
   try {
-    const response = await axios.post('/api/sellProductSubmit', payload);
+    const response = await axios.post('/api/salesInput/submit', payload);
     return response.data;
   } catch (error) {
     console.error("❌ error：", error);
     throw error;
   }
 };
+
 

@@ -1,151 +1,147 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.backend.mapper.SalesInputMapper">
 
-    <!-- 结果映射 -->
-    <resultMap id="SalesInputResultMap" type="com.example.backend.entity.dto.SalesInputEntity">
-        <id property="id" column="id" />
-        <result property="userId" column="user_id" />
-        <result property="productId" column="product_id" />
-        <result property="productName" column="product_name" />
-        <result property="categoryId" column="category_id" />
-        <result property="categoryName" column="category_name" />
-        <result property="specId" column="spec_id" />
-        <result property="specName" column="spec_name" />
-        <result property="stockQty" column="stock_qty" />
-        <result property="stockAlert" column="stock_alert" />
-        <result property="price" column="price" />
-        <result property="purchasePrice" column="purchase_price" />
-        <result property="totalSales" column="total_sales" />
-        <result property="lastSalesDate" column="last_sales_date" />
-        <result property="staff" column="staff" />
-        <result property="deliveryMethodId" column="delivery_method_id" />
-        <result property="deliveryCompany" column="delivery_company" />
-        <result property="deliveryMethod" column="delivery_method" />
-        <result property="deliveryPrice" column="delivery_price" />
-        <result property="createdBy" column="created_by" />
-        <result property="createdBy" column="created_by" />
-        <result property="createdAt" column="created_at" />
-        <result property="updatedBy" column="updated_by" />
-        <result property="updatedAt" column="updated_at" />
-        <result property="deletedFlg" column="deleted_flg" />
-    </resultMap>
+  <!-- 结果映射 -->
+  <resultMap id="SalesInputResultMap" type="com.example.backend.entity.dto.SalesInputEntity">
+    <id property="id" column="id" />
+    <result property="userId" column="user_id" />
+    <result property="productId" column="product_id" />
+    <result property="productName" column="product_name" />
+    <result property="categoryId" column="category_id" />
+    <result property="categoryName" column="category_name" />
+    <result property="specId" column="spec_id" />
+    <result property="specName" column="spec_name" />
+    <result property="stockQty" column="stock_qty" />
+    <result property="stockAlert" column="stock_alert" />
+    <result property="price" column="price" />
+    <result property="purchasePrice" column="purchase_price" />
+    <result property="totalSales" column="total_sales" />
+    <result property="lastSalesDate" column="last_sales_date" />
+    <result property="staff" column="staff" />
+    <result property="deliveryMethodId" column="delivery_method_id" />
+    <result property="deliveryCompany" column="delivery_company" />
+    <result property="deliveryMethod" column="delivery_method" />
+    <result property="deliveryPrice" column="delivery_price" />
+    <result property="createdBy" column="created_by" />
+    <result property="createdAt" column="created_at" />
+    <result property="updatedBy" column="updated_by" />
+    <result property="updatedAt" column="updated_at" />
+    <result property="deletedFlg" column="deleted_flg" />
+  </resultMap>
 
-    <!-- 查询库存数大于0的商品 -->
-    <select id="selectAvailableSalesProductsByUserId" resultMap="SalesInputResultMap">
-    SELECT 
-            p.id,
-        p.user_id,
-        p.product_id,
-        pi.product_name,
-        p.category_id,
-        c.category_name,
-        p.spec_id,
-        s.spec_name,
-        p.stock_qty,
-        p.stock_alert,
-        p.price,
-        p.purchase_price,
-        p.total_sales,
-        p.last_sales_date,
-        p.staff,
-        p.delivery_method_id,
-        d.delivery_company,
-        d.delivery_method,
-        dp.price AS delivery_price, 
-        p.created_by,
-        p.created_at,
-        p.updated_by,
-        p.updated_at,
-        p.deleted_flg
+  <!-- 查询库存数大于0的商品 -->
+  <select id="selectAvailableSalesProductsByUserId" resultMap="SalesInputResultMap">
+    SELECT
+      p.id,
+      p.user_id,
+      p.product_id,
+      pi.product_name,
+      p.category_id,
+      c.category_name,
+      p.spec_id,
+      s.spec_name,
+      p.stock_qty,
+      p.stock_alert,
+      p.price,
+      p.purchase_price,
+      p.total_sales,
+      p.last_sales_date,
+      p.staff,
+      p.delivery_method_id,
+      d.delivery_company,
+      d.delivery_method,
+      dp.price AS delivery_price,
+      p.created_by,
+      p.created_at,
+      p.updated_by,
+      p.updated_at,
+      p.deleted_flg
     FROM products p
-    LEFT JOIN product_info pi
-        ON p.product_id = pi.product_id 
+      LEFT JOIN product_info pi
+        ON p.product_id = pi.product_id
         AND pi.deleted_flg = '0'
         AND pi.user_id = p.user_id
-    LEFT JOIN categories c
-        ON p.category_id = c.category_id 
+      LEFT JOIN categories c
+        ON p.category_id = c.category_id
         AND c.deleted_flg = '0'
         AND c.user_id = p.user_id
-    LEFT JOIN spec s
-        ON p.spec_id = s.spec_id 
+      LEFT JOIN spec s
+        ON p.spec_id = s.spec_id
         AND s.deleted_flg = '0'
         AND s.user_id = p.user_id
-    LEFT JOIN delivery_method d
-        ON p.delivery_method_id = d.delivery_method_id 
+      LEFT JOIN delivery_method d
+        ON p.delivery_method_id = d.delivery_method_id
         AND d.deleted_flg = '0'
         AND d.user_id = p.user_id
-    LEFT JOIN delivery_price dp
+      LEFT JOIN delivery_price dp
         ON dp.user_id = p.user_id
-        AND dp.channel_id = #{channelId}          
+        AND dp.channel_id = #{channelId}
         AND dp.delivery_method_id = p.delivery_method_id
         AND dp.deleted_flg = '0'
-    WHERE p.user_id = #{userId}
-        AND p.deleted_flg = '0'
-    </select>
+    WHERE
+      p.user_id = #{userId}
+      AND p.deleted_flg = '0'
+      AND p.stock_qty > 0
+  </select>
 
-
-    <insert id="insertProfit" parameterType="com.example.backend.entity.db.ProfitEntity">
+  <!-- 插入销售记录 -->
+  <insert id="insertProfit" parameterType="com.example.backend.entity.db.ProfitEntity">
     INSERT INTO COMMODITY_MANAGEMENT.PROFIT (
-        PRODUCT_NAME,
-        CATEGORY,
-        SPEC,
-        PLATFORM,
-        SALES_PRICE,
-        PROFIT,
-        QUANTITY,
-        SALES_PERSON,
-        SALES_DATE,
-        UPDATED_AT,
-        UPDATED_BY,
-        CREATED_AT,
-        CREATED_BY,
-        DELETED_FLG,
-        USER_ID
+      USER_ID,
+      PRODUCT_ID,
+      CATEGORY_ID,
+      SPEC_ID,
+      CHANNEL_ID,
+      DELIVERY_METHOD_ID,
+      SALES_PRICE,
+      PROFIT,
+      QUANTITY,
+      SALES_PERSON,
+      SALES_DATE,
+      UPDATED_AT,
+      UPDATED_BY,
+      CREATED_AT,
+      CREATED_BY,
+      DELETED_FLG
     ) VALUES (
-        #{productName, jdbcType=VARCHAR},
-        #{category, jdbcType=VARCHAR},
-        #{spec, jdbcType=VARCHAR},
-        #{platform, jdbcType=VARCHAR},
-        #{salesPrice, jdbcType=NUMERIC},
-        #{profit, jdbcType=NUMERIC},
-        #{quantity, jdbcType=NUMERIC},
-        #{salesPerson, jdbcType=VARCHAR},
-        #{salesDate, jdbcType=DATE},
-        SYSTIMESTAMP,
-        #{updatedBy, jdbcType=VARCHAR},
-        SYSTIMESTAMP,
-        #{createdBy, jdbcType=VARCHAR},
-        #{deletedFlg, jdbcType=CHAR},
-        #{userId, jdbcType=NUMERIC}
+      #{userId, jdbcType=VARCHAR},
+      #{productId, jdbcType=VARCHAR},
+      #{categoryId, jdbcType=VARCHAR},
+      #{specId, jdbcType=VARCHAR},
+      #{channelId, jdbcType=NUMERIC},
+      #{deliveryMethodId, jdbcType=NUMERIC},
+      #{salesPrice, jdbcType=NUMERIC},
+      #{profit, jdbcType=NUMERIC},
+      #{quantity, jdbcType=NUMERIC},
+      #{salesPerson, jdbcType=VARCHAR},
+      #{salesDate, jdbcType=DATE},
+      SYSTIMESTAMP,
+      #{updatedBy, jdbcType=VARCHAR},
+      SYSTIMESTAMP,
+      #{createdBy, jdbcType=VARCHAR},
+      #{deletedFlg, jdbcType=CHAR}
     )
-    </insert>
+  </insert>
 
-    <update id="updateProductAfterSale">
-
+  <!-- 销售后更新商品信息 -->
+  <update id="updateProductAfterSale" parameterType="com.example.backend.entity.db.ProfitEntity">
     UPDATE COMMODITY_MANAGEMENT.PRODUCTS
     SET
-        STOCK_QTY = STOCK_QTY - #{quantity},
-        LAST_SALES_DATE = SYSTIMESTAMP,
-        STAFF = #{salesPerson},
-        TOTAL_SALES = TOTAL_SALES + #{quantity},
-        UPDATED_AT = SYSTIMESTAMP,
-        UPDATED_BY = #{salesPerson}
-    WHERE USER_ID = #{userId}
-      AND PRODUCT_NAME = #{productName}
-      AND SPEC_ID = (
-          SELECT ID FROM COMMODITY_MANAGEMENT.SPEC WHERE SPEC_NAME = #{specName} AND DELETED_FLG = '0'
-      )
-      AND CATEGORY_ID = (
-          SELECT ID FROM COMMODITY_MANAGEMENT.CATEGORY WHERE CATEGORY_NAME = #{categoryName} AND DELETED_FLG = '0'
-      )
-
-    </update>
-
-
-
+      STOCK_QTY = STOCK_QTY - #{quantity},
+      LAST_SALES_DATE = SYSTIMESTAMP,
+      STAFF = #{salesPerson},
+      TOTAL_SALES = TOTAL_SALES + #{quantity},
+      UPDATED_AT = SYSTIMESTAMP,
+      UPDATED_BY = #{salesPerson}
+    WHERE
+      USER_ID = #{userId}
+      AND PRODUCT_ID = #{productId}
+      AND CATEGORY_ID = #{categoryId}
+      AND SPEC_ID = #{specId}
+  </update>
 
 </mapper>
