@@ -1,13 +1,13 @@
 import React from 'react';
 import Header from '../components/Header/Header';
-import Sidebar from '../components/Sidebar/Sidebar';
+import Sidebar, { SIDEBAR_WIDTH } from '../components/Sidebar/Sidebar';
 import './MainLayout.css';
 
 const MainLayout = ({ children }) => (
     <div className="main-layout">
-        <Header />
-        <div className="main-wrapper">
-            <Sidebar />
+        <Sidebar />
+        <div className="right-wrapper" style={{ marginLeft: SIDEBAR_WIDTH }}>
+            <Header />
             <div className="main-content">
                 {children}
             </div>

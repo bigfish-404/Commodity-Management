@@ -1,29 +1,48 @@
+// SidebarItem.jsx
 import React from "react";
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { Link } from "react-router-dom";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
 
-const SidebarItem = ({ icon, text, to, selected }) => {
-  // 定义一个SidebarItem组件，接收四个props：icon, text, to, selected
+function SidebarItem({ icon, text, to = "#" }) {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
   return (
-    <ListItem disablePadding>
-      {/* 使用ListItem组件来创建一个列表项 */}
-      <ListItemButton
-        // 使用ListItemButton组件来创建一个可点击的按钮
-        component={Link}
-        // 使用Link组件来实现路由跳转
-        to={to}
-        selected={selected}
+    <ListItem
+      button
+      component={Link}
+      to={to}
+      sx={{
+        marginX: '18px',
+         marginY: '6px',
+        // margin: 0,
+        borderRadius: '6px',
+        backgroundColor: isActive ? '#e8d3bd' : '#f7ede1',
+        boxShadow: isActive
+          ? 'inset 2px 2px 5px rgba(0,0,0,0.12), inset -2px -2px 5px rgba(255,255,255,0.6)'
+          : '3px 3px 6px rgba(0,0,0,0.08)',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+          backgroundColor: '#f0dfcc',
+          boxShadow: '4px 4px 10px rgba(0,0,0,0.12)',
+        },
+      }}
+    >
+      <ListItemIcon sx={{ minWidth: '36px', color: '#6e4f3a' }}>
+        {icon}
+      </ListItemIcon>
+      <ListItemText
+        primary={text}
         sx={{
-          '&:hover': {
-            backgroundColor: '#FFB74D', // 鼠标悬停时的背景色
-          }
+          color: '#5b4432',
+          fontWeight: isActive ? 'bold' : 'normal',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
-      >
-        <ListItemIcon>{icon}</ListItemIcon>
-        <ListItemText primary={text} />
-      </ListItemButton>
+      />
     </ListItem>
   );
-};
+}
 
 export default SidebarItem;
