@@ -1,31 +1,38 @@
-import React from 'react';
+// Register.jsx
+import React, { useState } from 'react';
 import { Helmet } from "react-helmet-async";
 import CryptoJS from 'crypto-js';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+    Box,
+    Button,
+    Container,
+    Paper,
+    TextField,
+    Typography,
+    Snackbar,
+    Alert
+} from '@mui/material';
 
-
-import './Register.css';
-import { useNavigate } from 'react-router-dom';
+import HeaderRegister from '../../components/Header/HeaderRegister';
 
 function Register() {
-    const [username, setUsername] = React.useState("");
-    // useState是React的一个Hook，初始值为空字符串
-    const [email, setMail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [confirmPassword, setConfirmPassword] = React.useState("");
-
+    const [username, setUsername] = useState("");
+    const [email, setMail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [successOpen, setSuccessOpen] = useState(false);
     const navigate = useNavigate();
-    // useNavigate是React Router的一个Hook，用于编程式导航
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // preventDefault()方法阻止表单的默认提交行为
+
         if (!username || !email || !password || !confirmPassword) {
             alert("すべてのフィールドを入力してください。");
             return;
         }
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // 定义一个正则表达式，用于验证电子邮件格式
         if (!emailRegex.test(email)) {
             alert("有効なメールアドレスを入力してください。");
             return;
@@ -35,8 +42,8 @@ function Register() {
             alert("パスワードが一致しません。");
             return;
         }
+
         const encryptedPassword = CryptoJS.SHA256(password).toString();
-        // 使用CryptoJS库对密码进行SHA-256加密
 
         const response = await fetch("/api/register", {
             method: "POST",
@@ -48,85 +55,115 @@ function Register() {
                 username,
                 email,
                 password: encryptedPassword,
-                confirmPassword: encryptedPassword //                
+                confirmPassword: encryptedPassword
             })
         });
+
         const result = await response.json();
         if (response.ok) {
-            navigate("/");
+            setSuccessOpen(true);
+            setTimeout(() => navigate("/"), 1500);
         } else {
             alert(result.message || '登録に失敗しました');
-            // Handle registration failure (e.g., show error message)
         }
-    }
+    };
 
     return (
         <>
             <Helmet>
-                <title>Register</title>
+                <title>新規登録</title>
             </Helmet>
-            <div className="register-container">
-                <div className="left-panel">
-                    <h2>Commodity Managementへようこそ</h2>
-                    <p>安全・効率的でスマートな在庫管理プラットフォームで、すべての商品の流れを簡単に把握できます。</p>
-                    <ul>
-                        <li>✅ 在庫のリアルタイム更新と追跡</li>
-                        <li>✅ 複数チャネルの販売データを一元管理</li>
-                        <li>✅ 自動アラート・補充リマインダー機能</li>
-                        <li>✅ ユーザー権限管理に対応</li>
-                        <li>✅ グラフ分析で迅速な意思決定を支援</li>
-                    </ul>
-                </div>
 
-                <div className="right-panel">
+            <HeaderRegister />
 
-                    <h2>新規登録</h2>
-                    <form onSubmit={handleSubmit} className="register-form">
-                        <input
-                            type="text"
-                            placeholder="ユーザー名"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        //  onChange事件处理函数，当输入框内容变化时更新username状态
-                        />
-                        <input
-                            type="email"
-                            placeholder="メールアドレス"
-                            value={email}
-                            onChange={(e) => setMail(e.target.value)}
-                        />
-                        <input
-                            type="password"
-                            placeholder="パスワード"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <input
-                            type="password"
-                            placeholder="パスワードを確認"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+            <Box sx={{
+                minHeight: '100vh',
+                background: 'radial-gradient(circle at top left, #fdfdfd, #f5f3f1, #f0eeeb)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                pt: 6,
+                overflow: 'hidden'
+            }}>
+                <Container maxWidth="sm" sx={{ mt: 0 }}>
+                    <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+                        <Typography variant="h5" align="center" fontWeight="bold" color="#5a3d28" mb={3}>
+                            新規登録
+                        </Typography>
 
-                        />
-                        <button type="submit" className="register-button">登録</button>
-                    </form>
-                    <p className="login-link">
-                        すでにアカウントをお持ちですか？
-                        <a href="/" className="login-link-button">ログイン</a>
-                    </p>
+                        <Box component="form" onSubmit={handleSubmit}>
+                            <TextField
+                                label="ユーザー名"
+                                variant="outlined"
+                                fullWidth
+                                margin="normal"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                            <TextField
+                                label="メールアドレス"
+                                variant="outlined"
+                                fullWidth
+                                margin="normal"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setMail(e.target.value)}
+                            />
+                            <TextField
+                                label="パスワード"
+                                variant="outlined"
+                                type="password"
+                                fullWidth
+                                margin="normal"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <TextField
+                                label="パスワードを確認"
+                                variant="outlined"
+                                type="password"
+                                fullWidth
+                                margin="normal"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{
+                                    mt: 3,
+                                    bgcolor: '#a88d72',
+                                    boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.1)',
+                                    borderRadius: '12px',
+                                    textTransform: 'none',
+                                    fontWeight: 'bold',
+                                    '&:hover': {
+                                        bgcolor: '#8b6b51',
+                                        boxShadow: 'inset 0 -2px 6px rgba(0,0,0,0.25), 0 6px 12px rgba(0,0,0,0.15)'
+                                    }
+                                }}
+                            >
+                                登録
+                            </Button>
+                        </Box>
 
-                    <div className="social-login">
-                        <p>新規登録して利用開始しましょう！</p>
-                        <div className="social-icons">
-                            <span className="icon blue"></span>
-                            <span className="icon red"></span>
-                            <span className="icon lightblue"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+                            すでにアカウントをお持ちの方は{' '}
+                            <Link to="/" style={{ color: '#5a3d28', fontWeight: 'bold', textDecoration: 'none' }}>
+                                ログイン
+                            </Link>
+                        </Typography>
+                    </Paper>
+                </Container>
+            </Box>
+
+            <Snackbar open={successOpen} autoHideDuration={2000} onClose={() => setSuccessOpen(false)}>
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    登録が成功しました！
+                </Alert>
+            </Snackbar>
         </>
-
     );
 }
 

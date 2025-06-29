@@ -1,117 +1,128 @@
-import React, { useState } from 'react';//引入React库
-import axios from 'axios'; //引入axios库，用于发送HTTP请求
-import { Helmet } from 'react-helmet-async'; //引入react-helmet库，用于修改页面标题
-import { useNavigate } from 'react-router-dom'; //引入useNavigate钩子，用于编程式导航
-import CryptoJS from 'crypto-js'; //引入CryptoJS库，用于加密密码
-import { Link } from 'react-router-dom';
+// Login.jsx
+import React, { useState } from 'react';
+import {
+  Box,
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Link as MuiLink,
+  Avatar
+} from '@mui/material';
+import { useNavigate, Link } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
+import axios from 'axios';
+import { Helmet } from 'react-helmet-async';
 
-import HeaderRegister from '../../components/Header/HeaderRegister ';//引入Header_Register组件
-import './Login.css';
+import HeaderRegister from '../../components/Header/HeaderRegister';
 
-function Login() {
-    const [email, setMail] = useState("");
-    // useState是React的一个Hook，初始值为空字符串
-    // username用于存储用户名
-    // setUsername是更新username状态的函数
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+export default function Login() {
+  const [email, setMail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        // handleSubmit是一个异步函数（async），用于处理表单提交
-        // e是事件对象，包含了事件的相关信息    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
-        //preventDefault()方法阻止表单的默认提交行为
+    if (!email || !password) {
+      alert('メールアドレスとパスワードを入力してください');
+      return;
+    }
 
-        if (!email || !password) {
-            alert("Please enter both mailAddress and password.");
-            return;
-            // 如果用户名或密码为空，弹出提示框并返回   
-        }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('正しいメールアドレスを入力してください');
+      return;
+    }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // 定义一个正则表达式，用于验证电子邮件格式 
-        if (!emailRegex.test(email)) {
-            alert("Please enter a valid email address.");
-            return;
-        }
+    const encryptedPassword = CryptoJS.SHA256(password).toString();
 
-        const encryptedPassword = CryptoJS.SHA256(password).toString();
-        // 使用CryptoJS库对密码进行SHA-256加密
+    try {
+      const response = await axios.post('/api/login', {
+        email,
+        password: encryptedPassword,
+      }, {
+        withCredentials: true,
+      });
 
-        try {
-            const response = await axios.post("/api/login",
-                {
-                    email,
-                    password: encryptedPassword
-                },
-                {
-                    withCredentials: true
-                }
-            );
+      const userData = response.data;
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      navigate('/api/homepage');
+    } catch (error) {
+      alert(error?.response?.data?.message || 'ログインに失敗しました。');
+    }
+  };
 
-            const userData = response.data;
-            localStorage.setItem("currentUser", JSON.stringify(userData));
+  return (
+    <>
+      <Helmet>
+        <title>ログイン</title>
+      </Helmet>
 
-            navigate("/api/homepage");
+      <HeaderRegister />
 
-        } catch (error) {
-            if (error.response) {
-                // 服务器返回的错误响应
-                console.error("Login error:", error.response.data);
-                alert(error.response.data.message || "Login failed.");
-            } else {
-                // 网络错误或服务器未响应
-                console.error("Network error:", error);
-                alert("Network error or server is not responding.");
-            }
-        }
+      <Container maxWidth="sm">
+        <Box
+          sx={{
+            mt: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Paper elevation={3} sx={{ p: 5, width: '100%', borderRadius: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+              <Avatar sx={{ bgcolor: '#a88d72' }}>L</Avatar>
+            </Box>
 
-    };
+            <Typography component="h1" variant="h5" align="center" color="#5a3d28" fontWeight="bold">
+              ログイン
+            </Typography>
 
-    return (
-        <>
-            <Helmet>
-                <title>Login</title>
-            </Helmet>
-            <div className='container'>
-                <HeaderRegister />
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <TextField
+                label="メールアドレス"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={email}
+                onChange={(e) => setMail(e.target.value)}
+              />
+              <TextField
+                label="パスワード"
+                variant="outlined"
+                type="password"
+                fullWidth
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  bgcolor: '#a88d72',
+                  '&:hover': {
+                    bgcolor: '#8b6b51',
+                  },
+                }}
+              >
+                ログイン
+              </Button>
 
-                <div className='page-container'>
-                    <div className="login-container">
-                        <h2 className='login-font'>Login</h2>
-                        <form onSubmit={handleSubmit}>
-                            {/*绑定表单提交事件(handleSubmit) */}
-                            <input
-                                type="text"
-                                placeholder="メールアドレス"
-                                value={email}
-                                onChange={(e) => setMail(e.target.value)}
-                            />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <div className='login-buttons'>
-                                <button type="submit">Login</button>
-                            </div>
-                            <div className="register-link">
-                                アカウントをお持ちでない方はこちら
-                                <Link to="/api/register" className="link-button">
-                                    register
-                                </Link>
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-
-        </>
-
-    );
+              <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+                アカウントをお持ちでない方は{' '}
+                <MuiLink component={Link} to="/api/register" underline="hover" sx={{ color: '#5a3d28', fontWeight: 'bold' }}>
+                  新規登録
+                </MuiLink>
+              </Typography>
+            </Box>
+          </Paper>
+        </Box>
+      </Container>
+    </>
+  );
 }
-export default Login;
