@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.backend.mapper.ProfitMapper">
 
-    <select id="getSalesSummaryByDateRange" resultType="com.example.backend.entity.dto.SalesSummaryDTO">
+    <select id="getSalesSummaryFlexible" resultType="com.example.backend.entity.dto.SalesSummaryDTO">
         SELECT
-            TO_CHAR(SALES_DATE, 'MM-DD') AS label,
-            SUM(SALES_PRICE * QUANTITY) AS sales,
-            SUM(PROFIT) AS profit
+        <choose>
+            <when test="groupFormat == 'day'">
+                TO_CHAR(SALES_DATE, 'MM-DD') AS label,
+            </when>
+            <when test="groupFormat == 'month'">
+                TO_CHAR(SALES_DATE, 'YYYY-MM') AS label,
+            </when>
+            <otherwise>
+                TO_CHAR(SALES_DATE, 'YYYY-MM-DD') AS label,
+            </otherwise>
+        </choose>
+        SUM(SALES_PRICE * QUANTITY) AS sales,
+        SUM(PROFIT) AS profit
         FROM COMMODITY_MANAGEMENT.PROFIT
         WHERE USER_ID = #{userId}
           AND SALES_DATE &gt;= #{startDate}
           AND SALES_DATE &lt;= #{endDate}
           AND DELETED_FLG = '0'
-        GROUP BY TO_CHAR(SALES_DATE, 'MM-DD')
+        GROUP BY
+        <choose>
+            <when test="groupFormat == 'day'">
+                TO_CHAR(SALES_DATE, 'MM-DD')
+            </when>
+            <when test="groupFormat == 'month'">
+                TO_CHAR(SALES_DATE, 'YYYY-MM')
+            </when>
+            <otherwise>
+                TO_CHAR(SALES_DATE, 'YYYY-MM-DD')
+            </otherwise>
+        </choose>
         ORDER BY label
     </select>
-
 </mapper>

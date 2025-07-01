@@ -34,10 +34,31 @@ export default function Homepage() {
     const [pieData, setPieData] = useState([]);
 
     const fetchChartData = async (range) => {
+        const userId = JSON.parse(localStorage.getItem("currentUser"))?.userId;
+        if (!userId) {
+            console.error("ユーザー情報が取得できません");
+            return;
+        }
+
         try {
-            const res = await axios.get(`/api/profit-stats?range=${range}`);
-            setChartData(res.data.lineBarData);  // 需要后端返回格式 { lineBarData: [...], pieData: [...] }
-            setPieData(res.data.pieData);
+            const res = await axios.get(`/api/profit/stats`, {
+                params: {
+                    userId,
+                    range
+                }
+            });
+
+            const lineBarData = res.data;
+
+            // Pie 图暂时使用 sales 按 label 汇总构造
+            const pieDataTemp = lineBarData.map(item => ({
+                name: item.label,
+                value: item.sales
+            }));
+
+            setChartData(lineBarData);
+            setPieData(pieDataTemp);
+
         } catch (err) {
             console.error('データ取得失敗:', err);
         }
@@ -48,8 +69,11 @@ export default function Homepage() {
     }, [timeRange]);
 
     const handleRangeChange = (event, newRange) => {
-        if (newRange) setTimeRange(newRange);
+        if (newRange !== null) {
+            setTimeRange(newRange);
+        }
     };
+
 
     return (
         <>
@@ -152,7 +176,7 @@ export default function Homepage() {
                         </Paper>
                     </Grid>
                 </Grid>
-            </Box>
+            </Box >
         </>
     );
 }
