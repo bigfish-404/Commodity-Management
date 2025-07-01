@@ -1,4 +1,3 @@
-// AddProductModal.jsx
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { addProductInfo } from '../../../services/productAddService'; // 你要实现这个函数

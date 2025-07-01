@@ -15,13 +15,13 @@ function SidebarItem({ icon, text, to, inset = false, onClick, endIcon }) {
             to={isLink ? to : undefined}
             onClick={onClick}
             sx={{
-                mmx: 1,                    // ✅ 让左右留点空白，避免贴边
+                mmx: 1,                    // 让左右留点空白，避免贴边
                 my: 0.5,
-                pl: inset ? 3 : 2,        // ✅ 子项略向内缩
+                pl: inset ? 3 : 2,        // 子项略向内缩
                 borderRadius: '10px',
                 justifyContent: 'space-between',
                 pl: 2,
-                // ✅ 关键点：整块按钮整体向右移动
+                // 关键点：整块按钮整体向右移动
                 ml: inset ? 4 : 2,
                 
                 backgroundColor: isActive ? '#e0cdb9' : '#f9f1e6',

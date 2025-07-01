@@ -9,7 +9,7 @@ import UploadArea from './UploadArea';
 import { fetchProductInfo, fetchCategories, fetchDeliverys, fetchSpecs, submitProduct } from '../../services/productAddService';
 import './ProductAddForm.css';
 
-export default function ProductAddForm() {
+function ProductAddForm() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const initialFormData = {
@@ -25,23 +25,27 @@ export default function ProductAddForm() {
     };
 
     const [formData, setFormData] = useState(initialFormData);
-    const [categories, setCategories] = useState([]);
+
     const [productInfo, setProductInfo] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [specs, setSpecs] = useState([]);
     const [deliveryOptions, setDeliveryOptions] = useState([]);
+
+    const [productModalOpen, setProductModalOpen] = useState(false);
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     const [specModalOpen, setSpecModalOpen] = useState(false);
-    const [productModalOpen, setProductModalOpen] = useState(false);
     const [addMethodModalOpen, setAddMethodModalOpen] = useState(false);
 
 
     useEffect(() => { loadMasters(); }, []);
 
     const loadMasters = async () => {
+
+        setProductInfo(await fetchProductInfo(currentUser));
         setCategories(await fetchCategories(currentUser));
         setSpecs(await fetchSpecs(currentUser));
         setDeliveryOptions(await fetchDeliverys(currentUser));
-        setProductInfo(await fetchProductInfo(currentUser)); // 假设你已经实现 fetchProducts
+        
     };
 
     const handleChange = (e) => {
@@ -291,3 +295,4 @@ export default function ProductAddForm() {
         </Box>
     );
 }
+export default ProductAddForm;

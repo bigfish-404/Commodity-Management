@@ -7,9 +7,7 @@ import {
     Toolbar,
     Typography,
     Collapse,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
+
 } from "@mui/material";
 import {
     Home as HomeIcon,
@@ -51,7 +49,6 @@ function Sidebar() {
                 <SidebarItem icon={<HistoryIcon />} text="販売履歴" to="/api/salesHistory" />
                 <SidebarItem icon={<InventoryIcon />} text="商品リスト" to="/api/productList" />
                 <SidebarItem icon={<AddBoxIcon />} text="商品追加" to="/api/productAdd" />
-                <SidebarItem icon={<LocalMallIcon />} text="販売チャネル" to="/api/channel" />
 
                 {/* 折叠菜单：マスタ管理 */}
                 <SidebarItem
@@ -65,9 +62,10 @@ function Sidebar() {
 
                 <Collapse in={openMaster} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
+                        <SidebarItem icon={<TagIcon />} text="品番" to="/api/productInfo" inset />
                         <SidebarItem icon={<CategoryIcon />} text="カテゴリー" to="/api/category" inset />
                         <SidebarItem icon={<SettingsIcon />} text="規格・仕様" to="/api/spec" inset />
-                        <SidebarItem icon={<TagIcon />} text="品番" to="/api/productInfo" inset />
+                        <SidebarItem icon={<LocalMallIcon />} text="販売チャネル" to="/api/channel" inset />
                     </List>
                 </Collapse>
 
