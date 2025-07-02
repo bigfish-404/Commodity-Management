@@ -116,6 +116,7 @@ function ProductAddForm() {
 
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h2>商品追加</h2>
             <Grid container spacing={3}>
                 <Grid item xs={4} className="select-with-button">
                     <Box sx={{ flexGrow: 1 }}>

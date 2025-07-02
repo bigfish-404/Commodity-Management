@@ -11,7 +11,6 @@ export default function ProductAdd() {
             </Helmet>
             <div className="content">
                 <div className=".product-header ">
-                    <h2>商品追加</h2>
                     <ProductAddForm />
                 </div>
             </div>
