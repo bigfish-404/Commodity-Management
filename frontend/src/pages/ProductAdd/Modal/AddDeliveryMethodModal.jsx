@@ -1,7 +1,11 @@
-// src/components/Modal/AddDeliveryMethodModal.jsx
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { addDeliveryMethod } from '../../../services/productAddService';
+import { modalStyle, titleSx, buttonBoxSx } from './ModalStyleItem';
+import {
+    checkDeliveryCompany,
+    checkDeliveryMethod
+} from '../../../utils/validators';
 
 export default function AddDeliveryMethodModal({ open, onClose, onAdd }) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -9,8 +13,14 @@ export default function AddDeliveryMethodModal({ open, onClose, onAdd }) {
     const [methodName, setMethodName] = useState('');
 
     const handleSubmit = async () => {
-        if (!companyName.trim() || !methodName.trim()) {
-            alert("配送会社と配送方法の両方を入力してください");
+        const validations = [
+            checkDeliveryCompany(companyName),
+            checkDeliveryMethod(methodName),
+        ];
+        const errors = validations.filter(v => !v.valid);
+        if (errors.length > 0) {
+            const errorMessages = errors.map(e => `・${e.message}`).join('\n');
+            alert(`以下の項目に誤りがあります：\n\n${errorMessages}`);
             return;
         }
 
@@ -23,17 +33,23 @@ export default function AddDeliveryMethodModal({ open, onClose, onAdd }) {
             deletedFlg: '0'
         };
 
-        await addDeliveryMethod(payload);
-        setCompanyName('');
-        setMethodName('');
-        onAdd();      
-        onClose();   
+        try {
+            await addDeliveryMethod(payload);
+            setCompanyName('');
+            setMethodName('');
+            onAdd();
+            onClose();
+        } catch (error) {
+            console.error(error);
+            alert("登録に失敗しました");
+        }
     };
 
     return (
         <Modal open={open} onClose={onClose}>
-            <Box sx={{ p: 3, bgcolor: 'white', mx: 'auto', my: '20%', width: 400 }}>
-                <Typography variant="h6">配送会社 + 方法 追加</Typography>
+            <Box sx={modalStyle}>
+                <Typography variant="h6" sx={titleSx}>配送会社 + 方法 追加</Typography>
+
                 <TextField
                     fullWidth
                     label="配送会社名"
@@ -41,16 +57,21 @@ export default function AddDeliveryMethodModal({ open, onClose, onAdd }) {
                     onChange={(e) => setCompanyName(e.target.value)}
                     sx={{ mt: 2 }}
                 />
+
                 <TextField
                     fullWidth
                     label="配送方法名"
                     value={methodName}
                     onChange={(e) => setMethodName(e.target.value)}
                     sx={{ mt: 2 }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSubmit();
+                    }}
                 />
-                <Box sx={{ mt: 2, textAlign: 'right' }}>
-                    <Button onClick={onClose} sx={{ mr: 1 }}>キャンセル</Button>
-                    <Button variant="contained" onClick={handleSubmit}>登録</Button>
+
+                <Box sx={buttonBoxSx}>
+                    <Button onClick={onClose} variant="outlined">キャンセル</Button>
+                    <Button variant="contained" onClick={handleSubmit} sx={{ ml: 1 }}>登録</Button>
                 </Box>
             </Box>
         </Modal>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -15,11 +16,15 @@ public class ProductListServiceImpl implements ProductListService {
     @Autowired
     private ProductListMapper productListMapper;
 
-    // 允许的排序字段（拼接用完整字段名）
-    private static final Set<String> ALLOWED_ORDER_BY = Set.of(
-            "pi.product_name", "c.category_name", "s.spec_name",
-            "p.stock_qty", "p.price", "p.last_sales_date",
-            "p.total_sales", "p.staff");
+    private static final Map<String, String> ORDER_BY_FIELD_MAP = Map.of(
+            "productName", "pi.product_name",
+            "categoryName", "c.category_name",
+            "specName", "s.spec_name",
+            "stockQty", "p.stock_qty",
+            "price", "p.price",
+            "lastSalesDate", "p.last_sales_date",
+            "totalSales", "p.total_sales",
+            "staff", "p.staff");
 
     private static final Set<String> ALLOWED_ORDER_DIRECTION = Set.of("ASC", "DESC");
 
@@ -27,17 +32,17 @@ public class ProductListServiceImpl implements ProductListService {
     public List<ProductListEntity> getAllProductsByUserId(
             String userId, String orderBy, String orderDirection, int offset, int limit) {
 
-        // 默认排序字段与方向
-        String orderBySafe = "pi.product_name";
-        String orderDirSafe = "ASC";
+        // 字段映射（如果传入字段不存在，则使用默认 productName）
+        String orderBySafe = ORDER_BY_FIELD_MAP.getOrDefault(orderBy, "pi.product_name");
 
-        if (orderBy != null && ALLOWED_ORDER_BY.contains(orderBy)) {
-            orderBySafe = orderBy;
-        }
+        // 排序方向检查
+        String orderDirSafe = ALLOWED_ORDER_DIRECTION
+                .contains(orderDirection != null ? orderDirection.toUpperCase() : "")
+                        ? orderDirection.toUpperCase()
+                        : "ASC";
 
-        if (orderDirection != null && ALLOWED_ORDER_DIRECTION.contains(orderDirection.toUpperCase())) {
-            orderDirSafe = orderDirection.toUpperCase();
-        }
+        // 可选：调试日志
+        System.out.println("排序字段: " + orderBySafe + "，方向: " + orderDirSafe);
 
         return productListMapper.getAllProductsByUserId(userId, offset, limit, orderBySafe, orderDirSafe);
     }
