@@ -9,9 +9,31 @@ import {
     MenuItem,
     Button,
     Grid,
-    Dialog, DialogTitle, DialogContent, DialogActions
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Typography,
 } from '@mui/material';
-import './EditProductModal.css';
+import {
+    checkProductName,
+    checkCategoryName,
+    checkSpecName,
+    checkPrice,
+    checkPurchasePrice,
+    checkDeliveryCompany,
+    checkDeliveryMethod,
+    checktockQty,
+    checkStockAlert,
+} from '../../../utils/validators';
+
+import {
+    modalBoxSx,
+    confirmDialogPaperSx,
+    confirmTitleSx,
+    confirmContentTextSx,
+    confirmActionsSx,
+} from './EditProductModalStyles';
 
 function EditProductModal({
     open,
@@ -27,7 +49,6 @@ function EditProductModal({
     const [confirmOpen, setConfirmOpen] = useState(false);
     if (!open) return null;
 
-    // 限制数字输入 ≥ 0
     const handleNumberChange = (e) => {
         const { name, value } = e.target;
         const num = Number(value);
@@ -37,18 +58,43 @@ function EditProductModal({
     };
 
     const handleConfirm = () => {
-        handleSubmit();
-        setConfirmOpen(false);
+        const validations = [
+            checkProductName(formData.productId),
+            checkCategoryName(formData.categoryId),
+            checkSpecName(formData.specId),
+            checkPrice(formData.price),
+            checkPurchasePrice(formData.purchasePrice),
+            checktockQty(formData.stockQty),
+            checkStockAlert(formData.stockAlert),
+            checkDeliveryCompany(formData.deliveryCompany),
+            checkDeliveryMethod(formData.deliveryMethodId),
+        ];
+
+        const errors = validations.filter((v) => !v.valid);
+        if (errors.length > 0) {
+            const errorMessages = errors.map((e) => `・${e.message}`).join('\n');
+            alert(`以下の項目に誤りがあります：\n\n${errorMessages}`);
+            return;
+        }
+
+        try {
+            handleSubmit();
+            setConfirmOpen(false);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
         <>
             <Modal open={open} onClose={onClose}>
-                <Box className="edit-product-modal">
-                    <h2>商品情報編集</h2>
+                <Box sx={modalBoxSx}>
+                    <Typography variant="h6" gutterBottom>
+                        商品情報編集
+                    </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">品番</FormLabel>
+                            <FormLabel>品番</FormLabel>
                             <FormControl fullWidth size="small">
                                 <Select
                                     name="productId"
@@ -65,7 +111,7 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">カテゴリー</FormLabel>
+                            <FormLabel>カテゴリー</FormLabel>
                             <FormControl fullWidth size="small">
                                 <Select
                                     name="categoryName"
@@ -82,7 +128,7 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">仕様</FormLabel>
+                            <FormLabel>仕様</FormLabel>
                             <FormControl fullWidth size="small">
                                 <Select
                                     name="specName"
@@ -99,7 +145,7 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">価格</FormLabel>
+                            <FormLabel>価格</FormLabel>
                             <TextField
                                 name="price"
                                 size="small"
@@ -112,7 +158,7 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">進貨価格</FormLabel>
+                            <FormLabel>進貨価格</FormLabel>
                             <TextField
                                 name="purchasePrice"
                                 size="small"
@@ -125,7 +171,7 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">数量</FormLabel>
+                            <FormLabel>数量</FormLabel>
                             <TextField
                                 name="stockQty"
                                 size="small"
@@ -138,7 +184,7 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">在庫アラート</FormLabel>
+                            <FormLabel>在庫アラート</FormLabel>
                             <TextField
                                 name="stockAlert"
                                 size="small"
@@ -151,24 +197,26 @@ function EditProductModal({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">配送会社</FormLabel>
+                            <FormLabel>配送会社</FormLabel>
                             <FormControl fullWidth size="small">
                                 <Select
                                     name="deliveryCompany"
                                     value={formData.deliveryCompany || ''}
                                     onChange={handleChange}
                                 >
-                                    {[...new Set(deliveryList.map(company => company.deliveryCompany))].map((companyName, index) => (
-                                        <MenuItem key={index} value={companyName}>
-                                            {companyName}
-                                        </MenuItem>
-                                    ))}
+                                    {[...new Set(deliveryList.map((c) => c.deliveryCompany))].map(
+                                        (companyName, index) => (
+                                            <MenuItem key={index} value={companyName}>
+                                                {companyName}
+                                            </MenuItem>
+                                        )
+                                    )}
                                 </Select>
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormLabel className="form-label">配送方法</FormLabel>
+                            <FormLabel>配送方法</FormLabel>
                             <FormControl fullWidth size="small">
                                 <Select
                                     name="deliveryMethodId"
@@ -177,8 +225,12 @@ function EditProductModal({
                                     disabled={!formData.deliveryCompany}
                                 >
                                     {deliveryList
-                                        .filter(method => method.deliveryCompany === formData.deliveryCompany)
-                                        .map(method => (
+                                        .filter(
+                                            (method) =>
+                                                method.deliveryCompany ===
+                                                formData.deliveryCompany
+                                        )
+                                        .map((method) => (
                                             <MenuItem key={method.id} value={method.id}>
                                                 {method.deliveryMethod}
                                             </MenuItem>
@@ -187,25 +239,47 @@ function EditProductModal({
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={12} className="action-buttons">
-                            <Button variant="contained" onClick={() => setConfirmOpen(true)}>保存</Button>
-                            <Button variant="outlined" onClick={onClose} style={{ marginLeft: 10 }}>キャンセル</Button>
+                        <Grid
+                            item
+                            xs={12}
+                            sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}
+                        >
+                            <Button variant="contained" onClick={() => setConfirmOpen(true)}>
+                                保存
+                            </Button>
+                            <Button variant="outlined" onClick={onClose}>
+                                キャンセル
+                            </Button>
                         </Grid>
                     </Grid>
                 </Box>
             </Modal>
 
-            <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} className="custom-dialog">
-                <DialogTitle>確認</DialogTitle>
-                <DialogContent>本当に変更を保存しますか？</DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setConfirmOpen(false)} color="inherit">いいえ</Button>
-                    <Button onClick={handleConfirm} color="primary" autoFocus>はい</Button>
+            <Dialog
+                open={confirmOpen}
+                onClose={() => setConfirmOpen(false)}
+                PaperProps={{ sx: confirmDialogPaperSx }}
+            >
+                <DialogTitle sx={confirmTitleSx}>確認</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1" sx={confirmContentTextSx}>
+                        本当に変更を保存しますか？
+                    </Typography>
+                </DialogContent>
+                <DialogActions sx={confirmActionsSx}>
+                    <Button
+                        onClick={() => setConfirmOpen(false)}
+                        variant="outlined"
+                        color="inherit"
+                    >
+                        いいえ
+                    </Button>
+                    <Button onClick={handleConfirm} variant="contained" color="primary" autoFocus>
+                        はい
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>
-
-
     );
 }
 

@@ -36,7 +36,9 @@ import {
     checkPrice,
     checkPurchasePrice,
     checkDeliveryCompany,
-    checkDeliveryMethod
+    checkDeliveryMethod,
+    checktockQty,
+    checkStockAlert
 } from '../../utils/validators';
 
 // 样式设定
@@ -106,6 +108,8 @@ function ProductAdd() {
             checkSpecName(formData.specId),
             checkPrice(formData.price),
             checkPurchasePrice(formData.purchasePrice),
+            checktockQty(formData.stockQty),
+            checkStockAlert(formData.stockAlert),
             checkDeliveryCompany(formData.deliveryCompany),
             checkDeliveryMethod(formData.deliveryMethodId),
         ];

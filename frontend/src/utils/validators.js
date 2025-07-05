@@ -44,6 +44,44 @@ export const checkSpecName = (value) => {
     };
 };
 
+export const checktockQty = (value) => {
+    if (!isNotEmpty(value)) {
+        return {
+            valid: false,
+            message: '数量を入力してください'
+        };
+    }
+    if (!isNumber(value)) {
+        return {
+            valid: false,
+            message: '数量は0より大きい数字で入力してください'
+        };
+    }
+    return {
+        valid: true,
+        message: ''
+    };
+};
+
+export const checkStockAlert = (value) => {
+    if (!isNotEmpty(value)) {
+        return {
+            valid: false,
+            message: '在庫アラートを入力してください'
+        };
+    }
+    if (!isNumber(value)) {
+        return {
+            valid: false,
+            message: '在庫アラートは0より大きい数字で入力してください'
+        };
+    }
+    return {
+        valid: true,
+        message: ''
+    };
+};
+
 export const checkPrice = (value) => {
     if (!isNotEmpty(value)) {
         return {
