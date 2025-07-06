@@ -26,7 +26,7 @@ export const paginationContainerSx = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  mt: 4,
+  mt: 4, 
   flexWrap: 'wrap',
 };
 

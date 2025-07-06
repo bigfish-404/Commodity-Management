@@ -5,20 +5,33 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography
+  Typography,
 } from '@mui/material';
+import {
+  dialogPaperSx,
+  titleSx,
+  messageSx,
+  cancelButtonSx,
+  confirmButtonSx,
+} from './confirmDeleteDialogStyles';
 
 export default function ConfirmDeleteDialog({ open, onClose, onConfirm }) {
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>確認</DialogTitle>
+    <Dialog open={open} onClose={onClose}
+      PaperProps={{ sx: dialogPaperSx }}
+    >
+      <DialogTitle sx={titleSx}>確認</DialogTitle>
       <DialogContent>
-        <Typography>この販売履歴を削除してもよろしいですか？</Typography>
+        <Typography sx={messageSx}>
+          この販売履歴を削除してもよろしいですか？
+        </Typography>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>キャンセル</Button>
-        <Button onClick={onConfirm} color="error" variant="contained">
-          削除
+      <DialogActions sx={{ justifyContent: 'flex-end', px: 3, pb: 2 }}>
+        <Button onClick={onClose} variant="outlined" sx={cancelButtonSx}>
+          いいえ
+        </Button>
+        <Button onClick={onConfirm} variant="contained" color="error" sx={confirmButtonSx}>
+          はい
         </Button>
       </DialogActions>
     </Dialog>
