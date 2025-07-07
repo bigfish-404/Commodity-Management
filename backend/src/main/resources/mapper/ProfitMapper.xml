@@ -3,7 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.backend.mapper.ProfitMapper">
+<mapper namespace="com.example.backend.mapper.HomepageMapper">
+
+    <select id="getMonthlyTotal" parameterType="map" resultType="com.example.backend.entity.dto.SalesMonthSummaryDTO">
+        SELECT
+            NVL(SUM(SALES_PRICE * QUANTITY), 0) AS salesTotal,
+            NVL(SUM(PROFIT), 0) AS profitTotal
+        FROM
+            COMMODITY_MANAGEMENT.PROFIT
+        WHERE
+            USER_ID = #{userId}
+            AND SALES_DATE BETWEEN #{start} AND #{end}
+        AND DELETED_FLG = '0'
+    </select>
 
     <!-- 销售与利润的时间维度聚合 -->
     <select id="getSalesSummaryFlexible" resultType="com.example.backend.entity.dto.SalesSummaryDTO">

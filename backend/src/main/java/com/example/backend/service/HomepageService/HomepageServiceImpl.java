@@ -1,10 +1,11 @@
-package com.example.backend.service.ProfitService;
+package com.example.backend.service.HomepageService;
 
 import com.example.backend.entity.dto.ChannelRatioSummaryDTO;
 import com.example.backend.entity.dto.SalesSummaryDTO;
-import com.example.backend.mapper.ProfitMapper;
+import com.example.backend.mapper.HomepageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.backend.entity.dto.SalesMonthSummaryDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,14 +14,19 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ProfitServiceImpl implements ProfitService {
+public class HomepageServiceImpl implements HomepageService {
 
     @Autowired
-    private ProfitMapper profitMapper;
+    private HomepageMapper homepageMapper;
+
+    @Override
+    public SalesMonthSummaryDTO getMonthlyTotal(String userId, Date start, Date end) {
+        return homepageMapper.getMonthlyTotal(userId, start, end);
+    }
 
     @Override
     public List<SalesSummaryDTO> getSalesSummaryFlexible(String userId, Date start, Date end, String format) {
-        List<SalesSummaryDTO> list = profitMapper.getSalesSummaryFlexible(userId, start, end, format);
+        List<SalesSummaryDTO> list = homepageMapper.getSalesSummaryFlexible(userId, start, end, format);
 
         // 按 label 分组，计算每个 label 的总销售额，按 label 排序
         Map<String, List<SalesSummaryDTO>> grouped = new LinkedHashMap<>();
@@ -59,7 +65,7 @@ public class ProfitServiceImpl implements ProfitService {
 
     @Override
     public List<ChannelRatioSummaryDTO> getChannelRatioSummary(String userId, Date start, Date end) {
-        return profitMapper.getChannelRatioSummary(userId, start, end);
+        return homepageMapper.getChannelRatioSummary(userId, start, end);
     }
 
 }

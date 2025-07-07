@@ -2,18 +2,44 @@ package com.example.backend.controller;
 
 import com.example.backend.entity.dto.ChannelRatioSummaryDTO;
 import com.example.backend.entity.dto.SalesSummaryDTO;
-import com.example.backend.service.ProfitService.ProfitService;
+import com.example.backend.service.HomepageService.HomepageService;
+import com.example.backend.entity.dto.SalesMonthSummaryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/profit")
-public class ProfitController {
+@RequestMapping("/api/homepage")
+public class HomepageController {
 
     @Autowired
-    private ProfitService profitService;
+    private HomepageService homepageService;
+
+    @GetMapping("/overview")
+    public Map<String, Object> getMonthlyOverview(@RequestParam String userId) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date start = cal.getTime();
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        endCal.set(Calendar.SECOND, 59);
+        endCal.set(Calendar.MILLISECOND, 999);
+        Date end = endCal.getTime();
+
+        SalesMonthSummaryDTO summary = homepageService.getMonthlyTotal(userId, start, end);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("salesTotal", summary.getSalesTotal());
+        result.put("profitTotal", summary.getProfitTotal());
+        return result;
+    }
 
     @GetMapping("/stats")
     public List<SalesSummaryDTO> getStatsByRange(@RequestParam String userId, @RequestParam String range) {
@@ -82,7 +108,7 @@ public class ProfitController {
                 groupFormat = "week";
         }
 
-        return profitService.getSalesSummaryFlexible(userId, start, end, groupFormat);
+        return homepageService.getSalesSummaryFlexible(userId, start, end, groupFormat);
     }
 
     @GetMapping("/channel-ratio")
@@ -210,7 +236,7 @@ public class ProfitController {
                 end = defaultEnd.getTime();
         }
 
-        return profitService.getChannelRatioSummary(userId, start, end);
+        return homepageService.getChannelRatioSummary(userId, start, end);
     }
 
 }
