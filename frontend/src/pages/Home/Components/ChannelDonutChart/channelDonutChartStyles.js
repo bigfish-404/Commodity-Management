@@ -20,8 +20,7 @@ export const chartTitleBoxSx = {
 
 export const chartWrapperSx = {
     flex: '0 1 auto',       
-  minHeight: 0,
-
+    height: 300,
 };
 
 export const legendBoxSx = {

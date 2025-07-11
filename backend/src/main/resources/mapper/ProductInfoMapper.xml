@@ -18,9 +18,11 @@
     </resultMap>
 
     <select id="getAllProductInfo" resultMap="ProductInfoResultMap">
-        SELECT * FROM PRODUCT_INFO
-        WHERE DELETED_FLG = '0'
-          AND USER_ID = #{userId}
+        SELECT *
+        FROM COMMODITY_MANAGEMENT.PRODUCT_INFO
+        WHERE USER_ID = #{userId}
+          AND DELETED_FLG = '0'
+        ORDER BY CREATED_AT DESC
     </select>
 
     <insert id="insertProductInfo" parameterType="com.example.backend.entity.db.ProductInfoEntity">
@@ -46,5 +48,26 @@
             #{deletedFlg, jdbcType=CHAR}
         )
     </insert>
+
+    <!-- 更新商品 -->
+    <update id="updateProduct" parameterType="com.example.backend.entity.db.ProductInfoEntity">
+        UPDATE COMMODITY_MANAGEMENT.PRODUCT_INFO
+        SET
+            PRODUCT_NAME = #{productName},
+            DESCRIPTION = #{description},
+            UPDATED_AT = SYSTIMESTAMP,
+            UPDATED_BY = #{updatedBy}
+        WHERE ID = #{id}
+          AND USER_ID = #{userId}
+    </update>
+
+    <!-- 删除商品（逻辑删除） -->
+    <update id="deleteProduct">
+        UPDATE COMMODITY_MANAGEMENT.PRODUCT_INFO
+        SET DELETED_FLG = '1',
+            UPDATED_AT = SYSTIMESTAMP
+        WHERE ID = #{id}
+    </update>
+
 
 </mapper>

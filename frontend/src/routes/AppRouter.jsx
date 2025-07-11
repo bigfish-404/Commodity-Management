@@ -10,6 +10,7 @@ import ProductList from '../pages/ProductList/ProductList';
 import ProductAdd from '../pages/ProductAdd/ProductAdd';
 import SalesHistory from '../pages/SalesHistory/SalesHistory';
 import Channel from '../pages/Channel/Channel';
+import ProductInfo from '../pages/ProductInfo/ProductInfo';
 
 function AppRouter() {
   return (
@@ -25,6 +26,7 @@ function AppRouter() {
       <Route path="/api/mypage" element={<MainLayout><Mypage /></MainLayout>} />
       <Route path="/api/productList" element={<MainLayout><ProductList /></MainLayout>} />
       <Route path="/api/productAdd" element={<MainLayout><ProductAdd /></MainLayout>} />
+      <Route path="/api/ProductInfo" element={<MainLayout><ProductInfo /></MainLayout>} />
       <Route path="/api/channel" element={<MainLayout><Channel /></MainLayout>} />
     </Routes>
   );

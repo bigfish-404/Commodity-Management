@@ -92,7 +92,7 @@ export default function ChannelDonutChart() {
             const res = await axios.get(`/api/homepage/channel-ratio`, {
                 params: { userId, range: selectedRange },
             });
-
+console.log("📊 donut data raw response:", res.data);
             const rawData = res.data;
             rawData.sort((a, b) => a.channelId - b.channelId);
 

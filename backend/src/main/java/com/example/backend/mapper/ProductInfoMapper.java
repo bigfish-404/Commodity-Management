@@ -11,4 +11,8 @@ public interface ProductInfoMapper {
 
     int insertProductInfo(ProductInfoEntity entity);
 
+    int updateProduct(ProductInfoEntity product);
+
+    int deleteProduct(Long id);
+
 }

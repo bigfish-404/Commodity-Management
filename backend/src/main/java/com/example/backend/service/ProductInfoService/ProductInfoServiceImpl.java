@@ -1,4 +1,4 @@
-package com.example.backend.service.ProductInfroService;
+package com.example.backend.service.ProductInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +19,15 @@ public class ProductInfoServiceImpl implements ProductInfoService{
     @Override
     public void add(ProductInfoEntity entity) {
         mapper.insertProductInfo(entity);
+    }
+
+    @Override
+    public int updateProductInfo(ProductInfoEntity product) {
+        return mapper.updateProduct(product);
+    }
+    
+    @Override
+    public int deleteProductInfo(Long id) {
+        return mapper.deleteProduct(id);
     }
 }
