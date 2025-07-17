@@ -1,13 +1,24 @@
-// src/pages/ProductInfo.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Box, Typography, Table, TableHead, TableBody, TableRow, TableCell,
-    TableContainer, Paper, IconButton, TextField, Button, Chip
+    TableContainer, Paper, IconButton, TextField, Button
 } from '@mui/material';
 import { Delete, Edit, Add, Save } from '@mui/icons-material';
 import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import { Helmet } from 'react-helmet-async';
-import { formContainerSx } from './ProductInfoStyles';
+
+import {
+    formContainerSx,
+    searchFieldSx,
+    tableContainerSx,
+    tableSx,
+    tableHeadRowSx,
+    tableCellHeadSx,
+    tableRowHoverSx,
+    tableCellBodySx,
+    disabledTextFieldSx
+} from './ProductInfoStyles';
+
 import {
     fetchProducts,
     addProduct,
@@ -20,6 +31,8 @@ function ProductInfo() {
     const [editId, setEditId] = useState(null);
     const [newRow, setNewRow] = useState(null);
     const [search, setSearch] = useState('');
+    const containerRef = useRef(null);
+
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const userId = currentUser?.userId || 'demo_user';
 
@@ -36,9 +49,32 @@ function ProductInfo() {
         loadProducts();
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                containerRef.current &&
+                !containerRef.current.contains(event.target) &&
+                editId !== null
+            ) {
+                setEditId(null);
+                setNewRow(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [editId]);
+
+
     const handleEdit = (item) => {
         setEditId(item.id);
-        setNewRow({ ...item });
+        setNewRow({
+            productName: item.productName,
+            description: item.description,
+            personInCharge: item.updatedBy ?? currentUser.name
+        });
     };
 
     const handleChange = (e) => {
@@ -50,18 +86,15 @@ function ProductInfo() {
             const productToSave = {
                 ...newRow,
                 userId,
-                createdBy: userId,
-                updatedBy: userId
+                createdBy: currentUser.name,
+                updatedBy: currentUser.name
             };
-
             if (editId === 'new') {
-                productToSave.productId = 'PRD-' + Date.now();
                 await addProduct(productToSave);
             } else {
                 productToSave.id = editId;
                 await updateProduct(productToSave);
             }
-
             setEditId(null);
             setNewRow(null);
             loadProducts();
@@ -84,7 +117,7 @@ function ProductInfo() {
         setNewRow({
             productName: '',
             description: '',
-            personInCharge: '',
+            personInCharge: currentUser?.name || '',
             status: 'active'
         });
     };
@@ -95,17 +128,15 @@ function ProductInfo() {
 
     return (
         <>
-            <Helmet>
-                <title>品番追加</title>
-            </Helmet>
-
+            <Helmet><title>品番追加</title></Helmet>
+            
             <Box component="form" sx={formContainerSx}>
                 <Box p={3}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                         <TextField
                             label="品番検索"
                             size="small"
-                            sx={{ width: 300 }}
+                            sx={searchFieldSx}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -119,44 +150,52 @@ function ProductInfo() {
                         </Box>
                     </Box>
 
-                    <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 1 }}>
-                        <Table
-                            size="small"
-                            sx={{ minWidth: 800, borderCollapse: 'separate', borderSpacing: 0 }}
-                        >
+                    <TableContainer component={Paper} sx={tableContainerSx} ref={containerRef}>
+                        <Table size="small" sx={tableSx}>
                             <TableHead>
-                                <TableRow sx={{ backgroundColor: '#f4f6f8' }}>
+                                <TableRow sx={tableHeadRowSx}>
                                     {['品番名', '説明', '担当者', '登録日', '操作'].map((header) => (
-                                        <TableCell
-                                            key={header}
-                                            align="center"
-                                            sx={{ fontWeight: 'bold', '&:not(:first-of-type)': { borderLeft: '1px solid #ddd' } }}
-                                        >
+                                        <TableCell key={header} align="center" sx={tableCellHeadSx}>
                                             {header}
                                         </TableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+                                {editId === 'new' && (
+                                    <TableRow hover sx={tableRowHoverSx}>
+                                        <TableCell align="center">
+                                            <TextField name="productName" value={newRow.productName} onChange={handleChange} size="small" fullWidth />
+                                        </TableCell>
+                                        <TableCell align="center" sx={tableCellBodySx}>
+                                            <TextField name="description" value={newRow.description} onChange={handleChange} size="small" fullWidth />
+                                        </TableCell>
+                                        <TableCell align="center" sx={tableCellBodySx}>
+                                            <TextField name="personInCharge" value={newRow.personInCharge} disabled size="small" fullWidth sx={disabledTextFieldSx} />
+                                        </TableCell>
+                                        <TableCell align="center" sx={tableCellBodySx}>--</TableCell>
+                                        <TableCell align="center" sx={tableCellBodySx}>
+                                            <IconButton onClick={handleSave} color="primary"><Save /></IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                                 {filteredProducts.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        hover
-                                        sx={{ '&:hover': { backgroundColor: '#f9f9f9' }, borderBottom: '1px solid #eee' }}
-                                    >
+                                    <TableRow key={row.id} hover sx={tableRowHoverSx}>
                                         {editId === row.id ? (
                                             <>
                                                 <TableCell align="center">
                                                     <TextField name="productName" value={newRow.productName} onChange={handleChange} size="small" fullWidth />
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>
+                                                <TableCell align="center" sx={tableCellBodySx}>
                                                     <TextField name="description" value={newRow.description} onChange={handleChange} size="small" fullWidth />
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>
-                                                    <TextField name="personInCharge" value={newRow.updatedBy} onChange={handleChange} size="small" fullWidth />
+                                                <TableCell align="center" sx={tableCellBodySx}>
+                                                    <TextField name="personInCharge" value={newRow.personInCharge} disabled size="small" fullWidth sx={disabledTextFieldSx} />
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>{row.updatedAt || '--'}</TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>
+                                                <TableCell align="center" sx={tableCellBodySx}>
+                                                    {row.updatedAt?.slice(0, 10) || '--'}
+                                                </TableCell>
+                                                <TableCell align="center" sx={tableCellBodySx}>
                                                     <IconButton onClick={handleSave} color="primary"><Save /></IconButton>
                                                 </TableCell>
                                             </>
@@ -168,11 +207,10 @@ function ProductInfo() {
                                                         {row.productName}
                                                     </Box>
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>{row.description}</TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>{row.updatedBy}</TableCell>
-
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>{row.updatedAt?.slice(0, 10) || '--'}</TableCell>
-                                                <TableCell align="center" sx={{ borderLeft: '1px solid #eee' }}>
+                                                <TableCell align="center" sx={tableCellBodySx}>{row.description}</TableCell>
+                                                <TableCell align="center" sx={tableCellBodySx}>{row.updatedBy}</TableCell>
+                                                <TableCell align="center" sx={tableCellBodySx}>{row.updatedAt?.slice(0, 10) || '--'}</TableCell>
+                                                <TableCell align="center" sx={tableCellBodySx}>
                                                     <IconButton onClick={() => handleEdit(row)}><Edit /></IconButton>
                                                     <IconButton onClick={() => handleDelete(row.id)} color="error"><Delete /></IconButton>
                                                 </TableCell>

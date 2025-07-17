@@ -42,10 +42,10 @@
             #{productName, jdbcType=VARCHAR},
             #{description, jdbcType=VARCHAR},
             #{createdBy, jdbcType=VARCHAR},
-            #{createdAt, jdbcType=TIMESTAMP},
+            SYSTIMESTAMP,
             #{updatedBy, jdbcType=VARCHAR},
-            #{updatedAt, jdbcType=TIMESTAMP},
-            #{deletedFlg, jdbcType=CHAR}
+            SYSTIMESTAMP,
+            0
         )
     </insert>
 
