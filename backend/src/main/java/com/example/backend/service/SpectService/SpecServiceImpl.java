@@ -22,4 +22,14 @@ public class SpecServiceImpl implements SpecService {
     public List<SpecEntity> getAllSpecs(String userId) {
         return specMapper.getAllSpecs(userId);
     }
+
+        @Override
+    public void update(SpecEntity spec) {
+        specMapper.update(spec);
+    }
+
+    @Override
+    public void delete(Long id) {
+        specMapper.delete(id);
+    }
 }

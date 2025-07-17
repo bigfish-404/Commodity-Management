@@ -39,7 +39,7 @@
             #{createdBy, jdbcType=VARCHAR}, 
             SYSTIMESTAMP, 
             #{updatedBy, jdbcType=VARCHAR}, 
-            #{deletedFlg, jdbcType=CHAR}
+            0
         )
     </insert>
 
@@ -50,5 +50,23 @@
             WHERE DELETED_FLG = '0'
             AND USER_ID = #{userId}
     </select>
+    
+    <update id="update" parameterType="com.example.backend.entity.db.SpecEntity">
+        UPDATE COMMODITY_MANAGEMENT.SPEC
+        SET
+            SPEC_NAME = #{specName},
+            DESCRIPTION = #{description},
+            UPDATED_BY = #{updatedBy},
+            UPDATED_AT = SYSTIMESTAMP
+        WHERE ID = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE COMMODITY_MANAGEMENT.SPEC
+        SET 
+            DELETED_FLG = '1', 
+            UPDATED_AT = SYSTIMESTAMP
+        WHERE ID = #{id}
+    </update>
 
 </mapper>

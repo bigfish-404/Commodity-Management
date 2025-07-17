@@ -1,12 +1,11 @@
+// src/pages/SpecInfo.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import {
     Box, Typography, Table, TableHead, TableBody, TableRow, TableCell,
     TableContainer, Paper, IconButton, TextField, Button
 } from '@mui/material';
 import { Delete, Edit, Add, Save } from '@mui/icons-material';
-import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import { Helmet } from 'react-helmet-async';
-
 import {
     formContainerSx,
     searchFieldSx,
@@ -15,19 +14,17 @@ import {
     tableHeadRowSx,
     tableCellHeadSx,
     tableRowHoverSx,
-    tableCellBodySx,
-    disabledTextFieldSx
-} from './ProductInfoStyles';
+} from './SpecStyles';
 
 import {
-    fetchProducts,
-    addProduct,
-    updateProduct,
-    deleteProduct
-} from '../../services/productInfoService';
+    fetchSpecs,
+    addSpec,
+    updateSpec,
+    deleteSpec
+} from '../../services/specService';
 
-function ProductInfo() {
-    const [productInfo, setProductInfo] = useState([]);
+function SpecInfo() {
+    const [specList, setSpecList] = useState([]);
     const [editId, setEditId] = useState(null);
     const [newRow, setNewRow] = useState(null);
     const [search, setSearch] = useState('');
@@ -36,17 +33,17 @@ function ProductInfo() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const userId = currentUser?.userId || 'demo_user';
 
-    const loadProducts = async () => {
+    const loadSpecs = async () => {
         try {
-            const data = await fetchProducts(userId);
-            setProductInfo(data);
+            const data = await fetchSpecs(userId);
+            setSpecList(data);
         } catch (err) {
-            console.error("商品情報の取得に失敗しました", err);
+            console.error("SPECの取得に失敗しました", err);
         }
     };
 
     useEffect(() => {
-        loadProducts();
+        loadSpecs();
     }, []);
 
     useEffect(() => {
@@ -67,13 +64,12 @@ function ProductInfo() {
         };
     }, [editId]);
 
-
     const handleEdit = (item) => {
         setEditId(item.id);
         setNewRow({
-            productName: item.productName,
-            description: item.description,
-            personInCharge: item.updatedBy ?? currentUser.name
+            specId: item.specId,
+            specName: item.specName,
+            description: item.description
         });
     };
 
@@ -83,21 +79,21 @@ function ProductInfo() {
 
     const handleSave = async () => {
         try {
-            const productToSave = {
+            const specToSave = {
                 ...newRow,
                 userId,
                 createdBy: currentUser.name,
                 updatedBy: currentUser.name
             };
             if (editId === 'new') {
-                await addProduct(productToSave);
+                await addSpec(specToSave);
             } else {
-                productToSave.id = editId;
-                await updateProduct(productToSave);
+                specToSave.id = editId;
+                await updateSpec(specToSave);
             }
             setEditId(null);
             setNewRow(null);
-            loadProducts();
+            loadSpecs();
         } catch (err) {
             console.error("保存失敗", err);
         }
@@ -105,8 +101,8 @@ function ProductInfo() {
 
     const handleDelete = async (id) => {
         try {
-            await deleteProduct(id);
-            loadProducts();
+            await deleteSpec(id);
+            loadSpecs();
         } catch (err) {
             console.error("削除失敗", err);
         }
@@ -115,26 +111,27 @@ function ProductInfo() {
     const handleAdd = () => {
         setEditId('new');
         setNewRow({
-            productName: '',
-            description: '',
-            personInCharge: currentUser?.name || '',
-            status: 'active'
+            specId: '',
+            specName: '',
+            description: ''
         });
     };
 
-    const filteredProducts = productInfo.filter(p =>
-        p.productName?.toLowerCase().includes(search.toLowerCase())
+    const filteredSpecs = specList.filter(p =>
+        p.specName?.toLowerCase().includes(search.toLowerCase())
     );
+
+    const borderCell = { borderRight: '1px solid #e0e0e0' };
 
     return (
         <>
-            <Helmet><title>品番追加</title></Helmet>
+            <Helmet><title>仕様/規格</title></Helmet>
 
             <Box component="form" sx={formContainerSx}>
                 <Box p={3}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                         <TextField
-                            label="品番検索"
+                            label="仕様/規格検索"
                             size="small"
                             sx={searchFieldSx}
                             value={search}
@@ -142,10 +139,10 @@ function ProductInfo() {
                         />
                         <Box display="flex" alignItems="center" gap={2}>
                             <Typography variant="body2" color="text.secondary">
-                                合計 {filteredProducts.length} 件
+                                合計 {filteredSpecs.length} 件
                             </Typography>
                             <Button variant="contained" onClick={handleAdd} startIcon={<Add />}>
-                                品番追加
+                                仕様/規格追加
                             </Button>
                         </Box>
                     </Box>
@@ -154,8 +151,8 @@ function ProductInfo() {
                         <Table size="small" sx={tableSx}>
                             <TableHead>
                                 <TableRow sx={tableHeadRowSx}>
-                                    {['品番名', '説明', '担当者', '登録日', '操作'].map((header) => (
-                                        <TableCell key={header} align="center" sx={tableCellHeadSx}>
+                                    {['仕様/規格名', '説明', '更新者', '更新日', '操作'].map((header) => (
+                                        <TableCell key={header} align="center" sx={{ ...tableCellHeadSx, ...borderCell }}>
                                             {header}
                                         </TableCell>
                                     ))}
@@ -164,53 +161,42 @@ function ProductInfo() {
                             <TableBody>
                                 {editId === 'new' && (
                                     <TableRow hover sx={tableRowHoverSx}>
-                                        <TableCell align="center">
-                                            <TextField name="productName" value={newRow.productName} onChange={handleChange} size="small" fullWidth />
+                                        <TableCell align="center" sx={borderCell}>
+                                            <TextField name="specName" value={newRow.specName} onChange={handleChange} size="small" fullWidth />
                                         </TableCell>
-                                        <TableCell align="center" sx={tableCellBodySx}>
+                                        <TableCell align="center" sx={borderCell}>
                                             <TextField name="description" value={newRow.description} onChange={handleChange} size="small" fullWidth />
                                         </TableCell>
-                                        <TableCell align="center" sx={tableCellBodySx}>
-                                            <TextField name="personInCharge" value={newRow.personInCharge} disabled size="small" fullWidth sx={disabledTextFieldSx} />
-                                        </TableCell>
-                                        <TableCell align="center" sx={tableCellBodySx}>--</TableCell>
-                                        <TableCell align="center" sx={tableCellBodySx}>
+                                        <TableCell align="center" sx={borderCell}>{currentUser.name}</TableCell>
+                                        <TableCell align="center" sx={borderCell}>--</TableCell>
+                                        <TableCell align="center" sx={borderCell}>
                                             <IconButton onClick={handleSave} color="primary"><Save /></IconButton>
                                         </TableCell>
                                     </TableRow>
                                 )}
-                                {filteredProducts.map((row) => (
+                                {filteredSpecs.map((row) => (
                                     <TableRow key={row.id} hover sx={tableRowHoverSx}>
                                         {editId === row.id ? (
                                             <>
-                                                <TableCell align="center">
-                                                    <TextField name="productName" value={newRow.productName} onChange={handleChange} size="small" fullWidth />
+                                                <TableCell align="center" sx={borderCell}>
+                                                    <TextField name="specName" value={newRow.specName} onChange={handleChange} size="small" fullWidth />
                                                 </TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>
+                                                <TableCell align="center" sx={borderCell}>
                                                     <TextField name="description" value={newRow.description} onChange={handleChange} size="small" fullWidth />
                                                 </TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>
-                                                    <TextField name="personInCharge" value={newRow.personInCharge} disabled size="small" fullWidth sx={disabledTextFieldSx} />
-                                                </TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>
-                                                    {row.updatedAt?.slice(0, 10) || '--'}
-                                                </TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>
+                                                <TableCell align="center" sx={borderCell}>{currentUser.name}</TableCell>
+                                                <TableCell align="center" sx={borderCell}>{row.updatedAt?.slice(0, 10) || '--'}</TableCell>
+                                                <TableCell align="center" sx={borderCell}>
                                                     <IconButton onClick={handleSave} color="primary"><Save /></IconButton>
                                                 </TableCell>
                                             </>
                                         ) : (
                                             <>
-                                                <TableCell align="center">
-                                                    <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
-                                                        <Inventory2Outlined fontSize="small" color="action" />
-                                                        {row.productName}
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>{row.description}</TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>{row.updatedBy}</TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>{row.updatedAt?.slice(0, 10) || '--'}</TableCell>
-                                                <TableCell align="center" sx={tableCellBodySx}>
+                                                <TableCell align="center" sx={borderCell}>{row.specName}</TableCell>
+                                                <TableCell align="center" sx={borderCell}>{row.description}</TableCell>
+                                                <TableCell align="center" sx={borderCell}>{row.updatedBy}</TableCell>
+                                                <TableCell align="center" sx={borderCell}>{row.updatedAt?.slice(0, 10) || '--'}</TableCell>
+                                                <TableCell align="center" sx={borderCell}>
                                                     <IconButton onClick={() => handleEdit(row)}><Edit /></IconButton>
                                                     <IconButton onClick={() => handleDelete(row.id)} color="error"><Delete /></IconButton>
                                                 </TableCell>
@@ -227,4 +213,4 @@ function ProductInfo() {
     );
 }
 
-export default ProductInfo;
+export default SpecInfo;
