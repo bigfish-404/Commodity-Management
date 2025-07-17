@@ -11,7 +11,8 @@ import ProductAdd from '../pages/ProductAdd/ProductAdd';
 import SalesHistory from '../pages/SalesHistory/SalesHistory';
 import Channel from '../pages/Channel/Channel';
 import ProductInfo from '../pages/ProductInfo/ProductInfo';
-import SpecAdd from '../pages/Spec/Spec';
+import Category from '../pages/Category/Category';
+import Spec from '../pages/Spec/Spec';
 function AppRouter() {
   return (
     <Routes>
@@ -27,7 +28,8 @@ function AppRouter() {
       <Route path="/api/productList" element={<MainLayout><ProductList /></MainLayout>} />
       <Route path="/api/productAdd" element={<MainLayout><ProductAdd /></MainLayout>} />
       <Route path="/api/productInfo" element={<MainLayout><ProductInfo /></MainLayout>} />
-      <Route path="/api/specAdd" element={<MainLayout><SpecAdd /></MainLayout>} />
+      <Route path="/api/category" element={<MainLayout><Category /></MainLayout>} />
+      <Route path="/api/spec" element={<MainLayout><Spec /></MainLayout>} />
       <Route path="/api/channel" element={<MainLayout><Channel /></MainLayout>} />
     </Routes>
   );

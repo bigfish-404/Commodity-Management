@@ -64,7 +64,7 @@ function Sidebar() {
                     <List component="div" disablePadding>
                         <SidebarItem icon={<TagIcon />} text="品番" to="/api/productInfo" inset />
                         <SidebarItem icon={<CategoryIcon />} text="カテゴリー" to="/api/category" inset />
-                        <SidebarItem icon={<SettingsIcon />} text="規格・仕様" to="/api/specAdd" inset />
+                        <SidebarItem icon={<SettingsIcon />} text="規格・仕様" to="/api/spec" inset />
                         <SidebarItem icon={<LocalMallIcon />} text="販売チャネル" to="/api/channel" inset />
                     </List>
                 </Collapse>

@@ -11,4 +11,8 @@ public interface CategoryMapper {
     void insertCategory (CategoryEntity categoryEntity);
 
     List<CategoryEntity> getAllCategories(String userId);
+
+    int updateCategory(CategoryEntity categoryEntity);
+
+    int deleteCategory(Long id);
 } 

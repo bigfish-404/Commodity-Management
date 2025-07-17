@@ -30,4 +30,15 @@ public class CategoryController {
         List<CategoryEntity> list = categoriService.getAllCategories(userId);
         return list;
     }
+
+    @PostMapping("/updateCategory")
+    public int updateCategory(@RequestBody CategoryEntity categoryEntity){
+        return categoriService.updateCategory(categoryEntity);
+    }     
+
+    @PostMapping("/deleteCategory")
+    public int deleteCategory(@RequestParam("id") Long id){
+        return categoriService.deleteCategory(id);
+    }   
+
 }

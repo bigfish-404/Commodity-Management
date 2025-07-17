@@ -38,9 +38,9 @@
         SYSTIMESTAMP,
         #{updatedBy, jdbcType=VARCHAR},
         SYSTIMESTAMP,
-        #{deletedFlg, jdbcType=CHAR}
+        0
     )
-</insert>
+    </insert>
 
 
     <select id="getAllCategories" resultMap="CategoryResultMap">
@@ -49,5 +49,25 @@
         WHERE DELETED_FLG = '0'
             AND  USER_ID = #{userId}
     </select>
+
+    <!-- 更新 -->
+    <update id="updateCategory" parameterType="com.example.backend.entity.db.CategoryEntity">
+        UPDATE COMMODITY_MANAGEMENT.CATEGORIES
+        SET
+            CATEGORY_NAME = #{categoryName},
+            DESCRIPTION = #{description},
+            UPDATED_AT = SYSTIMESTAMP,
+            UPDATED_BY = #{updatedBy}
+        WHERE ID = #{id}
+          AND USER_ID = #{userId}
+    </update>
+
+    <!-- （逻辑删除） -->
+    <update id="deleteCategory">
+        UPDATE COMMODITY_MANAGEMENT.CATEGORIES
+        SET DELETED_FLG = '1',
+            UPDATED_AT = SYSTIMESTAMP
+        WHERE ID = #{id}
+    </update>
 
 </mapper>
